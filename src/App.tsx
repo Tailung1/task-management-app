@@ -1,11 +1,7 @@
-import boardIcon from "./assets/images/board-icon.svg";
+import { RouterProvider } from "react-router-dom";
+import router from "./router";
 function App() {
-  return (
-    <>
-      <h1>App</h1>
-      <img src={boardIcon} alt='Board icon' />
-    </>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
