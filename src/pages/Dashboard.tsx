@@ -1,7 +1,3 @@
 export default function Dashboard() {
-  return (
-    <div className='bg-amber-500  mt-10'>
-      Da ashboard shboardDashboardDashboardD shboardDashboardDashboardD shboardDashboardDashboardD
-    </div>
-  );
+  return <div className='bg-[#635FC71A] flex flex-col grow'>hi</div>;
 }

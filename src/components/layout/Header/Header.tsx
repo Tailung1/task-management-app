@@ -1,22 +1,25 @@
 import logo from "../../../assets/images/logo.png";
 import arrowDown from "../../../assets/images/arrow-down.png";
 import menuDots from "../../../assets/images/menu-dots.png";
+import plus from "../../../assets/images/plus.png";
 
 export default function Header() {
   return (
-    <header>
-      <div>
-        <img src={logo} alt='logo' />
+    <header className='flex justify-between p-2'>
+      <div className='flex justify-between items-center gap-3'>
+        <img className='w-10 h-10' src={logo} alt='logo' />
 
-        <div>
-          <h3>Platform Launch</h3>
-          <img src={arrowDown} alt='arrow-down-icon' />
+        <div className='flex items-center gap-1 '>
+          <h3 className='font-bold text-lg'>Personal board</h3>
+          <img className='w-5 h-5' src={arrowDown} alt='arrow-down-icon' />
         </div>
       </div>
 
-      <div>
-        <button>+</button>
-        <img src={menuDots} alt='menu-dots-icon' />
+      <div className='flex'>
+        <button className='rounded-[20px] px-5 bg-violet-400'>
+          <img className='w-4 h-4' src={plus} alt='X button' />
+        </button>{" "}
+        <img className='w-10 h-10' src={menuDots} alt='menu-dots-icon' />
       </div>
     </header>
   );
