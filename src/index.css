@@ -63,3 +63,16 @@ ol {
   list-style: none;
 }
 */
+
+@theme {
+  --animate-slide-in: slide-in 1s ease;
+
+  @keyframes slide-in {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+}
