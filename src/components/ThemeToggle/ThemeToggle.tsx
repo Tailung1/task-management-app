@@ -8,12 +8,12 @@ export default function ThemeToggle() {
   const [activeTheme, setActiveTheme] = useState<Theme>("light");
 
   return (
-    <div className='absolute left-20 bottom-20 flex items-center gap-3 rounded-full bg-slate-200 px-3 py-2 shadow-lg'>
+    <div className='flex items-center justify-center gap-5 rounded-full bg-slate-200 px-3 py-2 shadow-lg'>
       <img className='h-6 w-6' src={sun} alt='sun icon' />
 
       <button
         onClick={() => setActiveTheme((prev) => (prev === "light" ? "dark" : "light"))}
-        className={` cursor-pointer relative h-7 w-12 rounded-full transition-colors duration-3000 ${
+        className={` cursor-pointer relative h-7 w-12 rounded-full transition-colors duration-300 ${
           activeTheme === "dark" ? "bg-slate-700" : "bg-violet-500"
         }`}
       >
