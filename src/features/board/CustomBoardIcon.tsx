@@ -1,0 +1,11 @@
+
+
+export default function BoardIcon() {
+  return (
+    <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
+      <rect x='3' y='4' width='18' height='16' rx='2.5' stroke='#7230db' strokeWidth='2' />
+      <path d='M3 10H21' stroke='#7230db' strokeWidth='2' />
+      <path d='M15 10V20' stroke='#7230db' strokeWidth='2' />{" "}
+    </svg>
+  );
+}
