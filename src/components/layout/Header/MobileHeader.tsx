@@ -13,7 +13,7 @@ export default function MobileHeader() {
 
         <div
           className={`flex items-center gap-1 transition-transform duration-1000 ease ${
-            showSidebar ? "translate-x-12" : "translate-x-0"
+            showSidebar ? "md:translate-x-12" : "translate-x-0"
           }   `}
         >
           <h3 className='font-bold text-lg'>Personal board</h3>
