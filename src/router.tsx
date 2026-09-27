@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "./components/layout/MainLayout/MainLayout";
-import Dashboard from "./pages/Dashboard";
+import EmptyBoardState from "./features/board/components/EmptyBoardState";
+import BoardPage from "./features/board/pages/BoardPage";
 
 const router = createBrowserRouter([
   {
@@ -8,8 +9,13 @@ const router = createBrowserRouter([
     element: <MainLayout />,
     children: [
       {
-        path: "dashboard",
-        element: <Dashboard />,
+        index: true,
+        element: <EmptyBoardState />,
+      },
+
+      {
+        path: "boards/:boardnamethere",
+        element: <BoardPage />,
       },
     ],
   },
