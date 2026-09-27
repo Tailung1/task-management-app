@@ -1,10 +1,11 @@
 import LogoWrapper from "../../shared/LogoWrapper";
 import eyeHide from "../../../assets/images/eye-hide.png";
-
+import { useSidebarContext } from "../../../contexts/SidebarContext";
 import boardIcon from "../../../assets/images/board-icon.svg";
 import ThemeToggle from "../../ThemeToggle/ThemeToggle";
 
 export default function SidebarContent() {
+  const { setShowSidebar } = useSidebarContext();
   const boards = [
     {
       name: "Personal board",
@@ -26,8 +27,8 @@ export default function SidebarContent() {
           {boards.map((board, index) => (
             <div
               key={index}
-              className={`flex items-center   py-4  pl-4 gap-2  rounded-r-3xl -ml-4 ${
-                board.isActive && "bg-[#7230db]"
+              className={`flex items-center py-4   gap-2  rounded-r-3xl  ${
+                board.isActive && "bg-[#7230db] -ml-4 pl-4"
               }`}
             >
               {" "}
@@ -54,11 +55,13 @@ export default function SidebarContent() {
           </div>
         </div>
       </div>
-      <div className='absolute bottom-7 left-0 w-full flex  flex-col items-center'>
-        <div className='flex flex-col items-start'>
+      <div className='flex flex-col items-center absolute bottom-7 left-4 right-4 '>
+        <div className='flex w-full flex-col items-start'>
           <ThemeToggle />
-
-          <div className='hidden md:flex gap-2 items-center pt-5 cursor-pointer'>
+          <div
+            onClick={() => setShowSidebar(false)}
+            className='hidden md:flex gap-2 items-center pt-5 cursor-pointer'
+          >
             <img className='w-6 h-6' src={eyeHide} alt='Hide eye icon' />
             <p>Hide Sidebar</p>
           </div>

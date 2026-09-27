@@ -64,8 +64,8 @@ ol {
 }
 */
 
-@theme {
-  --animate-slide-in: slide-in 1s ease;
+/* @theme {
+  --animate-slide-in: slide-in 1s ease forwards;
 
   @keyframes slide-in {
     from {
@@ -76,3 +76,16 @@ ol {
     }
   }
 }
+
+@theme {
+  --animate-slide-out: slide-out 1s ease forwards;
+
+  @keyframes slide-out {
+    from {
+      transform: translateX(0%);
+    }
+    to {
+      transform: translateX(-100%);
+    }
+  }
+} */
