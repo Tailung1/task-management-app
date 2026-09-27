@@ -55,7 +55,7 @@ export default function SidebarContent() {
           </div>
         </div>
       </div>
-      <div className='flex flex-col items-center absolute bottom-7 left-4 right-4 '>
+      <div className='flex flex-col items-center justify-end w-full h-full'>
         <div className='flex w-full flex-col items-start'>
           <ThemeToggle />
           <div
