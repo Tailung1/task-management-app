@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "./components/layout/MainLayout/MainLayout";
 import BoardPage from "./features/board/pages/BoardPage";
+import NoBoardState from "./features/board/components/NoBoardState";
 
 const router = createBrowserRouter([
   {
@@ -9,11 +10,10 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <BoardPage />,
+        element: <NoBoardState />,
       },
-
       {
-        path: "boards/:boardnamethere",
+        path: "/board/:id",
         element: <BoardPage />,
       },
     ],
@@ -21,3 +21,5 @@ const router = createBrowserRouter([
 ]);
 
 export default router;
+
+
