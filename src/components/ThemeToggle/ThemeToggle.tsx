@@ -5,7 +5,7 @@ import { useThemeContext } from "../../contexts/ThemeContext";
 export default function ThemeToggle() {
   const { theme, setTheme } = useThemeContext();
   return (
-    <div className='flex items-center justify-center w-full   gap-5 rounded-lg bg-slate-200  py-2 shadow-lg'>
+    <div className='flex items-center justify-center w-full   gap-5 rounded-lg bg-[#f2f2f3] dark:bg-[#20212C] py-2 shadow-lg'>
       <img className='h-6 w-6' src={sun} alt='sun icon' />
 
       <button

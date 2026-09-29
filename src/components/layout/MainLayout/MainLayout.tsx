@@ -17,7 +17,7 @@ export default function MainLayout() {
       <Sidebar />
       <Eye />
       <Header />
-      <main className='flex flex-1 bg-[#f2f2f3] dark:bg-[#0d0721]'>
+      <main className='flex flex-1 bg-[#f2f2f3] dark:bg-[#20212C]'>
         <Outlet />
       </main>
     </div>
