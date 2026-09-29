@@ -1,8 +1,9 @@
 import BoardItem from "./BoardItem";
 import CustomBoardIcon from "../CustomBoardIcon";
+import type { Boards } from "../board.types";
 
 export default function BoardList() {
-  const boards = [
+  const boards: Boards = [
     {
       name: "Personal board",
       isActive: true,
@@ -12,6 +13,7 @@ export default function BoardList() {
       isActive: false,
     },
   ];
+
   return (
     <div>
       <p className='pb-4'>

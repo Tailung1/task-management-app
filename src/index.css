@@ -1,6 +1,5 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
-@custom-variant light (&:where(.dark, .dark *));
 
 /*
 *,
@@ -93,7 +92,7 @@ ol {
 } */
 
 @theme {
-  --animate-bg-out: bg-out 0.3s ease forwards;
+  --animate-bg-out: bg-out 1s ease forwards;
 
   @keyframes bg-out {
     from {
