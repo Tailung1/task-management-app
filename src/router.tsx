@@ -10,6 +10,7 @@ const router = createBrowserRouter([
     element: <MainLayout />,
     children: [
       {
+        index:true,
         element: <NoBoardState />,
       },
       {
