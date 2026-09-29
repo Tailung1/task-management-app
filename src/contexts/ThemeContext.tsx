@@ -10,11 +10,11 @@ type ThemeContextType = {
 const ThemeContext = createContext<ThemeContextType | null>(null);
 
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("dark");
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const [theme, setTheme] = useState<Theme>(prefersDark ? "dark" : "light");
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark");
-    document.documentElement.classList.toggle("light", theme === "light");
   }, [theme]);
 
   return <ThemeContext.Provider value={{ theme, setTheme }}>{children}</ThemeContext.Provider>;
