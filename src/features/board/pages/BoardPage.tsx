@@ -1,4 +1,4 @@
-import EmptyBoardState from "../components/EmptyBoardState";
+import EmptyBoardState from "./EmptyBoardState";
 
 export default function BoardPage() {
   return (

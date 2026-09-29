@@ -89,3 +89,16 @@ ol {
     }
   }
 } */
+
+@theme {
+  --animate-bg-out: bg-out 0.3s ease forwards;
+
+  @keyframes bg-out {
+    from {
+      background-color: rgba(18, 13, 13, 0.7);
+    }
+    to {
+      background-color: rgba(61, 43, 43, 0);
+    }
+  }
+}

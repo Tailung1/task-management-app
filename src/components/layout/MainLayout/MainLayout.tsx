@@ -10,8 +10,8 @@ export default function MainLayout() {
     <div className='flex flex-col h-screen  relative'>
       <div
         onClick={() => setShowSidebar(false)}
-        className={`layer md:hidden  bg-black/50 fixed min-w-screen min-h-screen ${
-          showSidebar ? "flex" : "hidden"
+        className={`layer md:hidden fixed min-w-screen min-h-screen  ease-out ${
+          showSidebar ? "flex bg-black/70" : "animate-bg-out"
         }`}
       />
       <Sidebar />
