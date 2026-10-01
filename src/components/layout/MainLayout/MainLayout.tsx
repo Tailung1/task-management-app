@@ -8,9 +8,10 @@ export default function MainLayout() {
   const { showSidebar, setShowSidebar } = useSidebarContext();
   return (
     <div className='flex flex-col h-screen  relative'>
+      {/* Mobile sidebar overlay */}
       <div
         onClick={() => setShowSidebar(false)}
-        className={`layer md:hidden fixed min-w-screen min-h-screen  ease-out ${
+        className={`overlay md:hidden fixed inset-0  ease ${
           showSidebar ? "flex bg-black/70" : "animate-bg-out"
         }`}
       />
