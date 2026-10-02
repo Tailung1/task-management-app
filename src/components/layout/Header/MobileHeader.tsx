@@ -4,12 +4,19 @@ import logo from "../../../assets/images/logo.png";
 import { useSidebarContext } from "../../../contexts/SidebarContext";
 import { useModalContext } from "../../../contexts/ModalContext";
 import BoardOptionsMenu from "../../../features/board/components/BoardOptionsMenu";
+import { useLocation } from "react-router-dom";
 
 export default function MobileHeader() {
   const { showSidebar } = useSidebarContext();
   const { setActiveModal } = useModalContext();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  
+  const location = useLocation();
+
+  const handleModalOpen = () => {
+    if (location.pathname === "/") return;
+    setActiveModal("create-task");
+  };
+
   return (
     <div className='flex w-full justify-between p-2'>
       {" "}
@@ -29,7 +36,7 @@ export default function MobileHeader() {
       <div className='flex items-center gap-1'>
         {" "}
         <button
-          onClick={() => setActiveModal("create-task")}
+          onClick={handleModalOpen}
           type='button'
           className='flex cursor-pointer items-center gap-2 rounded-[30px] bg-[#635FC7] px-3 py-3 text-white hover:bg-[#7A75E0]'
           aria-label='Add New Task'
