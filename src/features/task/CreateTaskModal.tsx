@@ -109,6 +109,7 @@ export default function CreateTaskModal() {
           <option value='' disabled>
             Select status
           </option>
+
           <option value='todo'>Todo</option>
           <option value='doing'>Doing</option>
           <option value='done'>Done</option>
