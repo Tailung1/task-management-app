@@ -1,24 +1,26 @@
-import boardIcon from "../../../assets/images/board-icon.svg";
-import { useNavigate } from "react-router-dom";
+import { PanelsTopLeft } from "lucide-react";
+import { Link } from "react-router-dom";
 import type { Board } from "../board.types";
 
 export default function BoardItem({ board }: { board: Board }) {
-  const navigate = useNavigate();
-  const handleNavigate = (name: string) => {
-    const slug = `/board/${name.replaceAll(" ", "-")}`;
-    navigate(slug);
-  };
+  const slug = `/board/${board.name.replaceAll(" ", "-")}`;
 
   return (
-    <div
-      onClick={() => handleNavigate(board.name)}
-      className={`flex items-center py-4 gap-2  rounded-r-3xl  ${
-        board.isActive && "bg-[#7230db] -ml-4 pl-4"
+    <Link
+      to={slug}
+      className={`flex items-center gap-2 rounded-r-3xl py-4 ${
+        board.isActive ? "bg-[#7230db] -ml-4 pl-4" : ""
       }`}
     >
-      {" "}
-      <img className='w-6 h-6' src={boardIcon} alt='logo' />
-      <p className='text-[18px]'>{board.name}</p>
-    </div>
+      <PanelsTopLeft
+        size={24}
+        strokeWidth={2}
+        className={board.isActive ? "text-white" : "text-[#828FA3] dark:text-[#828FA3]"}
+      />
+
+      <span className={board.isActive ? "text-[18px] text-white" : "text-[18px] text-[#828FA3]"}>
+        {board.name}
+      </span>
+    </Link>
   );
 }

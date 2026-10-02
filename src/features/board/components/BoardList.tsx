@@ -1,5 +1,5 @@
+import { PanelsTopLeft } from "lucide-react";
 import BoardItem from "./BoardItem";
-import CustomBoardIcon from "../CustomBoardIcon";
 import type { Boards } from "../board.types";
 
 export default function BoardList() {
@@ -16,21 +16,26 @@ export default function BoardList() {
 
   return (
     <div>
-      <p className='pb-4'>
+      <p className='pb-4 text-xs font-bold tracking-wide text-[#828FA3]'>
         ALL BOARDS <span>({boards.length})</span>
       </p>
-      <section className='flex flex-col pb-3'>
-        {boards.map((board, index) => (
-          <BoardItem board={board} key={index} />
+
+      <ul className='flex flex-col pb-3'>
+        {boards.map((board) => (
+          <li key={board.name}>
+            <BoardItem board={board} />
+          </li>
         ))}
-      </section>
-      <div className='flex items-cente gap-2 pb-6'>
-        <CustomBoardIcon />
-        <div className='flex gap-1 items-center'>
-          <span>+</span>
-          <p className='text-[18px] text-[#7230db]'>Create New Board</p>
-        </div>
-      </div>
+      </ul>
+
+      <button type='button' className='flex items-center gap-2 pb-6 text-[#7230db]'>
+        <PanelsTopLeft size={24} strokeWidth={2} className='text-[#635FC7]' />
+
+        <span className='flex items-center gap-1 text-[18px]'>
+          <span aria-hidden='true'>+</span>
+          Create New Board
+        </span>
+      </button>
     </div>
   );
 }
