@@ -1,9 +1,11 @@
 import { ChevronDown, EllipsisVertical, Plus } from "lucide-react";
 import logo from "../../../assets/images/logo.png";
 import { useSidebarContext } from "../../../contexts/SidebarContext";
+import { useModalContext } from "../../../contexts/ModalContext";
 
 export default function MobileHeader() {
   const { showSidebar } = useSidebarContext();
+  const { setActiveModal } = useModalContext();
 
   return (
     <div className='flex w-full justify-between p-2'>
@@ -23,6 +25,7 @@ export default function MobileHeader() {
 
       <div className='flex items-center gap-1'>
         <button
+          onClick={() => setActiveModal("create-task")}
           type='button'
           className='flex cursor-pointer items-center gap-2 rounded-[30px] bg-[#635FC7] px-3 py-3 text-white hover:bg-[#7A75E0]'
           aria-label='Add New Task'
