@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 
 type Theme = "light" | "dark";
 
@@ -9,7 +9,7 @@ type ThemeContextType = {
 
 const ThemeContext = createContext<ThemeContextType | null>(null);
 
-export default function ThemeProvider({ children }: { children: React.ReactNode }) {
+export default function ThemeProvider({ children }: { children: ReactNode }) {
   const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
   const [theme, setTheme] = useState<Theme>(prefersDark ? "dark" : "light");
 
