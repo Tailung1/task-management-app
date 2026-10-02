@@ -4,6 +4,7 @@ import CreateColumnModal from "../../features/column/CreateColumnModal";
 import ModalOverlay from "./ModalOverlay";
 import CreateTaskModal from "../../features/task/CreateTaskModal";
 import DeleteBoardModal from "../../features/board/components/DeleteBoardModal";
+// import EditBoardModal from "../../features/board/components/EditBoardModal";
 
 export default function ModalRenderer() {
   const { activeModal } = useModalContext();
@@ -15,6 +16,9 @@ export default function ModalRenderer() {
     case "delete-board":
       activeModalForDisplay = <DeleteBoardModal />;
       break;
+    // case "edit-board":
+    //   activeModalForDisplay = <EditBoardModal />;
+    //   break;
     case "create-column":
       activeModalForDisplay = <CreateColumnModal />;
       break;

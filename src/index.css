@@ -2,9 +2,9 @@
 /* @custom-variant dark (&:where(.dark, .dark *)); */
 @custom-variant dark (&:where(.dark *)); /* enough for my case */
 
-/* button {
+button {
   cursor: pointer;
-} */
+}
 
 /*
 *,

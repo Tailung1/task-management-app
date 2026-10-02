@@ -4,7 +4,6 @@ export default function DeleteBoardModal() {
   const { setActiveModal } = useModalContext();
 
   function handleDelete() {
-    // Delete board here
     setActiveModal(null);
   }
 
