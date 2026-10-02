@@ -1,7 +1,9 @@
 import { useSidebarContext } from "../../../contexts/SidebarContext";
+import { useModalContext } from "../../../contexts/ModalContext";
 
 export default function EmptyBoardState() {
   const { showSidebar } = useSidebarContext();
+  const { setActiveModal } = useModalContext();
 
   return (
     <div
@@ -12,7 +14,10 @@ export default function EmptyBoardState() {
       <p className='text-[18px] text-red-500 text-center leading-tight'>
         This board is empty. Create a new column to get started.
       </p>
-      <button className='flex gap-2 items-center cursor-pointer bg-violet-400 w-fit py-3 px-4 rounded-full hover:bg-violet-300'>
+      <button
+        onClick={() => setActiveModal("create-column")}
+        className='flex gap-2 items-center cursor-pointer bg-violet-400 w-fit py-3 px-4 rounded-full hover:bg-violet-300'
+      >
         <span>+</span>
         <p className='text-white'>Add New Column</p>
       </button>

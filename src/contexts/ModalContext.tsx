@@ -15,7 +15,7 @@ type ModalContextType = {
 
 const ModalContext = createContext<ModalContextType | null>(null);
 
-export default function ThemeProvider({ children }: { children: React.ReactNode }) {
+export default function ModalProvider({ children }: { children: React.ReactNode }) {
   const [activeModal, setActiveModal] = useState<ModalType | null>(null);
 
   return (
@@ -25,11 +25,11 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
   );
 }
 
-export const useThemeContext = () => {
+export const useModalContext = () => {
   const context = useContext(ModalContext);
 
   if (!context) {
-    throw new Error("useThemeContext must be used inside ThemeProvider");
+    throw new Error("useModalContext must be used inside ThemeProvider");
   }
 
   return context;

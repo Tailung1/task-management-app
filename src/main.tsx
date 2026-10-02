@@ -4,12 +4,15 @@ import "./index.css";
 import App from "./App.tsx";
 import ThemeProvider from "./contexts/ThemeContext.tsx";
 import SidebarProvider from "./contexts/SidebarContext.tsx";
+import ModalProvider from "./contexts/ModalContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider>
       <SidebarProvider>
-        <App />
+        <ModalProvider>
+          <App />
+        </ModalProvider>
       </SidebarProvider>
     </ThemeProvider>
   </StrictMode>
