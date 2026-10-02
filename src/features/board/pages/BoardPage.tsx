@@ -12,7 +12,7 @@ export default function BoardPage() {
       {activeModal ? (
         <ModalRenderer />
       ) : (
-        <div className='flex-1 flex items-center justify-center'>
+        <div className='flex-1  flex items-center justify-center'>
           <EmptyBoardState />
         </div>
       )}

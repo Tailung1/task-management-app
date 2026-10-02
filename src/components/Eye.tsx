@@ -8,7 +8,7 @@ export default function Eye() {
       onClick={() => setShowSidebar(true)}
       className={`${
         showSidebar ? "md:hidden" : "md:flex"
-      } hidden bg-[rgb(99,95,199)] hover:bg-[rgb(120,116,220)] w-16 items-center justify-center p-4 rounded-r-4xl absolute bottom-20 cursor-pointer`}
+      } hidden bg-[rgb(99,95,199)] hover:bg-[rgb(120,116,220)] w-16 items-center justify-center p-4 rounded-r-4xl fixed bottom-20 cursor-pointer`}
     >
       <img className='w-6 h-6' src={eyeOpen} alt='opened eyes icon ' />
     </button>
