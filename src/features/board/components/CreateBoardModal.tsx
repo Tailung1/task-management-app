@@ -20,7 +20,7 @@ export default function CreateBoardModal() {
   }
 
   return (
-    <div className='w-full max-w-130 overflow-hidden rounded-xl bg-white shadow-2xl dark:bg-[#2B2C37]'>
+    <div className='w-full max-w-130 overflow-hidden rounded-xl bg-white  dark:bg-[#2B2C37]'>
       {/* Header */}
       <div className='flex items-start justify-between px-7 pt-7'>
         <div>
@@ -95,7 +95,7 @@ export default function CreateBoardModal() {
               >
                 <button
                   type='button'
-                  className='cursor-grab px-1.5 text-[#828FA3] opacity-0 transition group-hover:opacity-100'
+                  className='cursor-grab  px-1.5 text-[#828FA3] opacity-0 transition group-hover:opacity-100'
                   aria-label='Reorder column'
                 >
                   <GripVertical size={17} />

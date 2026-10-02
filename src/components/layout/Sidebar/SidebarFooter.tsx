@@ -1,18 +1,20 @@
+import { EyeOff } from "lucide-react";
 import ThemeToggle from "../../ThemeToggle/ThemeToggle";
 import { useSidebarContext } from "../../../contexts/SidebarContext";
-import eyeHide from "../../../assets/images/eye-hide.png";
 
 export default function SidebarFooter() {
   const { setShowSidebar } = useSidebarContext();
+
   return (
-    <div className='flex flex-col items-center justify-end w-full h-full'>
+    <div className='flex h-full w-full flex-col items-center justify-end'>
       <div className='flex w-full flex-col items-start'>
         <ThemeToggle />
+
         <div
           onClick={() => setShowSidebar(false)}
-          className='hidden md:flex gap-2 items-center pt-5 cursor-pointer'
+          className='hidden items-center gap-2 pt-5 text-[#828FA3] cursor-pointer md:flex'
         >
-          <img className='w-6 h-6' src={eyeHide} alt='Hide eye icon' />
+          <EyeOff size={24} strokeWidth={2} aria-hidden='true' />
           <p>Hide Sidebar</p>
         </div>
       </div>

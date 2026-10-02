@@ -15,7 +15,7 @@ export default function BoardItem({ board }: { board: Board }) {
       <PanelsTopLeft
         size={24}
         strokeWidth={2}
-        className={board.isActive ? "text-white" : "text-[#828FA3] dark:text-[#828FA3]"}
+        className={board.isActive ? "text-white" : "text-[#828FA3]"}
       />
 
       <span className={board.isActive ? "text-[18px] text-white" : "text-[18px] text-[#828FA3]"}>
