@@ -11,8 +11,8 @@ export default function MainLayout() {
       {/* Mobile sidebar overlay */}
       <div
         onClick={() => setShowSidebar(false)}
-        className={`overlay md:hidden fixed inset-0  ease ${
-          showSidebar ? "flex bg-black/70" : "animate-bg-out"
+        className={` bg-black/70 md:hidden transition-opacity duration-300 fixed inset-0 ease ${
+          showSidebar ? "pointer-events-auto opacity-100 ": "pointer-events-none opacity-0"
         }`}
       />
       <Sidebar />

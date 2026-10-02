@@ -7,7 +7,7 @@ import BoardOptionsMenu from "../../../features/board/components/BoardOptionsMen
 import { useLocation } from "react-router-dom";
 
 export default function MobileHeader() {
-  const { showSidebar } = useSidebarContext();
+  const { showSidebar, setShowSidebar } = useSidebarContext();
   const { setActiveModal } = useModalContext();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
@@ -24,13 +24,14 @@ export default function MobileHeader() {
         {" "}
         <img className='h-10 w-10 md:hidden' src={logo} alt='logo' />{" "}
         <div
-          className={`flex items-center gap-1 transition-transform duration-1000 ease ${
+          onClick={() => setShowSidebar(true)}
+          className={`flex items-center gap-1 md:pointer-events-none transition-transform duration-1000 ease ${
             showSidebar ? "md:translate-x-12" : "translate-x-0"
           }`}
         >
           {" "}
           <h3 className='text-lg font-bold'>Personal board</h3>{" "}
-          <ChevronDown size={20} strokeWidth={2} aria-hidden='true' />{" "}
+          <ChevronDown className='md:hidden' size={20} strokeWidth={2} aria-hidden='true' />{" "}
         </div>{" "}
       </div>{" "}
       <div className='flex items-center gap-1'>

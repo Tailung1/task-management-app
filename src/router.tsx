@@ -14,7 +14,7 @@ const router = createBrowserRouter([
         element: <NoBoardState />,
       },
       {
-        path: "board/:id",
+        path: "board/:boardName",
         element: <BoardPage />,
       },
     ],
