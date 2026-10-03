@@ -1,48 +1,21 @@
 import { PanelsTopLeft } from "lucide-react";
 import BoardItem from "./BoardItem";
-import type { Boards } from "../board.types";
+// import type { Boards } from "../board.types";
 import { useModalContext } from "../../../contexts/ModalContext";
-import "./board-list-scrollbar.css";
+import "./scrollbar.css";
+import data from "../../../data.json";
 
 export default function BoardList() {
   const { setActiveModal } = useModalContext();
 
-  const boards: Boards = [
-    {
-      name: "Personal board",
-      isActive: true,
-    },
-    {
-      name: "Task1wuqsdjskdhsdjhjsdhksdks",
-      isActive: false,
-    },
-    {
-      name: "Personal board",
-      isActive: true,
-    },
-    {
-      name: "Task1",
-      isActive: false,
-    },
-    {
-      name: "Personal board",
-      isActive: true,
-    },
-    {
-      name: "Task1",
-      isActive: false,
-    },
-  ];
-
   return (
     <div>
       <p className='pb-4 text-xs font-bold tracking-wide text-[#828FA3]'>
-        ALL BOARDS <span>({boards.length})</span>
+        ALL BOARDS <span>({data.length})</span>
       </p>
-
-      <div className='-ml-8 mb-4 max-h-64  overflow-y-auto pr-2 board-list-scrollbar'>
+      <div className='-ml-8 mb-8 max-h-55 overflow-y-auto pr-2 board-list-scrollbar'>
         <ul>
-          {boards.map((board, index) => (
+          {data.map((board, index) => (
             <li key={`${board.name}-${index}`}>
               <BoardItem board={board} />
             </li>
@@ -55,7 +28,7 @@ export default function BoardList() {
         type='button'
         className='mb-6 flex cursor-pointer items-center gap-2 text-[#7230db] transition-opacity duration-200 hover:opacity-70'
       >
-        <PanelsTopLeft size={24} strokeWidth={2} className='text-[#635FC7]' />
+        <PanelsTopLeft size={20} strokeWidth={2} className='text-[#635FC7]' />
 
         <span className='flex items-center gap-1 text-[18px]'>
           <span aria-hidden='true'>+</span>

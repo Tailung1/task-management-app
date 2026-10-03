@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Personal board",
+    "isActive": true
+  },
+  {
+    "name": "Task1wuqsdjskdhsdjhjsdhksdks",
+    "isActive": false
+  },
+  {
+    "name": "Personal board",
+    "isActive": true
+  },
+  {
+    "name": "Task1",
+    "isActive": false
+  },
+  {
+    "name": "Personal board",
+    "isActive": false
+  },
+  {
+    "name": "Task1",
+    "isActive": true
+  }
+]
