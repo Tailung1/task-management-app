@@ -2,7 +2,7 @@ import { PanelsTopLeft } from "lucide-react";
 import BoardItem from "./BoardItem";
 import type { Boards } from "../board.types";
 import { useModalContext } from "../../../contexts/ModalContext";
-import "./s.css";
+import "./board-list-scrollbar.css";
 
 export default function BoardList() {
   const { setActiveModal } = useModalContext();

@@ -1,27 +1,14 @@
-.board-list-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: #c4c7d0 transparent;
-}
-
 .board-list-scrollbar::-webkit-scrollbar {
   width: 6px;
 }
 
-.board-list-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-
 .board-list-scrollbar::-webkit-scrollbar-thumb {
-  background: #c4c7d0;
+  background: #b8bbc6;
   border-radius: 9999px;
 }
 
 .board-list-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #a8acb8;
-}
-
-.dark .board-list-scrollbar {
-  scrollbar-color: #4b4d5a transparent;
+  background: #9296a5;
 }
 
 .dark .board-list-scrollbar::-webkit-scrollbar-thumb {
