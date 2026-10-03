@@ -12,13 +12,13 @@ export default function MainLayout() {
       <div
         onClick={() => setShowSidebar(false)}
         className={` bg-black/70 md:hidden transition-opacity duration-300 fixed inset-0 ease ${
-          showSidebar ? "pointer-events-auto opacity-100 ": "pointer-events-none opacity-0"
+          showSidebar ? "pointer-events-auto opacity-100 " : "pointer-events-none opacity-0"
         }`}
       />
       <Sidebar />
       <Eye />
       <Header />
-      <main className='flex flex-1 bg-[#f2f2f3] dark:bg-[#20212C]'>
+      <main className='flex min-h-0 flex-1 bg-[#f2f2f3] dark:bg-[#20212C] '>
         <Outlet />
       </main>
     </div>
