@@ -13,7 +13,7 @@ export default function BoardList() {
       <p className='pb-4 text-xs font-bold tracking-wide text-[#828FA3]'>
         ALL BOARDS <span>({data.length})</span>
       </p>
-      <div className='-ml-8 mb-8 max-h-55 overflow-y-auto pr-2 scrollbar'>
+      <div className='-ml-8 mb-8 max-h-58.5 overflow-y-auto pr-2 scrollbar'>
         <ul>
           {data.map((board, index) => (
             <li key={`${board.name}-${index}`}>
