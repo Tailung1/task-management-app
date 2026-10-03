@@ -8,8 +8,8 @@ export default function BoardItem({ board }: { board: Board }) {
   return (
     <Link
       to={slug}
-      className={`flex items-center gap-2 rounded-r-3xl py-3 -ml-4 pl-4 ${
-        board.isActive ? "bg-[#7230db] " : "hover:bg-[#E9E7F8]"
+      className={`flex w-67 md:w-55 items-center gap-2  rounded-r-3xl py-3 pl-8 ${
+        board.isActive ? "bg-[#7230db]" : "hover:bg-[#E9E7F8]"
       }`}
     >
       <PanelsTopLeft

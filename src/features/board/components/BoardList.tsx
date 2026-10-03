@@ -2,10 +2,28 @@ import { PanelsTopLeft } from "lucide-react";
 import BoardItem from "./BoardItem";
 import type { Boards } from "../board.types";
 import { useModalContext } from "../../../contexts/ModalContext";
+import "./s.css";
 
 export default function BoardList() {
   const { setActiveModal } = useModalContext();
+
   const boards: Boards = [
+    {
+      name: "Personal board",
+      isActive: true,
+    },
+    {
+      name: "Task1",
+      isActive: false,
+    },
+    {
+      name: "Personal board",
+      isActive: true,
+    },
+    {
+      name: "Task1",
+      isActive: false,
+    },
     {
       name: "Personal board",
       isActive: true,
@@ -22,18 +40,20 @@ export default function BoardList() {
         ALL BOARDS <span>({boards.length})</span>
       </p>
 
-      <ul className='flex flex-col pb-3'>
-        {boards.map((board) => (
-          <li key={board.name}>
-            <BoardItem board={board} />
-          </li>
-        ))}
-      </ul>
+      <div className='-ml-8 mb-4 max-h-64 overflow-y-auto pr-2 board-list-scrollbar'>
+        <ul>
+          {boards.map((board, index) => (
+            <li key={`${board.name}-${index}`}>
+              <BoardItem board={board} />
+            </li>
+          ))}
+        </ul>
+      </div>
 
       <button
         onClick={() => setActiveModal("create-board")}
         type='button'
-        className='flex cursor-pointer items-center gap-2 pb-6 text-[#7230db] transition-opacity duration-200 hover:opacity-70'
+        className='mb-6 flex cursor-pointer items-center gap-2 text-[#7230db] transition-opacity duration-200 hover:opacity-70'
       >
         <PanelsTopLeft size={24} strokeWidth={2} className='text-[#635FC7]' />
 
