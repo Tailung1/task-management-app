@@ -1,20 +1,6 @@
 import { Plus } from "lucide-react";
 import { useModalContext } from "../../../contexts/ModalContext";
-
-type Task = {
-  id: string;
-  title: string;
-};
-
-type BoardColumn = {
-  id: string;
-  name: string;
-  tasks: Task[];
-};
-
-type BoardViewProps = {
-  columns: BoardColumn[];
-};
+import type { BoardViewProps } from "../board.types";
 
 const columnColors = [
   "bg-purple-500",
