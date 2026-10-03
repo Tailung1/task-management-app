@@ -13,7 +13,7 @@ export default function BoardList() {
       isActive: true,
     },
     {
-      name: "Task1",
+      name: "Task1wuqsdjskdhsdjhjsdhksdks",
       isActive: false,
     },
     {
@@ -40,7 +40,7 @@ export default function BoardList() {
         ALL BOARDS <span>({boards.length})</span>
       </p>
 
-      <div className='-ml-8 mb-4 max-h-64 overflow-y-auto pr-2 board-list-scrollbar'>
+      <div className='-ml-8 mb-4 max-h-64  overflow-y-auto pr-2 board-list-scrollbar'>
         <ul>
           {boards.map((board, index) => (
             <li key={`${board.name}-${index}`}>
