@@ -7,16 +7,23 @@ interface AuthModalProps {
   onClose?: () => void;
 }
 
+type AuthMode = "login" | "register";
+
 export default function AuthModal({ onClose }: AuthModalProps) {
-  const [isLogin, setIsLogin] = useState(true);
+  const [mode, setMode] = useState<AuthMode>("login");
 
   function handleLogin(credentials: LoginCredentials) {}
 
   function handleRegister(credentials: RegisterCredentials) {}
 
+  function handleModeChange() {
+    setMode((current) => (current === "login" ? "register" : "login"));
+  }
+
+  const isLogin = mode === "login";
+
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 backdrop-blur-sm'>
-      {" "}
       <div
         role='dialog'
         aria-modal='true'
@@ -34,6 +41,10 @@ export default function AuthModal({ onClose }: AuthModalProps) {
           </button>
         )}
 
+        <h2 id='auth-modal-title' className='sr-only'>
+          {isLogin ? "Sign in" : "Create account"}
+        </h2>
+
         {isLogin ? (
           <LoginForm onSubmit={handleLogin} />
         ) : (
@@ -41,10 +52,10 @@ export default function AuthModal({ onClose }: AuthModalProps) {
         )}
 
         <div className='mt-6 text-center text-sm text-[#828fa3]'>
-          {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
+          {isLogin ? "Don't have an account?" : "Already have an account"}{" "}
           <button
             type='button'
-            onClick={() => setIsLogin((value) => !value)}
+            onClick={handleModeChange}
             className='font-semibold text-[#7230db] transition hover:text-[#5d20bd] dark:text-[#a66cff]'
           >
             {isLogin ? "Create account" : "Sign in"}
