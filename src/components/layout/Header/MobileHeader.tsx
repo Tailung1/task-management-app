@@ -25,7 +25,7 @@ export default function MobileHeader() {
         <img className='h-10 w-10 md:hidden' src={logo} alt='logo' />{" "}
         <div
           onClick={() => setShowSidebar(true)}
-          className={`flex items-center gap-1 md:pointer-events-none transition-transform duration-1000 ease ${
+          className={`flex items-center cursor-pointer  gap-1 md:pointer-events-none transition-transform duration-1000 ease ${
             showSidebar ? "md:translate-x-12" : "translate-x-0"
           }`}
         >

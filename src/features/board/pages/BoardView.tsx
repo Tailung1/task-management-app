@@ -31,7 +31,7 @@ export default function BoardView({ columns }: BoardViewProps) {
   };
 
   return (
-    <div className='flex flex-1 gap-6 p-6'>
+    <div className='flex gap-6 p-6'>
       {columns.map((column) => (
         <section key={column.id} className='flex h-full w-70 flex-col '>
           {/* Column header */}
@@ -41,7 +41,7 @@ export default function BoardView({ columns }: BoardViewProps) {
               aria-hidden='true'
             />
 
-            <h2 className='flex-1 overflow-x-auto whitespace-nowrap scrollbar text-sm font-bold uppercase tracking-wider text-gray-700 dark:text-gray-200'>
+            <h2 className='overflow-x-auto whitespace-nowrap scrollbar text-sm font-bold uppercase tracking-wider text-gray-700 dark:text-gray-200'>
               {column.name}
             </h2>
 
@@ -49,7 +49,7 @@ export default function BoardView({ columns }: BoardViewProps) {
           </div>
 
           {/* Tasks */}
-          <div className='flex-1 overflow-y-auto pr-1 flex flex-col gap-3 pb-2 scrollbar'>
+          <div className='overflow-y-auto pr-1 flex flex-col gap-3 pb-2 scrollbar'>
             {column.tasks.map((task) => (
               <article
                 key={task.id}
