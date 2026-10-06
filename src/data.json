@@ -1,6 +1,7 @@
 [
   {
     "id": "1",
+    "isActive": true,
     "name": "TodoTodoTodoTodoTodoTodoTodoTodo",
     "tasks": [
       { "id": "1", "title": "Create dashboard UI" },
@@ -27,42 +28,32 @@
   },
   {
     "id": "2",
+    "isActive": false,
     "name": "Doing",
     "tasks": [{ "id": "3", "title": "Build board layout" }]
   },
   {
     "id": "3",
+    "isActive": false,
     "name": "Done",
     "tasks": [{ "id": "4", "title": "Configure routing" }]
   },
   {
     "id": "2",
+    "isActive": false,
     "name": "Doing",
     "tasks": [{ "id": "3", "title": "Build board layout" }]
   },
   {
     "id": "3",
+    "isActive": false,
     "name": "Done",
     "tasks": [{ "id": "4", "title": "Configure routing" }]
   },
   {
     "id": "2",
+    "isActive": false,
     "name": "Doing",
     "tasks": [{ "id": "3", "title": "Build board layout" }]
-  },
-  {
-    "id": "3",
-    "name": "Done",
-    "tasks": [{ "id": "4", "title": "Configure routing" }]
-  },
-  {
-    "id": "2",
-    "name": "Doing",
-    "tasks": [{ "id": "3", "title": "Build board layout" }]
-  },
-  {
-    "id": "3",
-    "name": "Done",
-    "tasks": [{ "id": "4", "title": "Configure routing" }]
   }
 ]
