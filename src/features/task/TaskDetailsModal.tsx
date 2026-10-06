@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Check, ChevronDown, X } from "lucide-react";
+import { Check, ChevronDown, EllipsisVertical, X } from "lucide-react";
 
 const task = {
   id: "1",
@@ -41,6 +41,7 @@ export default function TaskDetailsModal() {
   const [subtasks, setSubtasks] = useState(task.subtasks);
   const [status, setStatus] = useState(task.status);
   const [showStatusMenu, setShowStatusMenu] = useState(false);
+  const [showTaskMenu, setShowTaskMenu] = useState(false);
 
   const completedCount = subtasks.filter((subtask) => subtask.status === "Done").length;
 
@@ -69,13 +70,41 @@ export default function TaskDetailsModal() {
           <p className='mt-1 text-sm text-gray-500 dark:text-gray-400'>From {task.boardName}</p>
         </div>
 
-        <button
-          type='button'
-          aria-label='Close task details'
-          className='text-gray-500 transition hover:text-gray-800 dark:text-gray-400 dark:hover:text-white'
-        >
-          <X size={20} />
-        </button>
+        <div className='relative flex items-center gap-1'>
+          <button
+            type='button'
+            aria-label='Close task details'
+            className='text-gray-500 transition hover:text-gray-800 dark:text-gray-400 dark:hover:text-white'
+          >
+            <X size={27} />
+          </button>
+          <button
+            type='button'
+            aria-label='Task options'
+            onClick={() => setShowTaskMenu((current) => !current)}
+            className='text-gray-500 transition hover:text-gray-800 dark:text-gray-400 dark:hover:text-white'
+          >
+            <EllipsisVertical size={27} />
+          </button>
+
+          {showTaskMenu && (
+            <div className='absolute right-0 top-full z-20 mt-2 w-36 overflow-hidden rounded-md bg-white py-1 shadow-lg dark:bg-[#20212C]'>
+              <button
+                type='button'
+                className='w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-[#2B2C37]'
+              >
+                Edit task
+              </button>
+
+              <button
+                type='button'
+                className='w-full px-4 py-2 text-left text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-[#2B2C37]'
+              >
+                Delete task
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className='mt-6'>
@@ -136,7 +165,7 @@ export default function TaskDetailsModal() {
         </button>
 
         {showStatusMenu && (
-          <div className='absolute left-0 right-0 bottom-0 z-10  rounded-md border border-gray-200 bg-white shadow-lg dark:border-gray-600 dark:bg-[#2B2C37]'>
+          <div className='absolute left-0 right-0 bottom-0 z-10 rounded-md border border-gray-200 bg-white shadow-lg dark:border-gray-600 dark:bg-[#2B2C37]'>
             {statuses.map((option) => (
               <button
                 key={option}
