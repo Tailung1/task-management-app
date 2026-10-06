@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Check, ChevronDown, EllipsisVertical, X } from "lucide-react";
+import { useModalContext } from "../../contexts/ModalContext";
 
 const task = {
   id: "1",
@@ -38,6 +39,7 @@ const task = {
 const statuses = ["Todo", "Doing", "Done"];
 
 export default function TaskDetailsModal() {
+  const { setActiveModal } = useModalContext();
   const [subtasks, setSubtasks] = useState(task.subtasks);
   const [status, setStatus] = useState(task.status);
   const [showStatusMenu, setShowStatusMenu] = useState(false);
@@ -90,6 +92,7 @@ export default function TaskDetailsModal() {
           {showTaskMenu && (
             <div className='absolute right-0 top-full z-20 mt-2 w-36 overflow-hidden rounded-md bg-white py-1 shadow-lg dark:bg-[#20212C]'>
               <button
+                onClick={() => setActiveModal("edit-task")}
                 type='button'
                 className='w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 dark:text-white dark:hover:bg-[#2B2C37]'
               >
