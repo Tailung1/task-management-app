@@ -1,26 +1,68 @@
 [
   {
-    "name": "Personal board",
-    "isActive": true
+    "id": "1",
+    "name": "TodoTodoTodoTodoTodoTodoTodoTodo",
+    "tasks": [
+      { "id": "1", "title": "Create dashboard UI" },
+      { "id": "2", "title": "Set up authentication" },
+      { "id": "1", "title": "Create dashboard UI" },
+      { "id": "2", "title": "Set up authentication" },
+      { "id": "1", "title": "Create dashboard UI" },
+      { "id": "2", "title": "Set up authentication" },
+      { "id": "1", "title": "Create dashboard UI" },
+      { "id": "2", "title": "Set up authentication" },
+      { "id": "1", "title": "Create dashboard UI" },
+      { "id": "2", "title": "Set up authentication" },
+      { "id": "1", "title": "Create dashboard UI" },
+      { "id": "2", "title": "Set up authentication" },
+      { "id": "1", "title": "Create dashboard UI" },
+      { "id": "2", "title": "Set up authentication" },
+      { "id": "1", "title": "Create dashboard UI" },
+      { "id": "2", "title": "Set up authentication" },
+      { "id": "1", "title": "Create dashboard UI" },
+      { "id": "2", "title": "Set up authentication" },
+      { "id": "1", "title": "Create dashboard UI" },
+      { "id": "2", "title": "Set up authentication" }
+    ]
   },
   {
-    "name": "Task1wuqsdjskdhsdjhjsdhksdks",
-    "isActive": false
+    "id": "2",
+    "name": "Doing",
+    "tasks": [{ "id": "3", "title": "Build board layout" }]
   },
   {
-    "name": "Personal board",
-    "isActive": true
+    "id": "3",
+    "name": "Done",
+    "tasks": [{ "id": "4", "title": "Configure routing" }]
   },
   {
-    "name": "Task1",
-    "isActive": false
+    "id": "2",
+    "name": "Doing",
+    "tasks": [{ "id": "3", "title": "Build board layout" }]
   },
   {
-    "name": "Personal board",
-    "isActive": false
+    "id": "3",
+    "name": "Done",
+    "tasks": [{ "id": "4", "title": "Configure routing" }]
   },
   {
-    "name": "Task1",
-    "isActive": true
+    "id": "2",
+    "name": "Doing",
+    "tasks": [{ "id": "3", "title": "Build board layout" }]
+  },
+  {
+    "id": "3",
+    "name": "Done",
+    "tasks": [{ "id": "4", "title": "Configure routing" }]
+  },
+  {
+    "id": "2",
+    "name": "Doing",
+    "tasks": [{ "id": "3", "title": "Build board layout" }]
+  },
+  {
+    "id": "3",
+    "name": "Done",
+    "tasks": [{ "id": "4", "title": "Configure routing" }]
   }
 ]
