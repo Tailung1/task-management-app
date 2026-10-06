@@ -5,6 +5,7 @@ import ModalOverlay from "./ModalOverlay";
 import CreateTaskModal from "../../features/task/CreateTaskModal";
 import DeleteBoardModal from "../../features/board/components/DeleteBoardModal";
 // import EditBoardModal from "../../features/board/components/EditBoardModal";
+import TaskDetailsModal from "../../features/task/TaskDetailsModal";
 
 export default function ModalRenderer() {
   const { activeModal } = useModalContext();
@@ -24,6 +25,9 @@ export default function ModalRenderer() {
       break;
     case "create-task":
       activeModalForDisplay = <CreateTaskModal />;
+      break;
+    case "show-task-details-modal":
+      activeModalForDisplay = <TaskDetailsModal />;
       break;
   }
   return <ModalOverlay>{activeModalForDisplay}</ModalOverlay>;

@@ -6,7 +6,8 @@ type ModalType =
   | "delete-board"
   | "create-column"
   | "create-task"
-  | "edit-task";
+  | "edit-task"
+  | "show-task-details-modal";
 
 type ModalContextType = {
   activeModal: ModalType | null;

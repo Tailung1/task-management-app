@@ -52,6 +52,7 @@ export default function BoardView({ columns }: BoardViewProps) {
           <div className='overflow-y-auto pr-1 flex flex-col gap-3 pb-2 scrollbar'>
             {column.tasks.map((task) => (
               <article
+              onClick={()=>setActiveModal("show-task-details-modal")}
                 key={task.id}
                 className='rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md dark:border-[#3E3F4E] dark:bg-[#2B2C37]'
               >
