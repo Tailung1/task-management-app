@@ -26,7 +26,7 @@ export default function ModalRenderer() {
     case "create-task":
       activeModalForDisplay = <CreateTaskModal />;
       break;
-    case "show-task-details-modal":
+    case "show-task-details":
       activeModalForDisplay = <TaskDetailsModal />;
       break;
   }

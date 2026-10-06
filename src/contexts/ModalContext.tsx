@@ -7,7 +7,7 @@ type ModalType =
   | "create-column"
   | "create-task"
   | "edit-task"
-  | "show-task-details-modal";
+  | "show-task-details";
 
 type ModalContextType = {
   activeModal: ModalType | null;
