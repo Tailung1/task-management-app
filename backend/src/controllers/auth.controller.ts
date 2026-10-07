@@ -7,7 +7,13 @@ export const registerController = async (req: Request, res: Response) => {
 
     const user = await registerUser(name, email, password);
 
-    res.status(201).json(user);
+    res.status(201).json({
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      },
+    });
   } catch (error) {
     console.error(error);
 

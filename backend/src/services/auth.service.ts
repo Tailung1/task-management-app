@@ -1,4 +1,6 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+
 import { findUserByEmail, createUser } from "../db/queries/auth.query.js";
 
 export const registerUser = async (name: string, email: string, password: string) => {
@@ -26,5 +28,16 @@ export const loginUser = async (email: string, password: string) => {
     throw new Error("Invalid credentials");
   }
 
-  return user;
+  const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET as string, {
+    expiresIn: "7d",
+  });
+
+  return {
+    token,
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    },
+  };
 };
