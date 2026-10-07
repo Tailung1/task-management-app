@@ -1,19 +1,19 @@
-import { pool } from "../db/pool.js";
+import pool from "../db/pool.js";
 
 export const findTasksByBoardId = async (boardId: string) => {
   const result = await pool.query(
     `
       SELECT
-        t.id,
-        t.column_id,
-        t.title,
-        t.description,
-        t.position,
-        t.created_at,
-        t.updated_at
+      t.id,
+      t.column_id,
+      t.title,
+      t.description,
+      t.position,
+      t.created_at,
+      t.updated_at
       FROM tasks t
       JOIN columns c
-        ON c.id = t.column_id
+      ON c.id = t.column_id
       WHERE c.board_id = $1
       ORDER BY t.position ASC;
     `,
@@ -21,26 +21,6 @@ export const findTasksByBoardId = async (boardId: string) => {
   );
 
   return result.rows;
-};
-
-export const findTaskById = async (taskId: string) => {
-  const result = await pool.query(
-    `
-      SELECT
-        id,
-        column_id,
-        title,
-        description,
-        position,
-        created_at,
-        updated_at
-      FROM tasks
-      WHERE id = $1;
-    `,
-    [taskId]
-  );
-
-  return result.rows[0] ?? null;
 };
 
 export const createTask = async (

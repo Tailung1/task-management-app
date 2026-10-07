@@ -1,12 +1,11 @@
-import { pool } from "../db/pool.js";
+import pool from "../db/pool.js";
+
 export const findBoardsByUserId = async (userId: string) => {
   const result = await pool.query(
     `
       SELECT
-        id,
-        name,
-        created_at,
-        updated_at
+      id,
+      name,
       FROM boards
       WHERE user_id = $1
       ORDER BY created_at DESC;
@@ -17,23 +16,7 @@ export const findBoardsByUserId = async (userId: string) => {
   return result.rows;
 };
 
-export const findBoardById = async (boardId: string) => {
-  const result = await pool.query(
-    `
-      SELECT
-        id,
-        name,
-        user_id,
-        created_at,
-        updated_at
-      FROM boards
-      WHERE id = $1;
-    `,
-    [boardId]
-  );
 
-  return result.rows[0] ?? null;
-};
 
 export const createBoard = async (userId: string, name: string) => {
   const result = await pool.query(
