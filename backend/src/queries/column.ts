@@ -1,15 +1,15 @@
-import pool  from "../db/pool.js";
+import pool  from "../pool.js";
 
 export const findColumnsByBoardId = async (boardId: string) => {
   const result = await pool.query(
     `
       SELECT
-      id,
-      board_id,
-      name,
-      position,
-      created_at,
-      updated_at
+        id,
+        board_id,
+        name,
+        position,
+        created_at,
+        updated_at
       FROM columns
       WHERE board_id = $1
       ORDER BY position ASC;
@@ -20,7 +20,24 @@ export const findColumnsByBoardId = async (boardId: string) => {
   return result.rows;
 };
 
+export const findColumnById = async (columnId: string) => {
+  const result = await pool.query(
+    `
+      SELECT
+        id,
+        board_id,
+        name,
+        position,
+        created_at,
+        updated_at
+      FROM columns
+      WHERE id = $1;
+    `,
+    [columnId]
+  );
 
+  return result.rows[0] ?? null;
+};
 
 export const createColumn = async (boardId: string, name: string, position: number) => {
   const result = await pool.query(
