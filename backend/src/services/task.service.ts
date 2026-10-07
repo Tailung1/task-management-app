@@ -1,9 +1,4 @@
-import {
-  createTask,
-  updateTask,
-  deleteTask,
-} from "../db/queries/task.query.js";
-
+import { createTask, updateTask, deleteTask } from "../db/queries/task.query.js";
 
 export const addTask = async (
   columnId: string,

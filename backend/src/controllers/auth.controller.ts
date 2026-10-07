@@ -1,22 +1,48 @@
 import type { Request, Response } from "express";
-import { getUserByEmail, registerUser } from "../services/auth.service.js";
+import { registerUser, loginUser } from "../services/auth.service.js";
 
 export const registerController = async (req: Request, res: Response) => {
   try {
     const { name, email, password } = req.body;
-
-    const existingUser = await getUserByEmail(email);
-
-    if (existingUser) {
-      res.status(409).json({ message: "Email already exists" });
-      return;
-    }
 
     const user = await registerUser(name, email, password);
 
     res.status(201).json(user);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Failed to register user" });
+
+    if (error instanceof Error && error.message === "Email already exists") {
+      res.status(409).json({
+        message: error.message,
+      });
+      return;
+    }
+
+    res.status(500).json({
+      message: "Failed to register user",
+    });
+  }
+};
+
+export const loginController = async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body;
+
+    const result = await loginUser(email, password);
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+
+    if (error instanceof Error && error.message === "Invalid credentials") {
+      res.status(401).json({
+        message: error.message,
+      });
+      return;
+    }
+
+    res.status(500).json({
+      message: "Failed to login",
+    });
   }
 };
