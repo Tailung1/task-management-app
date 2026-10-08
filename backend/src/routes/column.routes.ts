@@ -1,10 +1,15 @@
 import { Router } from "express";
+import {
+  createColumnController,
+  updateColumnController,
+  deleteColumnController,
+} from "../controllers/column.controller.js";
 
 const router = Router();
 
-router.get("/boards/:boardId/columns");
-router.post("/boards/:boardId/columns");
-router.patch("/columns/:columnId");
-router.delete("/columns/:columnId");
+router.post("/boards/:boardId/columns", createColumnController);
+router.patch("/columns/:columnId", updateColumnController);
+router.delete("/columns/:columnId", deleteColumnController);
 
 export default router;
+
