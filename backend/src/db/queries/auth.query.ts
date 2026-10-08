@@ -4,12 +4,7 @@ export const findUserByEmail = async (email: string) => {
   const result = await pool.query(
     `
       SELECT
-        id,
-        name,
-        email,
-        password,
-        created_at,
-        updated_at
+      id
       FROM users
       WHERE email = $1;
     `,
@@ -18,7 +13,6 @@ export const findUserByEmail = async (email: string) => {
 
   return result.rows[0] ?? null;
 };
-
 
 export const createUser = async (name: string, email: string, password: string) => {
   const result = await pool.query(
