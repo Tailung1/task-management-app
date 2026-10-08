@@ -6,14 +6,15 @@ import taskRouter from "./routes/task.routes.js";
 import { authenticate } from "./middleware/auth.middleware.js";
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 app.use(express.json());
 
+
 app.use("/api/auth", authRouter);
-app.use("/api/boards",authenticate, boardRouter);
-app.use("/api",authenticate, columnRouter);
-app.use("/api",authenticate, taskRouter);
+app.use("/api/boards", authenticate, boardRouter);
+app.use("/api", authenticate, columnRouter);
+app.use("/api", authenticate, taskRouter);
 
 app.get("/api/health", (_req, res) => {
   res.json({

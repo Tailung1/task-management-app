@@ -4,7 +4,6 @@ import { registerUser, loginUser } from "../services/auth.service.js";
 export const registerController = async (req: Request, res: Response) => {
   try {
     const { name, email, password } = req.body;
-
     const user = await registerUser(name, email, password);
 
     res.status(201).json({
