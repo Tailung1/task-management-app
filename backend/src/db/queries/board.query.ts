@@ -5,7 +5,7 @@ export const findBoardsByUserId = async (userId: string) => {
     `
       SELECT
       id,
-      name,
+      name
       FROM boards
       WHERE user_id = $1
       ORDER BY created_at DESC;

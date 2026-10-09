@@ -9,16 +9,13 @@ import {
 export const getBoardsController = async (req: Request, res: Response) => {
   try {
     const userId = req.user.id;
-
     const boards = await getBoards(userId);
-
     res.status(200).json(boards);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Failed to fetch boards" });
   }
 };
-
 
 
 export const createBoardController = async (req: Request, res: Response) => {
