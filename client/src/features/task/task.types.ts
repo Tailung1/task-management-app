@@ -1,8 +1,16 @@
 interface Task {
-    id:number,
-    title:string,
-    descirption:string,
+  id: number;
+  title: string;
+  description: string;
+  currentStatus: string;
+  subtasks: Subtask[];
 }
-type Tasks=Task[]
 
-export type {Task,Tasks}
+interface Subtask {
+  id: number;
+  title: string;
+  description: string;
+  isCompleted: boolean;
+}
+
+export type { Task };

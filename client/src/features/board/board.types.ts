@@ -1,13 +1,11 @@
+import type {Task} from "../task/task.types"
 interface Board {
   name: string;
   isActive: boolean;
 }
 type Boards = Board[];
 
-type Task = {
-  id: string;
-  title: string;
-};
+
 
 type BoardColumn = {
   id: string;
