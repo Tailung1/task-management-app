@@ -11,15 +11,8 @@ const columnColors = [
   "bg-cyan-500",
 ];
 
-function getColumnColor(id: string) {
-  let hash = 0;
-
-  for (let i = 0; i < id.length; i++) {
-    hash = id.charCodeAt(i) + ((hash << 5) - hash);
-  }
-
-  const index = Math.abs(hash) % columnColors.length;
-
+function getColumnColor(id: number) {
+  const index = Math.abs(id) % columnColors.length;
   return columnColors[index];
 }
 

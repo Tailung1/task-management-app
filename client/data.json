@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "name": "My Board",
+    "isActive": true,
+    "columns": [
+      {
+        "id": 1,
+        "name": "Todo",
+        "isActive": true,
+        "tasks": []
+      },
+      {
+        "id": 2,
+        "name": "Doing",
+        "isActive": true,
+        "tasks": []
+      },
+      {
+        "id": 3,
+        "name": "Done",
+        "isActive": true,
+        "tasks": []
+      }
+    ]
+  }
+]

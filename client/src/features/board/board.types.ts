@@ -1,20 +1,14 @@
-import type {Task} from "../task/task.types"
+import type { BoardColumn } from "../column/column.types";
+
 interface Board {
+  id: number;
   name: string;
   isActive: boolean;
+  columns: BoardColumn[];
 }
-type Boards = Board[];
-
-
-
-type BoardColumn = {
-  id: string;
-  name: string;
-  tasks: Task[];
-};
 
 type BoardViewProps = {
   columns: BoardColumn[];
 };
 
-export type { Board, Boards, Task, BoardColumn, BoardViewProps };
+export type { Board, BoardColumn, BoardViewProps };
