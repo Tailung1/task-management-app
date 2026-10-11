@@ -3,12 +3,10 @@ import BoardView from "./BoardView";
 import { useModalContext } from "../../../contexts/ModalContext";
 import ModalRenderer from "../../../components/modal/ModalRenderer";
 import columns from "../../../../data.json";
-import data from "../../../../data.json"
-import type { Board } from "../board.types";
+import data from "../../../../data.json";
 
 export default function BoardPage() {
   const { activeModal } = useModalContext();
-const activeBoard = data.find((board: Board) => board.isActive);
   return (
     <>
       {activeModal ? (
@@ -18,7 +16,7 @@ const activeBoard = data.find((board: Board) => board.isActive);
           <EmptyBoardState />
         </div>
       ) : (
-        <BoardView columns={activeBoard} />
+        <BoardView columns={data[0].columns} />
       )}
     </>
   );
