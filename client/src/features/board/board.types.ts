@@ -7,8 +7,12 @@ interface Board {
   columns: BoardColumn[];
 }
 
+type CreateBoardInput=Omit<Board,"id">
+type UpdateBoardInput = Partial<Board>;
+
+
 type BoardViewProps = {
   columns: BoardColumn[];
 };
 
-export type { Board, BoardColumn, BoardViewProps };
+export type { Board, BoardColumn, BoardViewProps, CreateBoardInput, UpdateBoardInput };
