@@ -2,9 +2,10 @@ type RequestOptions = Omit<RequestInit, "body"> & {
   body?: unknown;
 };
 
-const API_URL = import.meta.env.VITE_API_URL;
+// const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = "http://localhost:5001/api/";
 
-export const apiClient = async <T>(url: string, options: RequestOptions = {}): Promise<T> => {
+ const apiClient = async <T>(url: string, options: RequestOptions = {}): Promise<T> => {
   const token = localStorage.getItem("token");
 
   const response = await fetch(`${API_URL}${url}`, {
@@ -27,3 +28,6 @@ export const apiClient = async <T>(url: string, options: RequestOptions = {}): P
 
   return data as T;
 };
+
+
+export default apiClient
