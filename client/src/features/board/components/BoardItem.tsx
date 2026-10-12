@@ -12,7 +12,7 @@ export default function BoardItem({ board }: { board: Board }) {
     <Link
       to={slug}
       className={`flex w-67 md:w-55 items-center gap-2 rounded-r-3xl py-2.5 pl-8 ${
-        board.isActive ? "bg-[#7230db]" : "hover:bg-[#E9E7F8]"
+        isActive ? "bg-[#7230db]" : "hover:bg-[#E9E7F8]"
       }`}
     >
       <PanelsTopLeft
@@ -23,7 +23,7 @@ export default function BoardItem({ board }: { board: Board }) {
 
       <span
         className={
-          board.isActive ? "text-[18px] text-white truncate" : "text-[18px] text-[#828FA3] truncate"
+          isActive ? "text-[18px] text-white truncate" : "text-[18px] text-[#828FA3] truncate"
         }
       >
         {board.name}
