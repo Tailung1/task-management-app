@@ -18,7 +18,7 @@ const router = createBrowserRouter([
         element: <LoginPage />,
       },
       {
-        path: "board/:boardName",
+        path: "board/:id/:boardName",
         element: <BoardPage />,
       },
     ],

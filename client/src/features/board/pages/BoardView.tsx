@@ -45,7 +45,7 @@ export default function BoardView({ columns }: BoardViewProps) {
           <div className='flex flex-col gap-3 overflow-y-auto pr-1 pb-2 scrollbar'>
             {column.tasks.map((task) => {
               const completedCount = task.subtasks.filter((subtask) => subtask.isCompleted).length;
-              const subtasksTotalLength = task.subtasks.length
+              const subtasksTotalLength = task.subtasks.length;
 
               return (
                 <article
