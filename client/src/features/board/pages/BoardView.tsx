@@ -26,7 +26,7 @@ export default function BoardView({ columns }: BoardViewProps) {
   return (
     <div className='flex gap-6 p-6'>
       {columns.map((column) => (
-        <section key={column.id} className='flex h-full w-70 flex-col '>
+        <section key={column.id} className='flex h-full w-70 flex-col'>
           {/* Column header */}
           <div className='mb-4 flex h-5 items-center gap-2'>
             <span
@@ -42,18 +42,29 @@ export default function BoardView({ columns }: BoardViewProps) {
           </div>
 
           {/* Tasks */}
-          <div className='overflow-y-auto pr-1 flex flex-col gap-3 pb-2 scrollbar'>
-            {column.tasks.map((task) => (
-              <article
-              onClick={()=>setActiveModal("show-task-details")}
-                key={task.id}
-                className='rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md dark:border-[#3E3F4E] dark:bg-[#2B2C37]'
-              >
-                <h3 className='text-[15px] font-bold leading-5 text-gray-800 dark:text-white'>
-                  {task.title}
-                </h3>
-              </article>
-            ))}
+          <div className='flex flex-col gap-3 overflow-y-auto pr-1 pb-2 scrollbar'>
+            {column.tasks.map((task) => {
+              const completedCount = task.subtasks.filter((subtask) => subtask.isCompleted).length;
+              const subtasksTotalLength = task.subtasks.length
+
+              return (
+                <article
+                  key={task.id}
+                  onClick={() => setActiveModal("show-task-details")}
+                  className='cursor-pointer rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md dark:border-[#3E3F4E] dark:bg-[#2B2C37]'
+                >
+                  <h3 className='text-[15px] font-bold leading-5 text-gray-800 dark:text-white'>
+                    {task.title}
+                  </h3>
+
+                  {task.subtasks.length > 0 && (
+                    <p className='mt-2 text-xs font-medium text-gray-500 dark:text-gray-400'>
+                      {completedCount} of {subtasksTotalLength} subtasks
+                    </p>
+                  )}
+                </article>
+              );
+            })}
           </div>
         </section>
       ))}

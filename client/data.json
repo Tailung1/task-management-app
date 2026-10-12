@@ -1,27 +1,116 @@
-[
-  {
-    "id": 1,
-    "name": "My Board",
-    "isActive": true,
-    "columns": [
-      {
-        "id": 1,
-        "name": "Todo",
-        "isActive": true,
-        "tasks": []
-      },
-      {
-        "id": 2,
-        "name": "Doing",
-        "isActive": true,
-        "tasks": []
-      },
-      {
-        "id": 3,
-        "name": "Done",
-        "isActive": true,
-        "tasks": []
-      }
-    ]
-  }
+[{
+  "id": 1,
+  "name": "My Board",
+  "isActive": true,
+  "columns": [
+    {
+      "id": 1,
+      "name": "Todo",
+      "isActive": true,
+      "tasks": [
+        {
+          "id": 1,
+          "title": "Set up project structure",
+          "description": "Organize the frontend and backend folders.",
+          "status": "Todo",
+          "subtasks": [
+            {
+              "id": 1,
+              "title": "Configure TypeScript",
+              "isCompleted": true
+            },
+            {
+              "id": 2,
+              "title": "Set up ESLint",
+              "isCompleted": false
+            },
+            {
+              "id": 3,
+              "title": "Configure environment variables",
+              "isCompleted": false
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "title": "Design authentication page",
+          "description": "Create responsive login and registration forms.",
+          "status": "Todo",
+          "subtasks": [
+            {
+              "id": 4,
+              "title": "Build login form",
+              "isCompleted": true
+            },
+            {
+              "id": 5,
+              "title": "Build registration form",
+              "isCompleted": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Doing",
+      "isActive": true,
+      "tasks": [
+        {
+          "id": 3,
+          "title": "Implement API client",
+          "description": "Connect the frontend to the backend API.",
+          "status": "Doing",
+          "subtasks": [
+            {
+              "id": 6,
+              "title": "Create fetch wrapper",
+              "isCompleted": true
+            },
+            {
+              "id": 7,
+              "title": "Add JWT authorization",
+              "isCompleted": false
+            },
+            {
+              "id": 8,
+              "title": "Handle API errors",
+              "isCompleted": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Done",
+      "isActive": true,
+      "tasks": [
+        {
+          "id": 4,
+          "title": "Create database schema",
+          "description": "Set up tables and relationships for the task management app.",
+          "status": "Done",
+          "subtasks": [
+            {
+              "id": 9,
+              "title": "Create users table",
+              "isCompleted": true
+            },
+            {
+              "id": 10,
+              "title": "Create boards and columns tables",
+              "isCompleted": true
+            },
+            {
+              "id": 11,
+              "title": "Create tasks and subtasks tables",
+              "isCompleted": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
 ]
