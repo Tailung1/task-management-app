@@ -1,8 +1,11 @@
 import { PanelsTopLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import type { Board } from "../board.types";
+import { useLocation } from "react-router-dom";
 
 export default function BoardItem({ board }: { board: Board }) {
+  const { pathname } = useLocation();
+  const isActive = Number(pathname.split("/")[2]) === board.id;
   const slug = `/board/${board.id}/${board.name.replaceAll(" ", "-")}`;
 
   return (
@@ -15,7 +18,7 @@ export default function BoardItem({ board }: { board: Board }) {
       <PanelsTopLeft
         size={20}
         strokeWidth={2}
-        className={`shrink-0 ${board.isActive ? "text-white" : "text-[#828FA3]"}`}
+        className={`shrink-0 ${isActive ? "text-white" : "text-[#828FA3]"}`}
       />
 
       <span
