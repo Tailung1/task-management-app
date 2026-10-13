@@ -2,6 +2,7 @@ import { useState } from "react";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import type { LoginCredentials, RegisterCredentials } from "../auth.types";
+import { login, register } from "../auth.api";
 
 interface AuthModalProps {
   onClose?: () => void;
@@ -12,9 +13,13 @@ type AuthMode = "login" | "register";
 export default function AuthModal({ onClose }: AuthModalProps) {
   const [mode, setMode] = useState<AuthMode>("login");
 
-  function handleLogin(credentials: LoginCredentials) {}
+  function handleLogin(credentials: LoginCredentials) {
+    login(credentials);
+  }
 
-  function handleRegister(credentials: RegisterCredentials) {}
+  function handleRegister(credentials: RegisterCredentials) {
+    register(credentials);
+  }
 
   function handleModeChange() {
     setMode((current) => (current === "login" ? "register" : "login"));

@@ -15,7 +15,7 @@ export interface RegisterCredentials {
   password: string;
 }
 
-export interface AuthResponse {
+export interface LoginResponse {
   user: User;
   token: string;
 }
