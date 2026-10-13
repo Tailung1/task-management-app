@@ -1,7 +1,6 @@
 import pool from "../pool.js";
 
 export const findBoardsByUserId = async (userId: string) => {
-  console.log(userId, "s");
   const result = await pool.query(
     `
       SELECT

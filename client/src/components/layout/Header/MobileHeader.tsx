@@ -26,7 +26,7 @@ export default function MobileHeader() {
         <div
           onClick={() => setShowSidebar(true)}
           className={`flex items-center cursor-pointer  gap-1 md:pointer-events-none transition-transform duration-1000 ease ${
-            showSidebar ? "md:translate-x-14" : "translate-x-0"
+            showSidebar ? "md:translate-x-16" : "translate-x-0"
           }`}
         >
           {" "}

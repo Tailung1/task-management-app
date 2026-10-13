@@ -2,10 +2,10 @@ import { type ReactNode } from "react";
 import { useModalContext } from "../../contexts/ModalContext";
 
 export default function ModalOverlay({ children }: { children: ReactNode }) {
-  const { activeModal, setActiveModal } = useModalContext();
+  const { setActiveModal } = useModalContext();
 
   const handleModalOff = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (event.target === event.currentTarget && activeModal === "create-task") {
+    if (event.target === event.currentTarget) {
       setActiveModal(null);
     }
   };
