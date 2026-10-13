@@ -34,7 +34,6 @@ export const loginController = async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     const result = await loginUser(email, password);
-
     res.status(200).json(result);
   } catch (error) {
     console.error(error);
