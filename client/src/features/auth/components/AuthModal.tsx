@@ -18,8 +18,8 @@ export default function AuthModal({ onClose }: AuthModalProps) {
     localStorage.setItem("token", data.token);
   }
 
-  function handleRegister(credentials: RegisterCredentials) {
-    register(credentials);
+  async function handleRegister(credentials: RegisterCredentials) {
+    await register(credentials);
   }
 
   function handleModeChange() {
