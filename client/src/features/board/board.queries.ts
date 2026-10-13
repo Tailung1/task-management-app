@@ -1,5 +1,5 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createBoard, deleteBoard, getBoards, updateBoard } from "./board.api";
+import {  useQuery } from "@tanstack/react-query";
+import { getBoards } from "./board.api";
 
 export function useBoards() {
   return useQuery({

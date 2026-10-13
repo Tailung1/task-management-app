@@ -4,12 +4,19 @@ import boardRouter from "./routes/board.routes.js";
 import columnRouter from "./routes/column.routes.js";
 import taskRouter from "./routes/task.routes.js";
 import { authenticate } from "./middleware/auth.middleware.js";
+import cors from "cors"
 
 const app = express();
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  }),
+);
+
 const PORT = process.env.PORT || 5001;
 
 app.use(express.json());
-
 
 app.use("/api/auth", authRouter);
 app.use("/api/boards", authenticate, boardRouter);

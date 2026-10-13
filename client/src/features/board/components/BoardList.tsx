@@ -1,9 +1,16 @@
 import { PanelsTopLeft } from "lucide-react";
 import BoardItem from "./BoardItem";
 import "./scrollbar.css";
-import data from "../../../../data.json";
+// import data1 from "../../../../data.json";
+import { useBoards } from "../board.queries";
 
 export default function BoardList() {
+  const { data, isPending, isError, error } = useBoards();
+
+  if (isPending) return <p>Loading boards...</p>;
+
+  if (isError) return <p>{error.message}</p>;
+
   return (
     <div>
       <p className='pb-4 text-xs font-bold tracking-wide text-[#828FA3]'>
