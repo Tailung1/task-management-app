@@ -5,11 +5,12 @@ type RequestOptions = Omit<RequestInit, "body"> & {
 // const API_URL = import.meta.env.VITE_API_URL;
 const API_URL = "http://localhost:5001/api/";
 
- const apiClient = async <T>(url: string, options: RequestOptions = {}): Promise<T> => {
+const apiClient = async <T>(url: string, options: RequestOptions = {}): Promise<T> => {
   const token = localStorage.getItem("token");
 
   const response = await fetch(`${API_URL}${url}`, {
     ...options,
+    method: options.method ?? "POST",
     headers: {
       "Content-Type": "application/json",
       ...(token && {
@@ -29,5 +30,4 @@ const API_URL = "http://localhost:5001/api/";
   return data as T;
 };
 
-
-export default apiClient
+export default apiClient;
