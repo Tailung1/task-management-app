@@ -1,7 +1,6 @@
 import pool from "../pool.js";
 
 export const findBoardsByUserId = async (userId: string) => {
-    console.log("reach query ")
   const result = await pool.query(
     `
       SELECT
@@ -13,7 +12,6 @@ export const findBoardsByUserId = async (userId: string) => {
     `,
     [userId]
   );
-
   return result.rows;
 };
 
