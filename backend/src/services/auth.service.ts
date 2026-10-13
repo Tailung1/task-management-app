@@ -16,12 +16,13 @@ export const registerUser = async (name: string, email: string, password: string
 };
 
 export const loginUser = async (email: string, password: string) => {
-    
   const user = await findUserByEmail(email);
-
   if (!user) {
     throw new Error("Invalid credentials");
   }
+  console.log(password,"passss");
+  console.log(user.pass, "user passss");
+
 
   const isMatch = await bcrypt.compare(password, user.password);
 

@@ -5,7 +5,8 @@ export const findUserByEmail = async (email: string) => {
     `
       SELECT
       id,
-      name,email
+      name,
+      email,
       password
       FROM users
       WHERE email = $1;

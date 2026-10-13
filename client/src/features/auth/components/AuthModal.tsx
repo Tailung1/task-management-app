@@ -4,6 +4,7 @@ import RegisterForm from "./RegisterForm";
 import type { LoginCredentials, RegisterCredentials } from "../auth.types";
 import { login, register } from "../auth.api";
 import useAuthContext from "../../../contexts/AuthContext";
+import { useModalContext } from "../../../contexts/ModalContext";
 
 interface AuthModalProps {
   onClose?: () => void;
@@ -13,12 +14,14 @@ type AuthMode = "login" | "register";
 
 export default function AuthModal({ onClose }: AuthModalProps) {
   const { setIsAuthenticated } = useAuthContext();
+  const { setActiveModal } = useModalContext();
   const [mode, setMode] = useState<AuthMode>("login");
 
   async function handleLogin(credentials: LoginCredentials) {
     const data = await login(credentials);
     localStorage.setItem("token", data.token);
     setIsAuthenticated(true);
+    setActiveModal(null);
   }
 
   async function handleRegister(credentials: RegisterCredentials) {
