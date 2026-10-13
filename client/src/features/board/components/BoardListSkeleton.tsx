@@ -1,5 +1,6 @@
 export default function BoardListSkeleton() {
   return (
+    // aria-busy Tells screen readers this region is still loading or updating.
     <div aria-label='Loading boards' aria-busy='true'>
       <p className='pb-4 text-xs font-bold tracking-wide text-[#828FA3]'>ALL BOARDS</p>
 
