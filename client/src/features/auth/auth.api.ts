@@ -2,11 +2,11 @@ import type { LoginCredentials, RegisterCredentials, LoginResponse } from "./aut
 import apiClient from "../../api/clientApi";
 
 export function login(credentials: LoginCredentials): Promise<LoginResponse> {
-  return apiClient("auth/login", { body: credentials });
+  return apiClient("auth/login", { method: "POST", body: credentials });
 }
 
 export function register(credentials: RegisterCredentials): Promise<void> {
-  return apiClient("auth/register", { body: credentials });
+  return apiClient("auth/register", { method: "POST", body: credentials });
 }
 
 // export async function logout(): Promise<void> {}
