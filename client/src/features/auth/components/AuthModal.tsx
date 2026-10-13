@@ -13,8 +13,9 @@ type AuthMode = "login" | "register";
 export default function AuthModal({ onClose }: AuthModalProps) {
   const [mode, setMode] = useState<AuthMode>("login");
 
-  function handleLogin(credentials: LoginCredentials) {
-    login(credentials);
+  async function handleLogin(credentials: LoginCredentials) {
+    const data = await login(credentials);
+    localStorage.setItem("token", data.token);
   }
 
   function handleRegister(credentials: RegisterCredentials) {
