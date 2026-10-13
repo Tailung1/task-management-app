@@ -1,7 +1,7 @@
 import apiClient from "../../api/clientApi";
 import type { Board, CreateBoardInput, UpdateBoardInput } from "./board.types";
 
-export const getBoards = () => apiClient<Board[]>("boards");
+export const getBoards = () => apiClient<Board[]>("boards",{method:"GET"});
 
 export const createBoard = (data: CreateBoardInput) =>
   apiClient<Board>("/boards", {

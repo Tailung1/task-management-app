@@ -1,7 +1,7 @@
 import type { BoardColumn } from "../column/column.types";
 
 interface Board {
-  id: number;
+  id: string;
   name: string;
   columns: BoardColumn[];
 }

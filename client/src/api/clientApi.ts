@@ -10,6 +10,7 @@ const apiClient = async <T>(url: string, options: RequestOptions = {}): Promise<
 
   const response = await fetch(`${API_URL}${url}`, {
     ...options,
+    method: options.method ?? "POST",
     headers: {
       "Content-Type": "application/json",
       ...(token && {

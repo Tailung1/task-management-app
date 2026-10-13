@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 
 export default function BoardItem({ board }: { board: Board }) {
   const { pathname } = useLocation();
-  const isActive = Number(pathname.split("/")[2]) === board.id;
+  const isActive = pathname.split("/")[2] === board.id;
   const slug = `/board/${board.id}/${board.name.replaceAll(" ", "-")}`;
 
   return (

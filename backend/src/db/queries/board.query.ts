@@ -1,6 +1,7 @@
 import pool from "../pool.js";
 
 export const findBoardsByUserId = async (userId: string) => {
+  console.log(userId, "s");
   const result = await pool.query(
     `
       SELECT
@@ -10,12 +11,10 @@ export const findBoardsByUserId = async (userId: string) => {
       WHERE user_id = $1
       ORDER BY created_at DESC;
     `,
-    [userId]
+    [userId],
   );
   return result.rows;
 };
-
-
 
 export const createBoard = async (userId: string, name: string) => {
   const result = await pool.query(
@@ -29,7 +28,7 @@ export const createBoard = async (userId: string, name: string) => {
         created_at,
         updated_at;
     `,
-    [userId, name]
+    [userId, name],
   );
 
   return result.rows[0];
@@ -50,7 +49,7 @@ export const updateBoard = async (boardId: string, name: string) => {
         created_at,
         updated_at;
     `,
-    [name, boardId]
+    [name, boardId],
   );
 
   return result.rows[0] ?? null;
@@ -63,7 +62,7 @@ export const deleteBoard = async (boardId: string) => {
       WHERE id = $1
       RETURNING id;
     `,
-    [boardId]
+    [boardId],
   );
 
   return result.rows[0] ?? null;
