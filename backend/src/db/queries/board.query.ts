@@ -118,22 +118,40 @@ export const findBoardDetailsById = async (boardId: string, userId: string) => {
   return board;
 };
 
-export const createBoard = async (userId: string, name: string) => {
-  const result = await pool.query(
-    `
-      INSERT INTO boards (user_id, name)
-      VALUES ($1, $2)
-      RETURNING
-        id,
-        name,
-        user_id,
-        created_at,
-        updated_at;
-    `,
-    [userId, name],
-  );
+export const createBoard = async (userId: string, name: string, columnNames: string[]) => {
+  const client = await pool.connect();
 
-  return result.rows[0];
+  try {
+    await client.query("BEGIN");
+
+    const boardResult = await client.query(
+      `
+        INSERT INTO boards (user_id, name)
+        VALUES ($1, $2)
+        RETURNING id, name;
+      `,
+      [userId, name],
+    );
+    const board = boardResult.rows[0];
+
+    for (const [position, columnName] of columnNames.entries()) {
+      await client.query(
+        `
+          INSERT INTO columns (board_id, name, position)
+          VALUES ($1, $2, $3);
+        `,
+        [board.id, columnName, position],
+      );
+    }
+
+    await client.query("COMMIT");
+    return board;
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
 };
 
 export const updateBoard = async (boardId: string, name: string) => {

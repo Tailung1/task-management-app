@@ -45,9 +45,26 @@ export const getBoardDetailsController = async (req: Request, res: Response) => 
 export const createBoardController = async (req: Request, res: Response) => {
   try {
     const userId = req.user.id;
-    const { name } = req.body;
+    const { name, columns = [] } = req.body;
 
-    const board = await addBoard(userId, name);
+    if (typeof name !== "string" || !name.trim()) {
+      res.status(400).json({ message: "Board name is required" });
+      return;
+    }
+
+    if (
+      !Array.isArray(columns) ||
+      columns.some((column: unknown) => typeof column !== "string" || !column.trim())
+    ) {
+      res.status(400).json({ message: "Columns must be an array of non-empty names" });
+      return;
+    }
+
+    const board = await addBoard(
+      userId,
+      name.trim(),
+      columns.map((column: string) => column.trim()),
+    );
 
     res.status(201).json(board);
   } catch (error) {

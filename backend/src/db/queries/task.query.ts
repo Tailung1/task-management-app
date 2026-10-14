@@ -1,28 +1,5 @@
 import pool from "../pool.js";
 
-export const findTasksByBoardId = async (boardId: string) => {
-  const result = await pool.query(
-    `
-      SELECT
-      t.id,
-      t.column_id,
-      t.title,
-      t.description,
-      t.position,
-      t.created_at,
-      t.updated_at
-      FROM tasks t
-      JOIN columns c
-      ON c.id = t.column_id
-      WHERE c.board_id = $1
-      ORDER BY t.position ASC;
-    `,
-    [boardId]
-  );
-
-  return result.rows;
-};
-
 export const createTask = async (
   columnId: string,
   title: string,

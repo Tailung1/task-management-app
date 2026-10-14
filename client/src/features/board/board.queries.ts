@@ -1,5 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
-import { getBoardDetails, getBoards } from "./board.api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { createBoard, getBoardDetails, getBoards } from "./board.api";
+import type { CreateBoardInput } from "./board.types";
 import useAuthContext from "../../contexts/AuthContext";
 
 export const boardKeys = {
@@ -14,6 +15,17 @@ export function useBoards() {
     queryKey: boardKeys.lists(),
     queryFn: getBoards,
     enabled: isAuthenticated,
+  });
+}
+
+export function useCreateBoard() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (input: CreateBoardInput) => createBoard(input),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: boardKeys.lists() });
+    },
   });
 }
 

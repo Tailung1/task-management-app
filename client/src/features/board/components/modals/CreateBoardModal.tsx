@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useModalContext } from "../../../../contexts/ModalContext";
 import { Plus, X, GripVertical } from "lucide-react";
+import { useCreateBoard } from "../../board.queries";
 
 export default function CreateBoardModal() {
   const { setActiveModal } = useModalContext();
+  const createBoard = useCreateBoard();
   const [boardName, setBoardName] = useState("");
   const [columns, setColumns] = useState(["Todo", "Doing", "Done"]);
 
@@ -17,6 +19,20 @@ export default function CreateBoardModal() {
 
   function removeColumn(index: number) {
     setColumns((current) => current.filter((_, i) => i !== index));
+  }
+
+  function handleCreateBoard() {
+    const name = boardName.trim();
+    const columnNames = columns.map((column) => column.trim()).filter(Boolean);
+
+    if (!name || createBoard.isPending) {
+      return;
+    }
+
+    createBoard.mutate(
+      { name, columns: columnNames },
+      { onSuccess: () => setActiveModal(null) },
+    );
   }
 
   return (
@@ -45,9 +61,12 @@ export default function CreateBoardModal() {
       {/* Content */}
       <div className='px-7 py-7'>
         <div>
-          <label className='mb-2 block text-xs font-bold text-[#828FA3]'>BOARD NAME</label>
+          <label htmlFor='new-board-name' className='mb-2 block text-xs font-bold text-[#828FA3]'>
+            BOARD NAME
+          </label>
 
           <input
+            id='new-board-name'
             value={boardName}
             onChange={(e) => setBoardName(e.target.value)}
             placeholder='e.g. Website Redesign'
@@ -163,11 +182,18 @@ export default function CreateBoardModal() {
             Add New Column
           </button>
         </div>
+        {createBoard.isError && (
+          <p className='mt-3 text-sm text-red-500' role='alert'>
+            {createBoard.error.message}
+          </p>
+        )}
       </div>
 
       <div className='bg-[#F8F8F8] px-7 py-5 dark:bg-[#20212C]'>
         <button
           type='button'
+          onClick={handleCreateBoard}
+          disabled={!boardName.trim() || createBoard.isPending}
           className='
               w-full rounded-full
               bg-[#635FC7]
@@ -176,9 +202,10 @@ export default function CreateBoardModal() {
               transition
               hover:bg-[#A8A4FF]
               active:scale-[0.99]
+              disabled:cursor-not-allowed disabled:opacity-60
             '
         >
-          Create New Board
+          {createBoard.isPending ? "Creating..." : "Create New Board"}
         </button>
       </div>
     </div>

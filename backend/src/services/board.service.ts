@@ -14,8 +14,8 @@ export const getBoardDetails = async (boardId: string, userId: string) => {
   return findBoardDetailsById(boardId, userId);
 };
 
-export const addBoard = async (userId: string, name: string) => {
-  return createBoard(userId, name);
+export const addBoard = async (userId: string, name: string, columnNames: string[]) => {
+  return createBoard(userId, name, columnNames);
 };
 
 export const editBoard = async (boardId: string, name: string) => {
