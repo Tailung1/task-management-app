@@ -13,4 +13,13 @@ type BoardViewProps = {
   columns: BoardColumn[];
 };
 
-export type { Board, BoardColumn, BoardViewProps, CreateBoardInput, UpdateBoardInput };
+
+
+
+export type {
+  Board,
+  BoardColumn,
+  BoardViewProps,
+  CreateBoardInput,
+  UpdateBoardInput,
+};

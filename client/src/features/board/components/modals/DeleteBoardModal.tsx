@@ -1,10 +1,12 @@
 import { useModalContext } from "../../../../contexts/ModalContext";
+import type { Board } from "../../board.types";
 
-export default function DeleteBoardModal() {
+export default function DeleteBoardModal({ board }: { board: Board }) {
   const { setActiveModal } = useModalContext();
 
   function handleDelete() {
     setActiveModal(null);
+    console.log(board);
   }
 
   return (

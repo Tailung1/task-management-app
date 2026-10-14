@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 
-type ModalType =
+export type ModalType =
   | "create-board"
   | "edit-board"
   | "delete-board"

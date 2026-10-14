@@ -6,7 +6,7 @@ function useActiveBoard() {
   const { data } = useBoards();
   const board = data?.find((item) => item.id === id);
 
-  return { board };
+  return board;
 }
 
 export default useActiveBoard;
