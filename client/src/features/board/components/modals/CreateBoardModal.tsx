@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useModalContext } from "../../../contexts/ModalContext";
+import { useModalContext } from "../../../../contexts/ModalContext";
 import { Plus, X, GripVertical } from "lucide-react";
 
 export default function CreateBoardModal() {

@@ -1,21 +1,9 @@
 import { useState } from "react";
 import { Plus, X } from "lucide-react";
-import { useModalContext } from "../../../contexts/ModalContext";
+import { useModalContext } from "../../../../contexts/ModalContext";
+import type { Board } from "../../board.types";
 
-type Board = {
-  id: string;
-  name: string;
-  columns: {
-    id: string;
-    name: string;
-  }[];
-};
-
-type EditBoardModalProps = {
-  board: Board;
-};
-
-export default function EditBoardModal({ board }: EditBoardModalProps) {
+export default function EditBoardModal({ board }: { board: Board }) {
   const { setActiveModal } = useModalContext();
 
   const [boardName, setBoardName] = useState(board.name);
@@ -23,7 +11,7 @@ export default function EditBoardModal({ board }: EditBoardModalProps) {
 
   function updateColumnName(id: string, name: string) {
     setColumns((current) =>
-      current.map((column) => (column.id === id ? { ...column, name } : column))
+      current.map((column) => (column.id === id ? { ...column, name } : column)),
     );
   }
 
@@ -33,6 +21,7 @@ export default function EditBoardModal({ board }: EditBoardModalProps) {
       {
         id: crypto.randomUUID(),
         name: "",
+        tasks: [],
       },
     ]);
   }
@@ -42,14 +31,13 @@ export default function EditBoardModal({ board }: EditBoardModalProps) {
   }
 
   function handleSubmit() {
-    const updatedBoard = {
+    const updatedBoard: Board = {
       ...board,
       name: boardName,
       columns,
     };
 
     console.log(updatedBoard);
-
     setActiveModal(null);
   }
 

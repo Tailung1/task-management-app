@@ -1,4 +1,4 @@
-import { useModalContext } from "../../../contexts/ModalContext";
+import { useModalContext } from "../../../../contexts/ModalContext";
 
 export default function DeleteBoardModal() {
   const { setActiveModal } = useModalContext();

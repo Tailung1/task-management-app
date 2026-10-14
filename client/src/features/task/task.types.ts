@@ -1,5 +1,5 @@
 interface Task {
-  id: number;
+  id: string;
   title: string;
   description: string;
   status: string;
@@ -7,7 +7,7 @@ interface Task {
 }
 
 interface Subtask {
-  id: number;
+  id: string;
   title: string;
   isCompleted: boolean;
 }
