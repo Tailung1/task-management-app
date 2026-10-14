@@ -23,14 +23,11 @@ export default function CreateColumnModal() {
 
   function handleSubmit() {
     const newErrors = columns.map((column) => (column.trim() === "" ? "Can't be empty" : ""));
-
     setErrors(newErrors);
 
     if (newErrors.some(Boolean)) {
       return;
     }
-
-    // Create columns here
   }
 
   return (

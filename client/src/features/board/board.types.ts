@@ -9,7 +9,8 @@ interface Board extends BoardSummary {
   columns: BoardColumn[];
 }
 
-type CreateBoardInput = Pick<BoardSummary, "name"> & { columns: string[] };
+// intersection type                        intersection operator
+type CreateBoardInput = Pick<BoardSummary, "name"> & { columns?: string[] };
 type UpdateBoardInput = Partial<BoardSummary>;
 
 type BoardViewProps = {

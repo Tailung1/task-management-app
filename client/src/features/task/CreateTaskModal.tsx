@@ -19,9 +19,7 @@ export default function CreateTaskModal() {
     setSubtasks((current) => current.filter((_, i) => i !== index));
   }
 
-  function handleSubmit() {
-    // Create task here
-  }
+  function handleSubmit() {}
 
   return (
     <div className='w-full max-w-130 rounded-xl bg-white p-6 shadow-2xl dark:bg-[#2B2C37]'>
