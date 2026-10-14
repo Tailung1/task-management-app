@@ -5,8 +5,11 @@ import { useModalContext } from "../../../../contexts/ModalContext";
 
 export default function BoardActionModal() {
   const { activeModal } = useModalContext();
-  const board = useActiveBoard();
-  if (!board) return;
+  const { data: board, isPending, isFetching, isError, error } = useActiveBoard();
+
+  if (isPending && isFetching) return <p role='status'>Loading board...</p>;
+  if (isError) return <p role='alert'>{error.message}</p>;
+  if (!board) return null;
 
   switch (activeModal) {
     case "edit-board":

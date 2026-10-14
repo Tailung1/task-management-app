@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import {
   getBoards,
+  getBoardDetails,
   addBoard,
   editBoard,
   removeBoard,
@@ -14,6 +15,29 @@ export const getBoardsController = async (req: Request, res: Response) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Failed to fetch boards" });
+  }
+};
+
+export const getBoardDetailsController = async (req: Request, res: Response) => {
+  try {
+    const { boardId } = req.params;
+
+    if (typeof boardId !== "string") {
+      res.status(400).json({ message: "Invalid board ID" });
+      return;
+    }
+
+    const board = await getBoardDetails(boardId, req.user.id);
+
+    if (!board) {
+      res.status(404).json({ message: "Board not found" });
+      return;
+    }
+
+    res.status(200).json(board);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to fetch board details" });
   }
 };
 

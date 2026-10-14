@@ -1,16 +1,19 @@
 import apiClient from "../../api/clientApi";
-import type { Board, CreateBoardInput, UpdateBoardInput } from "./board.types";
+import type { Board, BoardSummary, CreateBoardInput, UpdateBoardInput } from "./board.types";
 
-export const getBoards = () => apiClient<Board[]>("boards",{method:"GET"});
+export const getBoards = () => apiClient<BoardSummary[]>("boards", { method: "GET" });
+
+export const getBoardDetails = (boardId: string) =>
+  apiClient<Board>(`boards/${boardId}`, { method: "GET" });
 
 export const createBoard = (data: CreateBoardInput) =>
-  apiClient<Board>("/boards", {
+  apiClient<BoardSummary>("/boards", {
     method: "POST",
     body: data,
   });
 
 export const updateBoard = (boardId: string, data: UpdateBoardInput) =>
-  apiClient<Board>(`boards/${boardId}`, {
+  apiClient<BoardSummary>(`boards/${boardId}`, {
     method: "PATCH",
     body: data,
   });

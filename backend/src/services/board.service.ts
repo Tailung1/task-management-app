@@ -1,5 +1,6 @@
 import {
   findBoardsByUserId,
+  findBoardDetailsById,
   createBoard,
   updateBoard,
   deleteBoard,
@@ -7,6 +8,10 @@ import {
 
 export const getBoards = async (userId: string) => {
   return findBoardsByUserId(userId);
+};
+
+export const getBoardDetails = async (boardId: string, userId: string) => {
+  return findBoardDetailsById(boardId, userId);
 };
 
 export const addBoard = async (userId: string, name: string) => {

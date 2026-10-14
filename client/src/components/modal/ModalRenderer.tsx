@@ -6,8 +6,14 @@ import CreateTaskModal from "../../features/task/CreateTaskModal";
 import TaskDetailsModal from "../../features/task/TaskDetailsModal";
 import EditTaskModal from "../../features/task/EditTaskModal";
 import BoardActionModal from "../../features/board/components/modals/BoardActionModal";
+import type { Task } from "../../features/task/task.types";
 
-export default function ModalRenderer() {
+type ModalRendererProps = {
+  task: Task | null;
+  boardName: string;
+};
+
+export default function ModalRenderer({ task, boardName }: ModalRendererProps) {
   const { activeModal } = useModalContext();
   let activeModalForDisplay;
   switch (activeModal) {
@@ -28,7 +34,9 @@ export default function ModalRenderer() {
       activeModalForDisplay = <EditTaskModal />;
       break;
     case "show-task-details":
-      activeModalForDisplay = <TaskDetailsModal />;
+      if (task) {
+        activeModalForDisplay = <TaskDetailsModal task={task} boardName={boardName} />;
+      }
       break;
   }
   return <ModalOverlay>{activeModalForDisplay}</ModalOverlay>;

@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   getBoardsController,
+  getBoardDetailsController,
   createBoardController,
   updateBoardController,
   deleteBoardController,
@@ -9,6 +10,7 @@ import {
 const router = Router();
 
 router.get("/", getBoardsController);
+router.get("/:boardId", getBoardDetailsController);
 router.post("/", createBoardController);
 router.patch("/:boardId", updateBoardController);
 router.delete("/:boardId", deleteBoardController);

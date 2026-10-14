@@ -1,9 +1,9 @@
 import { PanelsTopLeft } from "lucide-react";
 import { Link } from "react-router-dom";
-import type { Board } from "../board.types";
+import type { BoardSummary } from "../board.types";
 import { useLocation } from "react-router-dom";
 
-export default function BoardItem({ board }: { board: Board }) {
+export default function BoardItem({ board }: { board: BoardSummary }) {
   const { pathname } = useLocation();
   const isActive = pathname.split("/")[2] === board.id;
   const slug = `/board/${board.id}/${board.name.replaceAll(" ", "-")}`;

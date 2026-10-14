@@ -1,23 +1,25 @@
 import type { BoardColumn } from "../column/column.types";
 
-interface Board {
+interface BoardSummary {
   id: string;
   name: string;
+}
+
+interface Board extends BoardSummary {
   columns: BoardColumn[];
 }
 
-type CreateBoardInput = Omit<Board, "id">;
-type UpdateBoardInput = Partial<Board>;
+type CreateBoardInput = Pick<BoardSummary, "name">;
+type UpdateBoardInput = Partial<BoardSummary>;
 
 type BoardViewProps = {
   columns: BoardColumn[];
+  onSelectTask: (taskId: string) => void;
 };
-
-
-
 
 export type {
   Board,
+  BoardSummary,
   BoardColumn,
   BoardViewProps,
   CreateBoardInput,

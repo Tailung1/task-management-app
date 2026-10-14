@@ -16,7 +16,7 @@ function getColumnColor(id: string) {
   return columnColors[index];
 }
 
-export default function BoardView({ columns }: BoardViewProps) {
+export default function BoardView({ columns, onSelectTask }: BoardViewProps) {
   const { setActiveModal } = useModalContext();
 
   const handleCreateColumn = () => {
@@ -48,10 +48,11 @@ export default function BoardView({ columns }: BoardViewProps) {
               const subtasksTotalLength = task.subtasks.length;
 
               return (
-                <article
+                <button
                   key={task.id}
-                  onClick={() => setActiveModal("show-task-details")}
-                  className='cursor-pointer rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md dark:border-[#3E3F4E] dark:bg-[#2B2C37]'
+                  type='button'
+                  onClick={() => onSelectTask(task.id)}
+                  className='w-full cursor-pointer rounded-lg border border-gray-200 bg-white p-4 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md dark:border-[#3E3F4E] dark:bg-[#2B2C37]'
                 >
                   <h3 className='text-[15px] font-bold leading-5 text-gray-800 dark:text-white'>
                     {task.title}
@@ -62,7 +63,7 @@ export default function BoardView({ columns }: BoardViewProps) {
                       {completedCount} of {subtasksTotalLength} subtasks
                     </p>
                   )}
-                </article>
+                </button>
               );
             })}
           </div>

@@ -1,51 +1,23 @@
 import { useState } from "react";
 import { Check, ChevronDown, EllipsisVertical, X } from "lucide-react";
 import { useModalContext } from "../../contexts/ModalContext";
-
-const task = {
-  id: "1",
-  title: "Create dashboard UI",
-  boardName: "Personal",
-  status: "Todo",
-  subtasks: [
-    {
-      id: "1",
-      title: "Create dashboard layout",
-      status: "Done",
-    },
-    {
-      id: "2",
-      title: "Create navigation",
-      status: "Done",
-    },
-    {
-      id: "3",
-      title: "Build dashboard cards",
-      status: "Todo",
-    },
-    {
-      id: "4",
-      title: "Make dashboard responsive",
-      status: "Todo",
-    },
-    {
-      id: "5",
-      title: "Add loading states",
-      status: "Todo",
-    },
-  ],
-};
+import type { Task } from "./task.types";
 
 const statuses = ["Todo", "Doing", "Done"];
 
-export default function TaskDetailsModal() {
+type TaskDetailsModalProps = {
+  task: Task;
+  boardName: string;
+};
+
+export default function TaskDetailsModal({ task, boardName }: TaskDetailsModalProps) {
   const { setActiveModal } = useModalContext();
   const [subtasks, setSubtasks] = useState(task.subtasks);
   const [status, setStatus] = useState(task.status);
   const [showStatusMenu, setShowStatusMenu] = useState(false);
   const [showTaskMenu, setShowTaskMenu] = useState(false);
 
-  const completedCount = subtasks.filter((subtask) => subtask.status === "Done").length;
+  const completedCount = subtasks.filter((subtask) => subtask.isCompleted).length;
 
   const toggleSubtask = (id: string) => {
     setSubtasks((currentSubtasks) =>
@@ -53,7 +25,7 @@ export default function TaskDetailsModal() {
         subtask.id === id
           ? {
               ...subtask,
-              status: subtask.status === "Done" ? "Todo" : "Done",
+              isCompleted: !subtask.isCompleted,
             }
           : subtask
       )
@@ -69,13 +41,14 @@ export default function TaskDetailsModal() {
         <div>
           <h2 className='text-lg font-bold text-[#20212C] dark:text-white'>{task.title}</h2>
 
-          <p className='mt-1 text-sm text-gray-500 dark:text-gray-400'>From {task.boardName}</p>
+          <p className='mt-1 text-sm text-gray-500 dark:text-gray-400'>From {boardName}</p>
         </div>
 
         <div className='relative flex items-center gap-1'>
           <button
             type='button'
             aria-label='Close task details'
+            onClick={() => setActiveModal(null)}
             className='text-gray-500 transition hover:text-gray-800 dark:text-gray-400 dark:hover:text-white'
           >
             <X size={27} />
@@ -115,9 +88,13 @@ export default function TaskDetailsModal() {
           Subtasks ({completedCount} of {subtasks.length})
         </p>
 
+        {task.description && (
+          <p className='mb-4 text-sm text-gray-500 dark:text-gray-400'>{task.description}</p>
+        )}
+
         <div className='space-y-2'>
           {subtasks.map((subtask) => {
-            const isCompleted = subtask.status === "Done";
+            const isCompleted = subtask.isCompleted;
 
             return (
               <button
