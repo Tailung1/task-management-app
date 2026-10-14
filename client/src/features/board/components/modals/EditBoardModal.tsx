@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Plus, X } from "lucide-react";
 import { useModalContext } from "../../../../contexts/ModalContext";
 import type { Board } from "../../board.types";
-export default function EditBoardModal({board}:{board:Board}) {
+
+export default function EditBoardModal({ board }: { board: Board }) {
   const { setActiveModal } = useModalContext();
   const [boardName, setBoardName] = useState(board.name);
   const [columns, setColumns] = useState(board.columns);

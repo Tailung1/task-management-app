@@ -1,5 +1,5 @@
 import { useModalContext } from "../../contexts/ModalContext";
-import CreateBoardModal from "../../features/board/components/CreateBoardModal";
+import CreateBoardModal from "../../features/board/components/modals/CreateBoardModal";
 import CreateColumnModal from "../../features/column/CreateColumnModal";
 import ModalOverlay from "./ModalOverlay";
 import CreateTaskModal from "../../features/task/CreateTaskModal";
