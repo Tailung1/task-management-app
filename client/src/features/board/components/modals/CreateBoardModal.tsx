@@ -25,7 +25,7 @@ export default function CreateBoardModal() {
   }
   function onSuccess(createdBoard: BoardSummary) {
     setActiveModal(null);
-    navigate(`/boards/${createdBoard.id}/${createdBoard.name}`);
+    navigate(`/board/${createdBoard.id}/${createdBoard.name}`);
   }
 
   function handleCreateBoard() {
