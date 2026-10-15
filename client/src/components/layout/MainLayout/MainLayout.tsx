@@ -3,9 +3,13 @@ import Header from "../Header/Header";
 import Sidebar from "../Sidebar/Sidebar";
 import Eye from "../../Eye";
 import { useSidebarContext } from "../../../contexts/SidebarContext";
+import { useModalContext } from "../../../contexts/ModalContext";
+import ModalRenderer from "../../modal/ModalRenderer";
 
 export default function MainLayout() {
   const { showSidebar, setShowSidebar } = useSidebarContext();
+  const { activeModal } = useModalContext();
+
   return (
     <div className='flex flex-col h-screen  relative'>
       {/* Mobile sidebar overlay */}
@@ -21,6 +25,7 @@ export default function MainLayout() {
       <main className='flex flex-1 overflow-y-hidden scrollbar  bg-[#f2f2f3] dark:bg-[#20212C] '>
         <Outlet />
       </main>
+      {activeModal === "create-board" && <ModalRenderer task={null} boardName='' />}
     </div>
   );
 }

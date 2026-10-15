@@ -42,7 +42,7 @@ export default function BoardPage() {
 
   return (
     <>
-      {activeModal ? (
+      {activeModal && activeModal !== "create-board" ? (
         <ModalRenderer task={activeTask ?? null} boardName={board.name} />
       ) : board.columns.length === 0 ? (
         <div className='flex flex-1 items-center justify-center'>
