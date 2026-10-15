@@ -4,14 +4,11 @@ import { X } from "lucide-react";
 export default function EditTaskModal() {
   const [title, setTitle] = useState("Create dashboard UI");
   const [description, setDescription] = useState(
-    "Create the dashboard interface with responsive layout and reusable components."
+    "Create the dashboard interface with responsive layout and reusable components.",
   );
 
   return (
-    <div
-      className='w-full max-w-lg rounded-lg bg-white p-6 shadow-xl dark:bg-[#2B2C37]'
-      onClick={(event) => event.stopPropagation()}
-    >
+    <div className='w-full max-w-lg rounded-lg bg-white p-6 shadow-xl dark:bg-[#2B2C37]'>
       <div className='flex items-center justify-between'>
         <h2 className='text-lg font-bold text-[#20212C] dark:text-white'>Edit Task</h2>
 

@@ -35,7 +35,6 @@ export default function TaskDetailsModal({ task, boardName }: TaskDetailsModalPr
   return (
     <div
       className='w-full max-w-lg rounded-lg bg-white p-6 shadow-xl dark:bg-[#2B2C37]'
-      onClick={(event) => event.stopPropagation()}
     >
       <div className='flex items-start justify-between gap-4'>
         <div>
