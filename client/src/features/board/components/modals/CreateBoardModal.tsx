@@ -2,12 +2,15 @@ import { useState } from "react";
 import { useModalContext } from "../../../../contexts/ModalContext";
 import { Plus, X, GripVertical } from "lucide-react";
 import { useCreateBoard } from "../../board.queries";
+import { useNavigate } from "react-router-dom";
+import type { BoardSummary } from "../../board.types";
 
 export default function CreateBoardModal() {
   const { setActiveModal } = useModalContext();
   const createBoard = useCreateBoard();
   const [boardName, setBoardName] = useState("");
   const [columns, setColumns] = useState(["Todo", "Doing", "Done"]);
+  const navigate = useNavigate();
 
   function addColumn() {
     setColumns((current) => [...current, ""]);
@@ -20,6 +23,10 @@ export default function CreateBoardModal() {
   function removeColumn(index: number) {
     setColumns((current) => current.filter((_, i) => i !== index));
   }
+  function onSuccess(createdBoard: BoardSummary) {
+    setActiveModal(null);
+    navigate(`/boards/${createdBoard.id}/${createdBoard.name}`);
+  }
 
   function handleCreateBoard() {
     const name = boardName.trim();
@@ -29,10 +36,7 @@ export default function CreateBoardModal() {
       return;
     }
 
-    createBoard.mutate(
-      { name, columns: columnNames },
-      { onSuccess: () => setActiveModal(null) },
-    );
+    createBoard.mutate({ name, columns: columnNames }, { onSuccess });
   }
 
   return (

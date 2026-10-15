@@ -7,7 +7,7 @@ export const getBoardDetails = (boardId: string) =>
   apiClient<Board>(`boards/${boardId}`, { method: "GET" });
 
 export const createBoard = (data: CreateBoardInput) =>
-  apiClient<BoardSummary>("/boards", {
+  apiClient<BoardSummary>("boards", {
     method: "POST",
     body: data,
   });
