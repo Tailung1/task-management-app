@@ -20,6 +20,9 @@ app.use(
   cors({
     origin: (origin, callback) => {
       if (!origin || config.clientOrigins.includes(origin)) {
+        // Why i have !origin -->
+        // Allow requests without an Origin header (e.g. curl/Postman),
+        // because CORS is a browser security mechanism, not authentication.
         callback(null, true);
         return;
       }
@@ -27,7 +30,7 @@ app.use(
     },
   }),
 );
-app.use(express.json({ limit: "64kb" }));
+app.use(express.json({ limit: "64kb" })); // The limit is about the request body, not the entire HTTP request
 
 const authRateLimit = rateLimit({
   windowMs: 15 * 60 * 1000,
