@@ -56,8 +56,7 @@ async function migrate() {
 
         console.log(`Applied: ${file}`);
       } catch (error) {
-        console.log(`error: ${error}`);
-
+        console.error(`Migration failed: ${file}`, error);
         await client.query("ROLLBACK");
         throw error;
       }
@@ -68,5 +67,8 @@ async function migrate() {
 }
 
 migrate()
-  .catch(console.error)
+  .catch((error: unknown) => {
+    console.error("Database migrations failed", error);
+    process.exitCode = 1;
+  })
   .finally(() => pool.end());

@@ -1,13 +1,11 @@
 import { Router } from "express";
-import {
-  registerController,
-  loginController,
-} from "../controllers/auth.controller.js";
+import { createLoginController, registerController } from "../controllers/auth.controller.js";
 
-const router = Router();
+export function createAuthRouter(config: { jwtSecret: string }) {
+  const router = Router();
 
-router.post("/register", registerController);
-router.post("/login", loginController);
+  router.post("/register", registerController);
+  router.post("/login", createLoginController(config.jwtSecret));
 
-export default router;
-
+  return router;
+}

@@ -2,6 +2,7 @@ import pool from "../pool.js";
 
 export const createTask = async (
   columnId: string,
+  userId: string,
   title: string,
   description: string | null,
   position: number
@@ -14,7 +15,10 @@ export const createTask = async (
         description,
         position
       )
-      VALUES ($1, $2, $3, $4)
+      SELECT c.id, $3, $4, $5
+      FROM columns c
+      JOIN boards b ON b.id = c.board_id
+      WHERE c.id = $1 AND b.user_id = $2
       RETURNING
         id,
         column_id,
@@ -24,13 +28,18 @@ export const createTask = async (
         created_at,
         updated_at;
     `,
-    [columnId, title, description, position]
+    [columnId, userId, title, description, position]
   );
 
   return result.rows[0];
 };
 
-export const updateTask = async (taskId: string, title: string, description: string | null) => {
+export const updateTask = async (
+  taskId: string,
+  userId: string,
+  title: string,
+  description: string | null,
+) => {
   const result = await pool.query(
     `
       UPDATE tasks
@@ -39,6 +48,12 @@ export const updateTask = async (taskId: string, title: string, description: str
         description = $2,
         updated_at = NOW()
       WHERE id = $3
+        AND EXISTS (
+          SELECT 1
+          FROM columns c
+          JOIN boards b ON b.id = c.board_id
+          WHERE c.id = tasks.column_id AND b.user_id = $4
+        )
       RETURNING
         id,
         column_id,
@@ -48,20 +63,26 @@ export const updateTask = async (taskId: string, title: string, description: str
         created_at,
         updated_at;
     `,
-    [title, description, taskId]
+    [title, description, taskId, userId]
   );
 
   return result.rows[0] ?? null;
 };
 
-export const deleteTask = async (taskId: string) => {
+export const deleteTask = async (taskId: string, userId: string) => {
   const result = await pool.query(
     `
       DELETE FROM tasks
       WHERE id = $1
+        AND EXISTS (
+          SELECT 1
+          FROM columns c
+          JOIN boards b ON b.id = c.board_id
+          WHERE c.id = tasks.column_id AND b.user_id = $2
+        )
       RETURNING id;
     `,
-    [taskId]
+    [taskId, userId]
   );
 
   return result.rows[0] ?? null;

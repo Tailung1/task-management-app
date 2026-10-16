@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ArrowLeft, Mail } from "lucide-react";
+import { getEmailError } from "../auth.validation";
 import FormField from "./FormField";
 
 interface ForgotPasswordFormProps {
@@ -17,8 +18,9 @@ export default function ForgotPasswordForm({
   function handleResetSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    if (!resetEmail.trim()) {
-      setResetError("Please enter your email address.");
+    const emailError = getEmailError(resetEmail);
+    if (emailError) {
+      setResetError(emailError);
       return;
     }
 
@@ -49,6 +51,8 @@ export default function ForgotPasswordForm({
         label='Email'
         type='email'
         placeholder='you@example.com'
+        autoComplete='email'
+        maxLength={254}
         value={resetEmail}
         error={resetError}
         icon={Mail}

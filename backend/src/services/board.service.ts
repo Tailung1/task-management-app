@@ -18,10 +18,10 @@ export const addBoard = async (userId: string, name: string, columnNames: string
   return createBoard(userId, name, columnNames);
 };
 
-export const editBoard = async (boardId: string, name: string) => {
-  return updateBoard(boardId, name);
+export const editBoard = async (boardId: string, userId: string, name: string) => {
+  return updateBoard(boardId, userId, name);
 };
 
-export const removeBoard = async (boardId: string) => {
-  return deleteBoard(boardId);
+export const removeBoard = async (boardId: string, userId: string) => {
+  return deleteBoard(boardId, userId);
 };

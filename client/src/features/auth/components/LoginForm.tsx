@@ -1,41 +1,47 @@
 import { useState } from "react";
 import { Eye, EyeOff, LockKeyhole, Mail } from "lucide-react";
 import type { LoginCredentials } from "../auth.types";
+import { getEmailError, getPasswordError } from "../auth.validation";
 import ForgotPasswordForm from "./ForgotPasswordForm";
 import FormField from "./FormField";
 
 interface LoginFormProps {
-  onSubmit: (credentials: LoginCredentials) => void;
+  onSubmit: (credentials: LoginCredentials) => Promise<void>;
+  isSubmitting: boolean;
+  authenticationError: string | null;
+  onClearAuthenticationError: () => void;
 }
 
 type LoginField = keyof LoginCredentials;
 type FormErrors = Partial<Record<LoginField, string>>;
 
-export default function LoginForm({ onSubmit }: LoginFormProps) {
+export default function LoginForm({
+  onSubmit,
+  isSubmitting,
+  authenticationError,
+  onClearAuthenticationError,
+}: LoginFormProps) {
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
 
-  function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
 
     const newErrors: FormErrors = {};
 
-    if (!email.trim()) {
-      newErrors.email = "Please enter your email address.";
-    }
-
-    if (!password.trim()) {
-      newErrors.password = "Please enter your password.";
-    }
+    const emailError = getEmailError(email);
+    const passwordError = getPasswordError(password, false);
+    if (emailError) newErrors.email = emailError;
+    if (passwordError) newErrors.password = passwordError;
 
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length > 0) return;
 
-    onSubmit({
+    await onSubmit({
       email: email.trim(),
       password,
     });
@@ -54,6 +60,8 @@ export default function LoginForm({ onSubmit }: LoginFormProps) {
         [field]: undefined,
       }));
     }
+
+    onClearAuthenticationError();
   }
 
   function handleForgotPassword() {
@@ -74,12 +82,14 @@ export default function LoginForm({ onSubmit }: LoginFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-1" noValidate>
+    <form onSubmit={handleSubmit} className="space-y-1" noValidate aria-busy={isSubmitting}>
       <FormField
         id="login-email"
         label="Email"
         type="email"
         placeholder="you@example.com"
+        autoComplete="email"
+        maxLength={254}
         value={email}
         error={errors.email}
         icon={Mail}
@@ -110,8 +120,9 @@ export default function LoginForm({ onSubmit }: LoginFormProps) {
             label=""
             type={showPassword ? "text" : "password"}
             placeholder="Enter your password"
+            autoComplete="current-password"
             value={password}
-            error={errors.password}
+            error={errors.password ?? authenticationError ?? undefined}
             icon={LockKeyhole}
             onChange={(value) => handleInputChange("password", value)}
             rightElement={
@@ -134,9 +145,10 @@ export default function LoginForm({ onSubmit }: LoginFormProps) {
 
       <button
         type="submit"
-        className="h-12 w-full rounded-xl bg-[#7230db] text-sm font-bold text-white shadow-lg shadow-[#7230db]/20 transition hover:bg-[#6325c4] hover:shadow-[#7230db]/30 active:scale-[0.99]"
+        disabled={isSubmitting}
+        className="h-12 w-full rounded-xl bg-[#7230db] text-sm font-bold text-white shadow-lg shadow-[#7230db]/20 transition hover:bg-[#6325c4] hover:shadow-[#7230db]/30 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        Sign in
+        {isSubmitting ? "Signing in..." : "Sign in"}
       </button>
     </form>
   );

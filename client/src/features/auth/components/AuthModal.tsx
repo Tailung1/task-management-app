@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import type { LoginCredentials, RegisterCredentials } from "../auth.types";
 import { login, register } from "../auth.api";
+import { ApiError } from "../../../api/clientApi";
 import useAuthContext from "../../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
@@ -15,20 +16,60 @@ type AuthMode = "login" | "register";
 export default function AuthModal({ onClose }: AuthModalProps) {
   const { setIsAuthenticated } = useAuthContext();
   const [mode, setMode] = useState<AuthMode>("login");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
+  const [loginPasswordError, setLoginPasswordError] = useState<string | null>(null);
+  const isSubmittingRef = useRef(false);
   const navigate = useNavigate();
 
   async function handleLogin(credentials: LoginCredentials) {
-    const data = await login(credentials);
-    localStorage.setItem("token", data.token);
-    setIsAuthenticated(true);
-    navigate("/")
+    await submitAuthRequest(async () => {
+      const data = await login(credentials);
+      localStorage.setItem("token", data.token);
+      setIsAuthenticated(true);
+      navigate("/");
+    });
   }
 
   async function handleRegister(credentials: RegisterCredentials) {
-    await register(credentials);
+    await submitAuthRequest(async () => {
+      await register(credentials);
+      setSubmitSuccess("Your account was created. You can now sign in.");
+    });
+  }
+
+  async function submitAuthRequest(request: () => Promise<void>) {
+    if (isSubmittingRef.current) return;
+
+    isSubmittingRef.current = true;
+    setIsSubmitting(true);
+    setSubmitError(null);
+    setSubmitSuccess(null);
+    setLoginPasswordError(null);
+
+    try {
+      await request();
+    } catch (error) {
+      if (mode === "login" && error instanceof ApiError && error.status === 401) {
+        setLoginPasswordError("Email or password is incorrect.");
+      } else {
+        setSubmitError(
+          error instanceof Error
+            ? error.message
+            : "An unexpected error occurred. Please try again.",
+        );
+      }
+    } finally {
+      isSubmittingRef.current = false;
+      setIsSubmitting(false);
+    }
   }
 
   function handleModeChange() {
+    setSubmitError(null);
+    setSubmitSuccess(null);
+    setLoginPasswordError(null);
     setMode((current) => (current === "login" ? "register" : "login"));
   }
 
@@ -46,8 +87,9 @@ export default function AuthModal({ onClose }: AuthModalProps) {
           <button
             type='button'
             onClick={onClose}
+            disabled={isSubmitting}
             aria-label='Close authentication modal'
-            className='absolute right-5 top-5 text-2xl leading-none text-[#828fa3] transition hover:text-[#2b2c37] dark:hover:text-white'
+            className='absolute right-5 top-5 text-2xl leading-none text-[#828fa3] transition hover:text-[#2b2c37] disabled:cursor-not-allowed disabled:opacity-50 dark:hover:text-white'
           >
             ×
           </button>
@@ -58,17 +100,43 @@ export default function AuthModal({ onClose }: AuthModalProps) {
         </h2>
 
         {isLogin ? (
-          <LoginForm onSubmit={handleLogin} />
+          <LoginForm
+            onSubmit={handleLogin}
+            isSubmitting={isSubmitting}
+            authenticationError={loginPasswordError}
+            onClearAuthenticationError={() => setLoginPasswordError(null)}
+          />
         ) : (
-          <RegisterForm onSubmit={handleRegister} />
+          <RegisterForm onSubmit={handleRegister} isSubmitting={isSubmitting} />
         )}
+
+        <div className='mt-4 min-h-14' aria-live='polite'>
+          {submitError && (
+            <p
+              className='rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300'
+              role='alert'
+            >
+              {submitError}
+            </p>
+          )}
+
+          {submitSuccess && (
+            <p
+              className='rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700 dark:bg-green-950/40 dark:text-green-300'
+              role='status'
+            >
+              {submitSuccess}
+            </p>
+          )}
+        </div>
 
         <div className='mt-6 text-center text-sm text-[#828fa3]'>
           {isLogin ? "Don't have an account?" : "Already have an account"}{" "}
           <button
             type='button'
             onClick={handleModeChange}
-            className='font-semibold text-[#7230db] transition hover:text-[#5d20bd] dark:text-[#a66cff]'
+            disabled={isSubmitting}
+            className='font-semibold text-[#7230db] transition hover:text-[#5d20bd] disabled:cursor-not-allowed disabled:opacity-50 dark:text-[#a66cff]'
           >
             {isLogin ? "Create account" : "Sign in"}
           </button>

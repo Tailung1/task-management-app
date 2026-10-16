@@ -1,75 +1,21 @@
-# React + TypeScript + Vite
+# Task Management App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Local development
 
-Currently, two official plugins are available:
+1. Create a PostgreSQL database.
+2. Copy `backend/.env.example` to `backend/.env`. Set `DATABASE_URL` and replace `JWT_SECRET` with a unique random secret. Generate one with `openssl rand -base64 32`.
+3. Run `cd backend && npm run migrate && npm run dev`.
+4. Copy `client/.env.example` to `client/.env.local`, then run `cd client && npm run f` in a second terminal.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Production deployment
 
-## React Compiler
+- Configure `NODE_ENV=production`, `DATABASE_URL`, `JWT_SECRET`, `CLIENT_ORIGINS`, `PORT`, and `TRUST_PROXY` for the backend. `CLIENT_ORIGINS` must be a comma-separated list of HTTPS origins without paths or trailing slashes. Set `TRUST_PROXY` to the actual number of trusted reverse-proxy hops, or `0` when directly exposed.
+- Set `VITE_API_URL` to the deployed API base URL when building the client.
+- Build the backend with `cd backend && npm run build`; run it with `npm start`. Run `npm run migrate` as a release step before deploying application code.
+- The API applies security headers, limits JSON bodies to 64 KB, restricts browser origins, and limits authentication requests. Its rate-limit store is in-memory; configure a shared store before running multiple API instances.
+- Terminate TLS at a trusted HTTPS proxy, enable HSTS and a suitable Content Security Policy for the client hosting, and use automated database backups and monitoring.
+- Authentication tokens are stored in browser local storage. For higher security requirements, use a short-lived access token with a secure HttpOnly refresh/session cookie and CSRF protection.
+- The forgot-password form is currently a UI placeholder and does not send reset emails. Add a verified email delivery and single-use expiring reset-token flow before offering password recovery in production.
+- Migration `008` will stop if existing accounts contain email addresses that differ only by letter case. Resolve those duplicate accounts before running that migration.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
-
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
+Run the backend auth validation tests with `cd backend && npm test`.

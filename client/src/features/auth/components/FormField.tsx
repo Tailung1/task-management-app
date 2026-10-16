@@ -9,7 +9,10 @@ interface FormFieldProps {
   placeholder: string;
   value: string;
   error?: string;
+  hint?: string;
   icon: LucideIcon;
+  autoComplete?: string;
+  maxLength?: number;
   onChange: (value: string) => void;
   rightElement?: ReactNode;
 }
@@ -21,11 +24,15 @@ export default function FormField({
   placeholder,
   value,
   error,
+  hint,
   icon: Icon,
+  autoComplete,
+  maxLength,
   onChange,
   rightElement,
 }: FormFieldProps) {
   const errorId = `${id}-error`;
+  const hintId = `${id}-hint`;
 
   return (
     <div>
@@ -50,9 +57,11 @@ export default function FormField({
           type={type}
           placeholder={placeholder}
           value={value}
+          autoComplete={autoComplete}
+          maxLength={maxLength}
           onChange={(e) => onChange(e.target.value)}
           aria-invalid={!!error}
-          aria-describedby={error ? errorId : undefined}
+          aria-describedby={error ? errorId : hint ? hintId : undefined}
           className={`h-12 w-full rounded-xl border bg-white pl-11 ${
             rightElement ? "pr-12" : "pr-4"
           } text-sm text-[#2b2c37] outline-none transition placeholder:text-[#828fa3] dark:bg-[#2b2c37] dark:text-white ${
@@ -65,17 +74,17 @@ export default function FormField({
         {rightElement}
       </div>
 
-      <div className='mt-2 h-5'>
-        <p
-          id={errorId}
-          className={`flex items-center gap-1.5 text-xs font-medium text-red-500 transition-all duration-200 ${
-            error ? "translate-y-0 opacity-100" : "-translate-y-1 opacity-0"
-          }`}
-          aria-hidden={!error}
-        >
-          <AlertCircle size={14} aria-hidden='true' />
-          {error || "\u00A0"}
-        </p>
+      <div className='mt-2 min-h-5'>
+        {error ? (
+          <p id={errorId} className='flex items-center gap-1.5 text-xs font-medium text-red-500'>
+            <AlertCircle size={14} aria-hidden='true' />
+            {error}
+          </p>
+        ) : hint ? (
+          <p id={hintId} className='text-xs text-[#828fa3]'>
+            {hint}
+          </p>
+        ) : null}
       </div>
     </div>
   );

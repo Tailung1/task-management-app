@@ -154,14 +154,14 @@ export const createBoard = async (userId: string, name: string, columnNames: str
   }
 };
 
-export const updateBoard = async (boardId: string, name: string) => {
+export const updateBoard = async (boardId: string, userId: string, name: string) => {
   const result = await pool.query(
     `
       UPDATE boards
       SET
         name = $1,
         updated_at = NOW()
-      WHERE id = $2
+      WHERE id = $2 AND user_id = $3
       RETURNING
         id,
         name,
@@ -169,20 +169,20 @@ export const updateBoard = async (boardId: string, name: string) => {
         created_at,
         updated_at;
     `,
-    [name, boardId],
+    [name, boardId, userId],
   );
 
   return result.rows[0] ?? null;
 };
 
-export const deleteBoard = async (boardId: string) => {
+export const deleteBoard = async (boardId: string, userId: string) => {
   const result = await pool.query(
     `
       DELETE FROM boards
-      WHERE id = $1
+      WHERE id = $1 AND user_id = $2
       RETURNING id;
     `,
-    [boardId],
+    [boardId, userId],
   );
 
   return result.rows[0] ?? null;

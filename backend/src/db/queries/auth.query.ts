@@ -9,7 +9,7 @@ export const findUserByEmail = async (email: string) => {
       email,
       password
       FROM users
-      WHERE email = $1;
+      WHERE LOWER(email) = $1;
     `,
     [email]
   );

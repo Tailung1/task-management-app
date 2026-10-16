@@ -1,39 +1,36 @@
 import { useState } from "react";
 import { Eye, EyeOff, LockKeyhole, Mail, UserRound } from "lucide-react";
 import type { RegisterCredentials } from "../auth.types";
+import { getEmailError, getNameError, getPasswordError } from "../auth.validation";
 import FormField from "./FormField";
 
 interface RegisterFormProps {
-  onSubmit: (credentials: RegisterCredentials) => void;
+  onSubmit: (credentials: RegisterCredentials) => Promise<void>;
+  isSubmitting: boolean;
 }
 
 type RegisterField = "name" | "email" | "password";
 
 type FormErrors = Partial<Record<RegisterField, string>>;
 
-export default function RegisterForm({ onSubmit }: RegisterFormProps) {
+export default function RegisterForm({ onSubmit, isSubmitting }: RegisterFormProps) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
 
-  function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
 
     const newErrors: FormErrors = {};
 
-    if (!name.trim()) {
-      newErrors.name = "Please enter your name.";
-    }
-
-    if (!email.trim()) {
-      newErrors.email = "Please enter your email address.";
-    }
-
-    if (!password.trim()) {
-      newErrors.password = "Please create a password.";
-    }
+    const nameError = getNameError(name);
+    const emailError = getEmailError(email);
+    const passwordError = getPasswordError(password);
+    if (nameError) newErrors.name = nameError;
+    if (emailError) newErrors.email = emailError;
+    if (passwordError) newErrors.password = passwordError;
 
     setErrors(newErrors);
 
@@ -41,7 +38,7 @@ export default function RegisterForm({ onSubmit }: RegisterFormProps) {
       return;
     }
 
-    onSubmit({
+    await onSubmit({
       name: name.trim(),
       email: email.trim(),
       password,
@@ -66,12 +63,14 @@ export default function RegisterForm({ onSubmit }: RegisterFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className='space-y-1' noValidate>
+    <form onSubmit={handleSubmit} className='space-y-1' noValidate aria-busy={isSubmitting}>
       <FormField
         id='register-name'
         label='Full name'
         type='text'
         placeholder='John Doe'
+        autoComplete='name'
+        maxLength={100}
         value={name}
         error={errors.name}
         icon={UserRound}
@@ -83,6 +82,8 @@ export default function RegisterForm({ onSubmit }: RegisterFormProps) {
         label='Email'
         type='email'
         placeholder='you@example.com'
+        autoComplete='email'
+        maxLength={254}
         value={email}
         error={errors.email}
         icon={Mail}
@@ -93,7 +94,8 @@ export default function RegisterForm({ onSubmit }: RegisterFormProps) {
         id='register-password'
         label='Password'
         type={showPassword ? "text" : "password"}
-        placeholder='Create a password'
+        placeholder='At least 8 characters'
+        autoComplete='new-password'
         value={password}
         error={errors.password}
         icon={LockKeyhole}
@@ -116,9 +118,10 @@ export default function RegisterForm({ onSubmit }: RegisterFormProps) {
 
       <button
         type='submit'
-        className='h-12 w-full rounded-xl bg-[#7230db] text-sm font-bold text-white shadow-lg shadow-[#7230db]/20 transition hover:bg-[#6325c4] hover:shadow-[#7230db]/30'
+        disabled={isSubmitting}
+        className='h-12 w-full rounded-xl bg-[#7230db] text-sm font-bold text-white shadow-lg shadow-[#7230db]/20 transition hover:bg-[#6325c4] hover:shadow-[#7230db]/30 disabled:cursor-not-allowed disabled:opacity-60'
       >
-        Create account
+        {isSubmitting ? "Creating account..." : "Create account"}
       </button>
     </form>
   );

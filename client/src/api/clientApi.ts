@@ -2,31 +2,134 @@ type RequestOptions = Omit<RequestInit, "body"> & {
   body?: unknown;
 };
 
-const API_URL = "http://localhost:5001/api/";
+type ResponseDecoder<T> = (value: unknown) => T;
 
-const apiClient = async <T>(url: string, options: RequestOptions = {}): Promise<T> => {
-  const token = localStorage.getItem("token");
+export class ApiError extends Error {
+  public readonly status: number | undefined;
 
-  const response = await fetch(`${API_URL}${url}`, {
-    ...options,
-    method: options.method ?? "POST",
-    headers: {
-      "Content-Type": "application/json",
-      ...(token && {
-        Authorization: `Bearer ${token}`,
-      }),
-      ...options.headers,
-    },
-    body: options.body !== undefined ? JSON.stringify(options.body) : undefined,
-  });
+  constructor(message: string, status?: number, options?: ErrorOptions) {
+    super(message, options);
+    this.name = "ApiError";
+    this.status = status;
+  }
+}
 
-  const data = await response.json().catch(() => null);
+function getApiBaseUrl(): URL {
+  const configuredUrl =
+    import.meta.env.VITE_API_URL || (import.meta.env.DEV ? "http://localhost:5001/api" : "");
 
-  if (!response.ok) {
-    throw new Error(data?.message ?? "Request failed");
+  if (!configuredUrl) {
+    throw new Error("VITE_API_URL must be configured for production.");
   }
 
-  return data as T;
+  let url: URL;
+  try {
+    url = new URL(configuredUrl);
+  } catch (error) {
+    throw new Error("VITE_API_URL must be an absolute HTTP(S) URL.", { cause: error });
+  }
+
+  if (
+    (url.protocol !== "http:" && url.protocol !== "https:") ||
+    (!import.meta.env.DEV && url.protocol !== "https:") ||
+    url.username ||
+    url.password ||
+    url.search ||
+    url.hash
+  ) {
+    throw new Error(
+      "VITE_API_URL must be an absolute HTTP(S) URL without credentials, query, or fragment.",
+    );
+  }
+
+  url.pathname = `${url.pathname.replace(/\/+$/, "")}/`;
+  return url;
+}
+
+function getErrorMessage(data: unknown): string | undefined {
+  if (
+    typeof data === "object" &&
+    data !== null &&
+    "message" in data &&
+    typeof data.message === "string" &&
+    data.message.trim()
+  ) {
+    return data.message;
+  }
+
+  return undefined;
+}
+
+const apiClient = async <T>(
+  path: string,
+  decode: ResponseDecoder<T>,
+  options: RequestOptions = {},
+): Promise<T> => {
+  const url = new URL(path.replace(/^\/+/, ""), getApiBaseUrl());
+  const headers = new Headers(options.headers);
+
+  headers.set("Accept", headers.get("Accept") ?? "application/json");
+
+  if (!headers.has("Authorization")) {
+    const token = localStorage.getItem("token");
+    if (token) {
+      headers.set("Authorization", `Bearer ${token}`);
+    }
+  }
+
+  const body = options.body === undefined ? undefined : JSON.stringify(options.body);
+  if (body !== undefined) {
+    headers.set("Content-Type", headers.get("Content-Type") ?? "application/json");
+  }
+
+  let response: Response;
+  try {
+    response = await fetch(url, {
+      ...options,
+      method: options.method ?? (body === undefined ? "GET" : "POST"),
+      headers,
+      body,
+    });
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") throw error;
+    throw new ApiError(
+      "Unable to connect to the server. Check your connection and try again.",
+      undefined,
+      { cause: error },
+    );
+  }
+
+  const responseText = await response.text();
+  let payload: unknown;
+
+  if (responseText) {
+    try {
+      payload = JSON.parse(responseText);
+    } catch (error) {
+      if (response.ok) {
+        throw new ApiError(
+          "The server returned an invalid JSON response.",
+          response.status,
+          { cause: error },
+        );
+      }
+    }
+  }
+
+  if (!response.ok) {
+    throw new ApiError(
+      getErrorMessage(payload) ?? `Request failed (${response.status})`,
+      response.status,
+    );
+  }
+
+  try {
+    return decode(payload);
+  } catch (error) {
+    throw new ApiError("The server returned data in an unexpected format.", response.status, {
+      cause: error,
+    });
+  }
 };
 
 export default apiClient;
