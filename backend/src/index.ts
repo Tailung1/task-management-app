@@ -23,7 +23,7 @@ app.use(
         // Why i have !origin -->
         // Allow requests without an Origin header (e.g. curl/Postman),
         // because CORS is a browser security mechanism, not authentication.
-        callback(null, true);
+        callback(null, true); // = allow this origin
         return;
       }
       callback(null, false);
@@ -48,11 +48,12 @@ app.get("/api/health", async (_req, res, next) => {
     next(error);
   }
 });
+const authenticate = createAuthenticate(config.jwtSecret);
 
 app.use("/api/auth", authRateLimit, createAuthRouter(config));
-app.use("/api/boards", createAuthenticate(config.jwtSecret), boardRouter);
-app.use("/api", createAuthenticate(config.jwtSecret), columnRouter);
-app.use("/api", createAuthenticate(config.jwtSecret), taskRouter);
+app.use("/api/boards", authenticate, boardRouter);
+app.use("/api", authenticate, columnRouter);
+app.use("/api", authenticate, taskRouter);
 
 app.use((_req, res) => {
   res.status(404).json({ message: "Not found" });
