@@ -32,10 +32,18 @@ function getApiBaseUrl(): URL {
   if (
     (url.protocol !== "http:" && url.protocol !== "https:") ||
     (!import.meta.env.DEV && url.protocol !== "https:") ||
+    // Custom Vite environment variables exposed to frontend code must start with VITE_.
+    // Example: VITE_API_URL
+    // DEV is a built-in Vite variable, so it doesn't need the VITE_ prefix.
     url.username ||
     url.password ||
     url.search ||
     url.hash
+    // username/password: https://user:pass@example.com
+    // Credentials in URLs are discouraged; use authentication headers instead.
+    // search: https://example.com/api?page=2 (starts with ?)
+    // hash: https://example.com/docs#installation (starts with #)
+    // These URL properties return non-empty strings when present.
   ) {
     throw new Error(
       "VITE_API_URL must be an absolute HTTP(S) URL without credentials, query, or fragment.",
@@ -43,6 +51,7 @@ function getApiBaseUrl(): URL {
   }
 
   url.pathname = `${url.pathname.replace(/\/+$/, "")}/`;
+  // Normalize pathname to end with exactly one trailing slash.
   return url;
 }
 
@@ -107,11 +116,9 @@ const apiClient = async <T>(
       payload = JSON.parse(responseText);
     } catch (error) {
       if (response.ok) {
-        throw new ApiError(
-          "The server returned an invalid JSON response.",
-          response.status,
-          { cause: error },
-        );
+        throw new ApiError("The server returned an invalid JSON response.", response.status, {
+          cause: error,
+        });
       }
     }
   }
