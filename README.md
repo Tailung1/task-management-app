@@ -10,6 +10,7 @@
 
 ## Production deployment
 
+
 - Configure `NODE_ENV=production`, `DATABASE_URL`, `JWT_SECRET`, `CLIENT_ORIGINS`, `PORT`, and `TRUST_PROXY` for the backend. `CLIENT_ORIGINS` must be a comma-separated list of HTTPS origins without paths or trailing slashes. Set `TRUST_PROXY` to the actual number of trusted reverse-proxy hops, or `0` when directly exposed.
 - Set `VITE_API_URL` to the deployed API base URL when building the client.
 - Build the backend with `cd backend && npm run build`; run it with `npm start`. Run `npm run migrate` as a release step before deploying application code.
