@@ -1,5 +1,6 @@
 # Task Management App
 
+
 ## Local development
 
 1. Create a PostgreSQL database.
