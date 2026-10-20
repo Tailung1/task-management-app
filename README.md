@@ -20,4 +20,5 @@
 - The forgot-password form is currently a UI placeholder and does not send reset emails. Add a verified email delivery and single-use expiring reset-token flow before offering password recovery in production.
 - Migration `008` will stop if existing accounts contain email addresses that differ only by letter case. Resolve those duplicate accounts before running that migration.
 
+
 Run the backend auth validation tests with `cd backend && npm test`.
