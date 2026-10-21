@@ -13,4 +13,6 @@ test("request body validation accepts plain object payloads only", () => {
   assert.equal(isRequestBody(null), false);
   assert.equal(isRequestBody(["board"]), false);
   assert.equal(isRequestBody("board"), false);
+  assert.equal(isRequestBody(new Date()), false);
+  assert.equal(isRequestBody(Object.create(null)), true);
 });
