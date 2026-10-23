@@ -36,6 +36,7 @@ export default function CreateColumnModal() {
 
       <div className='mb-6'>
         <p className='mb-2 text-xs font-bold text-[#828FA3]'>Column Names</p>
+
         <div className='flex flex-col gap-3'>
           {columns.map((column, index) => (
             <div key={index} className='flex items-center gap-2'>
