@@ -33,6 +33,7 @@ export function getEmailError(email: string): string | undefined {
       //  without starting or ending with a hyphen.
     ) &&
     (domainLabels.at(-1)?.length ?? 0) >= 2;
+  // .at(-1) — gets the last element of the array
 
   if (
     extraPart !== undefined ||
