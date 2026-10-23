@@ -19,7 +19,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
-  const [loginPasswordError, setLoginPasswordError] = useState<string | null>(null);
+  const [loginCredentialsError, setLoginCredentialsError] = useState<string | null>(null);
   const isSubmittingRef = useRef(false);
   const navigate = useNavigate();
 
@@ -46,13 +46,13 @@ export default function AuthModal({ onClose }: AuthModalProps) {
     setIsSubmitting(true);
     setSubmitError(null);
     setSubmitSuccess(null);
-    setLoginPasswordError(null);
+    setLoginCredentialsError(null);
 
     try {
       await request();
     } catch (error) {
       if (mode === "login" && error instanceof ApiError && error.status === 401) {
-        setLoginPasswordError("Email or password is incorrect.");
+        setLoginCredentialsError("Email or password is incorrect.");
       } else {
         setSubmitError(
           error instanceof Error
@@ -69,7 +69,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
   function handleModeChange() {
     setSubmitError(null);
     setSubmitSuccess(null);
-    setLoginPasswordError(null);
+    setLoginCredentialsError(null);
     setMode((current) => (current === "login" ? "register" : "login"));
   }
 
@@ -103,8 +103,8 @@ export default function AuthModal({ onClose }: AuthModalProps) {
           <LoginForm
             onSubmit={handleLogin}
             isSubmitting={isSubmitting}
-            authenticationError={loginPasswordError}
-            onClearAuthenticationError={() => setLoginPasswordError(null)}
+            authenticationError={loginCredentialsError}
+            onClearAuthenticationError={() => setLoginCredentialsError(null)}
           />
         ) : (
           <RegisterForm onSubmit={handleRegister} isSubmitting={isSubmitting} />
