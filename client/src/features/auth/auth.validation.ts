@@ -28,9 +28,9 @@ export function getEmailError(email: string): string | undefined {
     domainLabels.length >= 2 &&
     domainLabels.every(
       (label) =>
-        label.length >= 1 &&
-        label.length <= 63 &&
-        /^[A-Z0-9](?:[A-Z0-9-]*[A-Z0-9])?$/i.test(label),
+        label.length >= 1 && label.length <= 63 && /^[A-Z0-9](?:[A-Z0-9-]*[A-Z0-9])?$/i.test(label),
+      // This regex checks whether one domain label contains only letters, numbers, and hyphens,
+      //  without starting or ending with a hyphen.
     ) &&
     (domainLabels.at(-1)?.length ?? 0) >= 2;
 
