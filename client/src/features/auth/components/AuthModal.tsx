@@ -110,29 +110,27 @@ export default function AuthModal({ onClose }: AuthModalProps) {
           <RegisterForm onSubmit={handleRegister} isSubmitting={isSubmitting} />
         )}
 
-        {(submitError || submitSuccess) && (
-          <div className='mt-4' aria-live='polite'>
-            {submitError && (
-              <p
-                className='rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300'
-                role='alert'
-              >
-                {submitError}
-              </p>
-            )}
+        <div className='mt-2 min-h-14' aria-live='polite'>
+          {submitError && (
+            <p
+              className='rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300'
+              role='alert'
+            >
+              {submitError}
+            </p>
+          )}
 
-            {submitSuccess && (
-              <p
-                className='rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700 dark:bg-green-950/40 dark:text-green-300'
-                role='status'
-              >
-                {submitSuccess}
-              </p>
-            )}
-          </div>
-        )}
+          {submitSuccess && (
+            <p
+              className='rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700 dark:bg-green-950/40 dark:text-green-300'
+              role='status'
+            >
+              {submitSuccess}
+            </p>
+          )}
+        </div>
 
-        <div className='mt-4 text-center text-sm text-[#828fa3]'>
+        <div className='mt-2 text-center text-sm text-[#828fa3]'>
           {isLogin ? "Don't have an account?" : "Already have an account"}{" "}
           <button
             type='button'
