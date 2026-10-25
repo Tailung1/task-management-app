@@ -85,7 +85,7 @@ export function validateLoginInput(value: unknown): ValidationResult<AuthInput> 
     return { valid: false, message: "Email and password are required" };
   }
 
-  const email = validateEmail(value.email);
+  const email = validateEmail(value.email); // !!!
   if (!email.valid) return email;
 
   const password = validatePassword(value.password, false);

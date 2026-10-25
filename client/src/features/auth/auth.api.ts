@@ -12,6 +12,7 @@ function decodeUser(value: unknown): User {
     typeof value !== "object" ||
     value === null ||
     !("id" in value) ||
+    // in - JavaScript operator; checks whether a property exists on an object at runtime
     typeof value.id !== "string" ||
     !("name" in value) ||
     typeof value.name !== "string" ||
