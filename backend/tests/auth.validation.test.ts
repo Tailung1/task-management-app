@@ -42,6 +42,25 @@ test("registration rejects invalid email and short passwords", () => {
   );
 });
 
+test("registration enforces the name limit by Unicode characters", () => {
+  assert.equal(
+    validateRegistrationInput({
+      name: "é".repeat(100),
+      email: "ada@example.com",
+      password: "a-long-password",
+    }).valid,
+    true,
+  );
+  assert.equal(
+    validateRegistrationInput({
+      name: "é".repeat(101),
+      email: "ada@example.com",
+      password: "a-long-password",
+    }).valid,
+    false,
+  );
+});
+
 test("login accepts existing passwords shorter than the registration minimum", () => {
   assert.deepEqual(validateLoginInput({ email: "ada@example.com", password: "old" }), {
     valid: true,
