@@ -8,6 +8,12 @@ test("UUID validation accepts canonical UUIDs and rejects malformed IDs", () => 
   assert.equal(isUuid(undefined), false);
 });
 
+test("UUID validation accepts uppercase and rejects invalid version or variant bits", () => {
+  assert.equal(isUuid("550E8400-E29B-41D4-A716-446655440000"), true);
+  assert.equal(isUuid("550e8400-e29b-01d4-a716-446655440000"), false);
+  assert.equal(isUuid("550e8400-e29b-41d4-7466-446655440000"), false);
+});
+
 test("request body validation accepts plain object payloads only", () => {
   assert.equal(isRequestBody({ name: "board" }), true);
   assert.equal(isRequestBody(null), false);
