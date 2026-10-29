@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Eye, EyeOff, LockKeyhole, Mail } from "lucide-react";
 import type { LoginCredentials } from "../auth.types";
 import { getEmailError, getPasswordError } from "../auth.validation";
-import ForgotPasswordForm from "./ForgotPasswordForm";
 import FormField from "./FormField";
 
 interface LoginFormProps {
@@ -11,9 +10,7 @@ interface LoginFormProps {
   authenticationError: string | null;
   onClearAuthenticationError: () => void;
   initialEmail: string;
-  isForgotPassword: boolean;
   onForgotPassword: (email: string) => void;
-  onBackToLogin: (email: string) => void;
 }
 
 type LoginField = keyof LoginCredentials;
@@ -25,9 +22,7 @@ export default function LoginForm({
   authenticationError,
   onClearAuthenticationError,
   initialEmail,
-  isForgotPassword,
   onForgotPassword,
-  onBackToLogin,
 }: LoginFormProps) {
   const [email, setEmail] = useState(initialEmail);
   const [password, setPassword] = useState("");
@@ -69,15 +64,6 @@ export default function LoginForm({
     }
 
     onClearAuthenticationError();
-  }
-
-  if (isForgotPassword) {
-    return (
-      <ForgotPasswordForm
-        initialEmail={email}
-        onBackToLogin={() => onBackToLogin(email)}
-      />
-    );
   }
 
   return (

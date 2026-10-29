@@ -5,7 +5,7 @@ import FormField from "./FormField";
 
 interface ForgotPasswordFormProps {
   initialEmail: string;
-  onBackToLogin: () => void;
+  onBackToLogin: (email: string) => void;
 }
 
 export default function ForgotPasswordForm({
@@ -39,7 +39,7 @@ export default function ForgotPasswordForm({
     <form onSubmit={handleResetSubmit} className='space-y-1' noValidate>
       <button
         type='button'
-        onClick={onBackToLogin}
+        onClick={() => onBackToLogin(resetEmail)}
         className='flex items-center gap-2 mb-5  text-sm font-semibold text-[#828fa3] transition hover:text-[#2b2c37] dark:hover:text-white'
       >
         <ArrowLeft size={16} aria-hidden='true' />
