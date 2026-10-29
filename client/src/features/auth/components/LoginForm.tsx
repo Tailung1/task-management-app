@@ -10,6 +10,10 @@ interface LoginFormProps {
   isSubmitting: boolean;
   authenticationError: string | null;
   onClearAuthenticationError: () => void;
+  initialEmail: string;
+  isForgotPassword: boolean;
+  onForgotPassword: (email: string) => void;
+  onBackToLogin: (email: string) => void;
 }
 
 type LoginField = keyof LoginCredentials;
@@ -20,9 +24,12 @@ export default function LoginForm({
   isSubmitting,
   authenticationError,
   onClearAuthenticationError,
+  initialEmail,
+  isForgotPassword,
+  onForgotPassword,
+  onBackToLogin,
 }: LoginFormProps) {
-  const [isForgotPassword, setIsForgotPassword] = useState(false);
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(initialEmail);
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
@@ -64,19 +71,11 @@ export default function LoginForm({
     onClearAuthenticationError();
   }
 
-  function handleForgotPassword() {
-    setIsForgotPassword(true);
-  }
-
-  function handleBackToLogin() {
-    setIsForgotPassword(false);
-  }
-
   if (isForgotPassword) {
     return (
       <ForgotPasswordForm
         initialEmail={email}
-        onBackToLogin={handleBackToLogin}
+        onBackToLogin={() => onBackToLogin(email)}
       />
     );
   }
@@ -107,7 +106,7 @@ export default function LoginForm({
 
           <button
             type="button"
-            onClick={handleForgotPassword}
+            onClick={() => onForgotPassword(email)}
             className="text-xs font-semibold text-[#7230db] transition hover:text-[#5d20bd] dark:text-[#a66cff]"
           >
             Forgot password?

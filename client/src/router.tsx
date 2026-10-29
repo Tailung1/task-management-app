@@ -22,6 +22,10 @@ const router = createBrowserRouter([
         element: <LoginPage />,
       },
       {
+        path: "auth/forgot-password",
+        element: <LoginPage />,
+      },
+      {
         path: "login",
         element: <Navigate to="/auth/login" replace />,
       },

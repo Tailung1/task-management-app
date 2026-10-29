@@ -21,7 +21,15 @@ export default function AuthModal({ onClose }: AuthModalProps) {
   const [loginCredentialsError, setLoginCredentialsError] = useState<string | null>(null);
   const isSubmittingRef = useRef(false);
   const navigate = useNavigate();
-  const { pathname } = useLocation();
+  const { pathname, state } = useLocation();
+  const initialEmail =
+    typeof state === "object" &&
+    state !== null &&
+    "email" in state &&
+    typeof state.email === "string"
+      ? state.email
+      : "";
+  const isForgotPassword = pathname === "/auth/forgot-password";
   const mode: AuthMode = pathname === "/auth/register" ? "register" : "login";
 
   async function handleLogin(credentials: LoginCredentials) {
@@ -97,7 +105,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
         )}
 
         <h2 id='auth-modal-title' className='sr-only'>
-          {isLogin ? "Sign in" : "Create account"}
+          {isForgotPassword ? "Reset password" : isLogin ? "Sign in" : "Create account"}
         </h2>
 
         {isLogin ? (
@@ -106,6 +114,14 @@ export default function AuthModal({ onClose }: AuthModalProps) {
             isSubmitting={isSubmitting}
             authenticationError={loginCredentialsError}
             onClearAuthenticationError={() => setLoginCredentialsError(null)}
+            initialEmail={initialEmail}
+            isForgotPassword={isForgotPassword}
+            onForgotPassword={(email) =>
+              navigate("/auth/forgot-password", { state: { email } })
+            }
+            onBackToLogin={(email) =>
+              navigate("/auth/login", { state: { email } })
+            }
           />
         ) : (
           <RegisterForm onSubmit={handleRegister} isSubmitting={isSubmitting} />
@@ -131,17 +147,19 @@ export default function AuthModal({ onClose }: AuthModalProps) {
           )}
         </div>
 
-        <div className='mt-2 text-center text-sm text-[#828fa3]'>
-          {isLogin ? "Don't have an account?" : "Already have an account"}{" "}
-          <button
-            type='button'
-            onClick={handleModeChange}
-            disabled={isSubmitting}
-            className='font-semibold text-[#7230db] transition hover:text-[#5d20bd] disabled:cursor-not-allowed disabled:opacity-50 dark:text-[#a66cff]'
-          >
-            {isLogin ? "Create account" : "Sign in"}
-          </button>
-        </div>
+        {!isForgotPassword && (
+          <div className='mt-2 text-center text-sm text-[#828fa3]'>
+            {isLogin ? "Don't have an account?" : "Already have an account"}{" "}
+            <button
+              type='button'
+              onClick={handleModeChange}
+              disabled={isSubmitting}
+              className='font-semibold text-[#7230db] transition hover:text-[#5d20bd] disabled:cursor-not-allowed disabled:opacity-50 dark:text-[#a66cff]'
+            >
+              {isLogin ? "Create account" : "Sign in"}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
