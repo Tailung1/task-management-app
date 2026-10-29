@@ -5,7 +5,7 @@ import type { LoginCredentials, RegisterCredentials } from "../auth.types";
 import { login, register } from "../auth.api";
 import { ApiError } from "../../../api/clientApi";
 import useAuthContext from "../../../contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface AuthModalProps {
   onClose?: () => void;
@@ -15,13 +15,14 @@ type AuthMode = "login" | "register";
 
 export default function AuthModal({ onClose }: AuthModalProps) {
   const { setIsAuthenticated } = useAuthContext();
-  const [mode, setMode] = useState<AuthMode>("login");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
   const [loginCredentialsError, setLoginCredentialsError] = useState<string | null>(null);
   const isSubmittingRef = useRef(false);
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const mode: AuthMode = pathname === "/auth/register" ? "register" : "login";
 
   async function handleLogin(credentials: LoginCredentials) {
     await submitAuthRequest(async () => {
@@ -70,7 +71,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
     setSubmitError(null);
     setSubmitSuccess(null);
     setLoginCredentialsError(null);
-    setMode((current) => (current === "login" ? "register" : "login"));
+    navigate(mode === "login" ? "/auth/register" : "/auth/login");
   }
 
   const isLogin = mode === "login";
