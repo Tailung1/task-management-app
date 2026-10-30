@@ -30,18 +30,22 @@ export default function AuthPageLayout({
 
         {children}
 
-        {feedback && (
-          <p
-            className={`mt-2 rounded-lg px-3 py-2 text-sm ${
-              feedback.type === "error"
-                ? "bg-red-50 text-red-700 dark:bg-red-950/40 dark:text-red-300"
-                : "bg-green-50 text-green-700 dark:bg-green-950/40 dark:text-green-300"
-            }`}
-            role={feedback.type === "error" ? "alert" : "status"}
-            aria-live='polite'
-          >
-            {feedback.message}
-          </p>
+        {feedback !== undefined && (
+          <div className='mt-2 min-h-14'>
+            {feedback && (
+              <p
+                className={`rounded-lg px-3 py-2 text-sm ${
+                  feedback.type === "error"
+                    ? "bg-red-50 text-red-700 dark:bg-red-950/40 dark:text-red-300"
+                    : "bg-green-50 text-green-700 dark:bg-green-950/40 dark:text-green-300"
+                }`}
+                role={feedback.type === "error" ? "alert" : "status"}
+                aria-live='polite'
+              >
+                {feedback.message}
+              </p>
+            )}
+          </div>
         )}
 
         {footer && <div className='mt-4 text-center text-sm text-[#828fa3]'>{footer}</div>}
