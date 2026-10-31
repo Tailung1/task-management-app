@@ -43,7 +43,7 @@ export function loadConfig(): AppConfig {
       throw new Error(`Invalid client origin: ${origin}`, { cause: error });
     }
 
-     // URL() accepts protocols like ftp: and file:, so explicitly allow only HTTP(S).
+     // URL() accepts protocols like ftp: and file: as well, so explicitly allow only HTTP(S).
     if (
       (parsedOrigin.protocol !== "http:" && parsedOrigin.protocol !== "https:") ||
       parsedOrigin.origin !== origin ||
