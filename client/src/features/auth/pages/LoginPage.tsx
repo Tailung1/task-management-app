@@ -72,7 +72,10 @@ export default function LoginPage() {
         onSubmit={handleLogin}
         isSubmitting={isSubmitting}
         authenticationError={credentialsError}
-        onClearAuthenticationError={() => setCredentialsError(null)}
+        onClearFeedback={() => {
+          setSubmitError(null);
+          setCredentialsError(null);
+        }}
         initialEmail={initialEmail}
         onForgotPassword={(email) =>
           navigate("/auth/forgot-password", { state: { email } })

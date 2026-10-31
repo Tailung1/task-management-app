@@ -8,7 +8,7 @@ interface LoginFormProps {
   onSubmit: (credentials: LoginCredentials) => Promise<void>;
   isSubmitting: boolean;
   authenticationError: string | null;
-  onClearAuthenticationError: () => void;
+  onClearFeedback: () => void;
   initialEmail: string;
   onForgotPassword: (email: string) => void;
 }
@@ -20,7 +20,7 @@ export default function LoginForm({
   onSubmit,
   isSubmitting,
   authenticationError,
-  onClearAuthenticationError,
+  onClearFeedback,
   initialEmail,
   onForgotPassword,
 }: LoginFormProps) {
@@ -63,7 +63,7 @@ export default function LoginForm({
       }));
     }
 
-    onClearAuthenticationError();
+    onClearFeedback();
   }
 
   return (

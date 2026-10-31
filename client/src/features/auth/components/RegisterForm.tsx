@@ -7,13 +7,18 @@ import FormField from "./FormField";
 interface RegisterFormProps {
   onSubmit: (credentials: RegisterCredentials) => Promise<void>;
   isSubmitting: boolean;
+  onClearFeedback: () => void;
 }
 
 type RegisterField = "name" | "email" | "password";
 
 type FormErrors = Partial<Record<RegisterField, string>>;
 
-export default function RegisterForm({ onSubmit, isSubmitting }: RegisterFormProps) {
+export default function RegisterForm({
+  onSubmit,
+  isSubmitting,
+  onClearFeedback,
+}: RegisterFormProps) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -60,6 +65,8 @@ export default function RegisterForm({ onSubmit, isSubmitting }: RegisterFormPro
         [field]: undefined,
       }));
     }
+
+    onClearFeedback();
   }
 
   return (

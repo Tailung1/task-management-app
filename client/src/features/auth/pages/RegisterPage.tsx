@@ -56,7 +56,11 @@ export default function RegisterPage() {
         </>
       }
     >
-      <RegisterForm onSubmit={handleRegister} isSubmitting={isSubmitting} />
+      <RegisterForm
+        onSubmit={handleRegister}
+        isSubmitting={isSubmitting}
+        onClearFeedback={() => setSubmitError(null)}
+      />
     </AuthPageLayout>
   );
 }
