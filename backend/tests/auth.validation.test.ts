@@ -68,13 +68,16 @@ test("login accepts existing passwords shorter than the registration minimum", (
   });
 });
 
-test("passwords exceeding bcrypt's byte limit are rejected", () => {
-  assert.equal(
+test("passwords exceeding bcrypt's byte limit are rejected with a user-friendly message", () => {
+  assert.deepEqual(
     validateRegistrationInput({
       name: "Ada",
       email: "ada@example.com",
       password: "é".repeat(37),
-    }).valid,
-    false,
+    }),
+    {
+      valid: false,
+      message: "Password is too long. Please choose a shorter password.",
+    },
   );
 });

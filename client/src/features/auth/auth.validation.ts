@@ -55,6 +55,6 @@ export function getPasswordError(
     return `Password must be at least ${PASSWORD_MIN_LENGTH} characters.`;
   }
   if (new TextEncoder().encode(password).length > PASSWORD_MAX_BYTES) {
-    return "Password must be no more than 72 bytes.";
+    return "Password is too long. Please choose a shorter password.";
   }
 }

@@ -73,7 +73,7 @@ function validatePassword(
   if (Buffer.byteLength(value, "utf8") > PASSWORD_MAX_BYTES) {
     return {
       valid: false,
-      message: `Password must be no more than ${PASSWORD_MAX_BYTES} bytes`,
+      message: "Password is too long. Please choose a shorter password.",
     };
   }
 
