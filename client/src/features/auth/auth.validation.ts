@@ -32,7 +32,7 @@ export function getEmailError(email: string): string | undefined {
       // This regex checks whether one domain label contains only letters, numbers, and hyphens,
       //  without starting or ending with a hyphen.
     ) &&
-    (domainLabels.at(-1)?.length ?? 0) >= 2;
+    domainLabels.at(-1)!.length >= 2;
   // .at(-1) — gets the last element of the array
 
   if (
