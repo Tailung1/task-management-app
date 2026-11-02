@@ -6,7 +6,7 @@
 1. Create a PostgreSQL database.
 2. Copy `backend/.env.example` to `backend/.env`. Set `DATABASE_URL` and replace `JWT_SECRET` with a unique random secret. Generate one with `openssl rand -base64 32`.
 3. Run `cd backend && npm run migrate && npm run dev`.
-4. Copy `client/.env.example` to `client/.env.local`, then run `cd client && npm run f` in a second terminal.
+4. Copy `client/.env.example` to `client/.env.local`, then run `cd client && npm run dev` in a second terminal.
 
 ## Production deployment
 
