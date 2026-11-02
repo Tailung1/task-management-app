@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "./components/layout/MainLayout/MainLayout";
 import BoardPage from "./features/board/pages/BoardPage";
 import NoBoardState from "./features/board/pages/NoBoardState";
@@ -26,10 +26,6 @@ const router = createBrowserRouter([
       {
         path: "auth/forgot-password",
         element: <ForgotPasswordPage />,
-      },
-      {
-        path: "login",
-        element: <Navigate to="/auth/login" replace />,
       },
       {
         path: "board/:id/:boardName",
