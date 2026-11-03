@@ -9,6 +9,10 @@ export default function ThemeToggle() {
       <img className='h-6 w-6' src={sun} alt='sun icon' />
 
       <button
+        type="button"
+        role="switch"
+        aria-label="Dark mode"
+        aria-checked={theme === "dark"}
         onClick={() => setTheme((prev) => (prev === "light" ? "dark" : "light"))}
         className={`cursor-pointer relative h-7 w-12 rounded-full transition-colors duration-300 ${
           theme === "dark" ? "bg-slate-900" : "bg-violet-500"
