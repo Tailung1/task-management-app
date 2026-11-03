@@ -99,6 +99,7 @@ export default function TaskDetailsModal({ task, boardName }: TaskDetailsModalPr
               <button
                 key={subtask.id}
                 type='button'
+                aria-pressed={isCompleted}
                 onClick={() => toggleSubtask(subtask.id)}
                 className='flex w-full items-center gap-3 rounded bg-[#F4F4F5] px-3 py-3 text-left transition hover:bg-[#EDEDED] dark:bg-[#20212C] dark:hover:bg-[#262735]'
               >
