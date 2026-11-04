@@ -6,7 +6,7 @@ export default function ThemeToggle() {
   const { theme, setTheme } = useThemeContext();
   return (
     <div className='flex items-center justify-center w-full   gap-5 rounded-lg bg-[#f2f2f3] dark:bg-[#20212C] py-2 shadow-lg'>
-      <img className='h-6 w-6' src={sun} alt='sun icon' />
+      <img className='h-6 w-6' src={sun} alt='' aria-hidden='true' />
 
       <button
         type="button"
@@ -25,7 +25,7 @@ export default function ThemeToggle() {
         />
       </button>
 
-      <img className='h-5 w-5' src={moon} alt='moon icon' />
+      <img className='h-5 w-5' src={moon} alt='' aria-hidden='true' />
     </div>
   );
 }
