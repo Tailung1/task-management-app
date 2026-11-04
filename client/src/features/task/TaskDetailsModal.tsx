@@ -55,6 +55,7 @@ export default function TaskDetailsModal({ task, boardName }: TaskDetailsModalPr
           <button
             type='button'
             aria-label='Task options'
+            aria-expanded={showTaskMenu}
             onClick={() => setShowTaskMenu((current) => !current)}
             className='text-gray-500 transition hover:text-gray-800 dark:text-gray-400 dark:hover:text-white'
           >
@@ -133,6 +134,7 @@ export default function TaskDetailsModal({ task, boardName }: TaskDetailsModalPr
 
         <button
           type='button'
+          aria-expanded={showStatusMenu}
           onClick={() => setShowStatusMenu((current) => !current)}
           className='flex w-full items-center justify-between rounded border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-[#20212C] dark:border-gray-600 dark:bg-[#2B2C37] dark:text-white'
         >
