@@ -6,16 +6,22 @@ import FormField from "./FormField";
 interface ForgotPasswordFormProps {
   initialEmail: string;
   onBackToLogin: (email: string) => void;
+  onSubmit: (email: string) => Promise<void>;
+  isSubmitting: boolean;
+  onClearFeedback: () => void;
 }
 
 export default function ForgotPasswordForm({
   initialEmail,
   onBackToLogin,
+  onSubmit,
+  isSubmitting,
+  onClearFeedback,
 }: ForgotPasswordFormProps) {
   const [resetEmail, setResetEmail] = useState(initialEmail);
   const [resetError, setResetError] = useState("");
 
-  function handleResetSubmit(e: React.SubmitEvent<HTMLFormElement>) {
+  async function handleResetSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
 
     const emailError = getEmailError(resetEmail);
@@ -25,6 +31,7 @@ export default function ForgotPasswordForm({
     }
 
     setResetError("");
+    await onSubmit(resetEmail.trim());
   }
 
   function handleEmailChange(value: string) {
@@ -33,10 +40,16 @@ export default function ForgotPasswordForm({
     if (resetError) {
       setResetError("");
     }
+    onClearFeedback();
   }
 
   return (
-    <form onSubmit={handleResetSubmit} className='space-y-1' noValidate>
+    <form
+      onSubmit={handleResetSubmit}
+      className='space-y-1'
+      noValidate
+      aria-busy={isSubmitting}
+    >
       <button
         type='button'
         onClick={() => onBackToLogin(resetEmail)}
@@ -61,9 +74,10 @@ export default function ForgotPasswordForm({
 
       <button
         type='submit'
-        className='h-12 w-full rounded-xl bg-[#7230db] text-sm font-bold text-white shadow-lg shadow-[#7230db]/20 transition hover:bg-[#6325c4] hover:shadow-[#7230db]/30 active:scale-[0.99]'
+        disabled={isSubmitting}
+        className='h-12 w-full rounded-xl bg-[#7230db] text-sm font-bold text-white shadow-lg shadow-[#7230db]/20 transition hover:bg-[#6325c4] hover:shadow-[#7230db]/30 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60'
       >
-        Send reset link
+        {isSubmitting ? "Sending..." : "Send reset link"}
       </button>
     </form>
   );

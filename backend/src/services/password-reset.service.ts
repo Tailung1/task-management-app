@@ -37,17 +37,16 @@ export async function requestPasswordReset(
   const resetUrl = new URL("/auth/reset-password", appUrl);
   resetUrl.searchParams.set("token", token);
 
-  try {
-    await emailService.sendPasswordResetEmail(user.email, resetUrl.toString());
-  } catch (emailError) {
-    try {
-      await deletePasswordResetToken(user.id, tokenHash);
-    } catch (cleanupError) {
-      console.error("Failed to remove unsent password reset token", cleanupError);
-    }
-
-    throw emailError;
-  }
+  void Promise.resolve()
+    .then(() => emailService.sendPasswordResetEmail(user.email, resetUrl.toString()))
+    .catch(async (emailError: unknown) => {
+      console.error("Password reset email delivery failed", emailError);
+      try {
+        await deletePasswordResetToken(user.id, tokenHash);
+      } catch (cleanupError) {
+        console.error("Failed to remove unsent password reset token", cleanupError);
+      }
+    });
 }
 
 export async function resetPassword(token: string, password: string): Promise<boolean> {

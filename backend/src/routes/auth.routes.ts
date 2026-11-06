@@ -32,7 +32,7 @@ export function createAuthRouter(config: AppConfig) {
   router.post(
     "/forgot-password",
     forgotPasswordRateLimit,
-    createForgotPasswordController(config.appUrl, emailService),
+    createForgotPasswordController(config.appUrl, emailService, config.smtp !== undefined),
   );
   router.post("/reset-password", resetPasswordRateLimit, resetPasswordController);
 

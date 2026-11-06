@@ -23,3 +23,7 @@ export interface LoginResponse {
 export interface RegisterResponse {
   user: User;
 }
+
+export interface PasswordResetConfirmation {
+  message: string;
+}

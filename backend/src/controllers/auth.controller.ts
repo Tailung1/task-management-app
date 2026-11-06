@@ -89,11 +89,17 @@ export const createLoginController = (jwtSecret: AppConfig["jwtSecret"]) =>
 export const createForgotPasswordController = (
   appUrl: AppConfig["appUrl"],
   emailService: PasswordResetEmailService,
+  emailEnabled: boolean,
 ) => async (req: Request, res: Response) => {
   const validation = validateForgotPasswordInput(req.body);
 
   if (!validation.valid) {
     res.status(400).json({ message: validation.message });
+    return;
+  }
+
+  if (!emailEnabled) {
+    res.status(503).json({ message: "Password reset email is not configured." });
     return;
   }
 
@@ -103,7 +109,7 @@ export const createForgotPasswordController = (
       message: "If an account exists for that email, a password reset link will be sent.",
     });
   } catch (error) {
-    console.error("Password reset email failed", error);
+    console.error("Password reset request failed", error);
     res.status(500).json({ message: "Unable to process the password reset request." });
   }
 };

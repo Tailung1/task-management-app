@@ -1,6 +1,7 @@
 import type {
   LoginCredentials,
   LoginResponse,
+  PasswordResetConfirmation,
   RegisterCredentials,
   RegisterResponse,
   User,
@@ -48,6 +49,19 @@ function decodeRegisterResponse(value: unknown): RegisterResponse {
   return { user: decodeUser(value.user) };
 }
 
+function decodePasswordResetConfirmation(value: unknown): PasswordResetConfirmation {
+  if (
+    typeof value !== "object" ||
+    value === null ||
+    !("message" in value) ||
+    typeof value.message !== "string"
+  ) {
+    throw new Error("Invalid password reset response");
+  }
+
+  return { message: value.message };
+}
+
 export function login(credentials: LoginCredentials): Promise<LoginResponse> {
   return apiClient("auth/login", decodeLoginResponse, { method: "POST", body: credentials });
 }
@@ -56,6 +70,23 @@ export function register(credentials: RegisterCredentials): Promise<RegisterResp
   return apiClient("auth/register", decodeRegisterResponse, {
     method: "POST",
     body: credentials,
+  });
+}
+
+export function requestPasswordReset(email: string): Promise<PasswordResetConfirmation> {
+  return apiClient("auth/forgot-password", decodePasswordResetConfirmation, {
+    method: "POST",
+    body: { email },
+  });
+}
+
+export function resetPassword(
+  token: string,
+  password: string,
+): Promise<PasswordResetConfirmation> {
+  return apiClient("auth/reset-password", decodePasswordResetConfirmation, {
+    method: "POST",
+    body: { token, password },
   });
 }
 
