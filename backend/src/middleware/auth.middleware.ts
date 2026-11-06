@@ -2,9 +2,11 @@ import type { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import type { AppConfig } from "../config.js";
 import { isUuid } from "../utils/request.validation.js";
+import { findAuthTokenVersion } from "../db/queries/auth.query.js";
 
 export const createAuthenticate = (jwtSecret: AppConfig["jwtSecret"]) =>
-  (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
+    let decoded: string | jwt.JwtPayload;
     try {
       const authHeader = req.headers.authorization;
 
@@ -24,18 +26,35 @@ export const createAuthenticate = (jwtSecret: AppConfig["jwtSecret"]) =>
         return;
       }
 
-      const decoded = jwt.verify(token, jwtSecret, { algorithms: ["HS256"] });
+      decoded = jwt.verify(token, jwtSecret, { algorithms: ["HS256"] });
+    } catch {
+      res.status(401).json({
+        message: "Invalid or expired token",
+      });
+      return;
+    }
 
-      if (typeof decoded !== "object" || !isUuid(decoded.userId)) {
+    if (
+      typeof decoded !== "object" ||
+      !isUuid(decoded.userId) ||
+      typeof decoded.authTokenVersion !== "number" ||
+      !Number.isSafeInteger(decoded.authTokenVersion) ||
+      decoded.authTokenVersion < 0
+    ) {
+      res.status(401).json({ message: "Invalid or expired token" });
+      return;
+    }
+
+    try {
+      const currentVersion = await findAuthTokenVersion(decoded.userId);
+      if (currentVersion === null || decoded.authTokenVersion !== currentVersion) {
         res.status(401).json({ message: "Invalid or expired token" });
         return;
       }
 
       req.user = { id: decoded.userId };
       next();
-    } catch {
-      res.status(401).json({
-        message: "Invalid or expired token",
-      });
+    } catch (error) {
+      next(error);
     }
   };

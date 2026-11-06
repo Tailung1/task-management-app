@@ -28,10 +28,14 @@ export const loginUser = async (email: string, password: string, jwtSecret: AppC
     throw new Error("Invalid credentials");
   }
 
-  const token = jwt.sign({ userId: user.id }, jwtSecret, {
-    algorithm: "HS256",
-    expiresIn: "7d",
-  });
+  const token = jwt.sign(
+    { userId: user.id, authTokenVersion: user.auth_token_version },
+    jwtSecret,
+    {
+      algorithm: "HS256",
+      expiresIn: "7d",
+    },
+  );
 
   return {
     token,

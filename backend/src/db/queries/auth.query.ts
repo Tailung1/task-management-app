@@ -7,7 +7,8 @@ export const findUserByEmail = async (email: string) => {
       id,
       name,
       email,
-      password
+      password,
+      auth_token_version
       FROM users
       WHERE LOWER(email) = $1;
     `,
@@ -76,7 +77,7 @@ export const updatePasswordWithResetToken = async (
         RETURNING user_id
       )
       UPDATE users
-      SET password = $2
+      SET password = $2, auth_token_version = auth_token_version + 1
       FROM valid_token
       WHERE users.id = valid_token.user_id
       RETURNING users.id;
@@ -85,4 +86,12 @@ export const updatePasswordWithResetToken = async (
   );
 
   return result.rowCount === 1;
+};
+
+export const findAuthTokenVersion = async (userId: string): Promise<number | null> => {
+  const result = await pool.query(
+    "SELECT auth_token_version FROM users WHERE id = $1",
+    [userId],
+  );
+  return result.rows[0]?.auth_token_version ?? null;
 };
