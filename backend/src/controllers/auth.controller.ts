@@ -1,10 +1,20 @@
 import type { Request, Response } from "express";
 import { registerUser, loginUser } from "../services/auth.service.js";
 import {
+  validateForgotPasswordInput,
   validateLoginInput,
+  validatePasswordResetInput,
   validateRegistrationInput,
 } from "../utils/auth.validation.js";
 import type { AppConfig } from "../config.js";
+import {
+  requestPasswordReset,
+  resetPassword,
+} from "../services/password-reset.service.js";
+
+interface PasswordResetEmailService {
+  sendPasswordResetEmail(email: string, resetUrl: string): Promise<void>;
+}
 
 export const registerController = async (req: Request, res: Response) => {
   const validation = validateRegistrationInput(req.body);
@@ -75,3 +85,51 @@ export const createLoginController = (jwtSecret: AppConfig["jwtSecret"]) =>
       });
     }
   };
+
+export const createForgotPasswordController = (
+  appUrl: AppConfig["appUrl"],
+  emailService: PasswordResetEmailService,
+) => async (req: Request, res: Response) => {
+  const validation = validateForgotPasswordInput(req.body);
+
+  if (!validation.valid) {
+    res.status(400).json({ message: validation.message });
+    return;
+  }
+
+  try {
+    await requestPasswordReset(validation.value.email, appUrl, emailService);
+    res.status(202).json({
+      message: "If an account exists for that email, a password reset link will be sent.",
+    });
+  } catch (error) {
+    console.error("Password reset email failed", error);
+    res.status(500).json({ message: "Unable to process the password reset request." });
+  }
+};
+
+export const resetPasswordController = async (req: Request, res: Response) => {
+  const validation = validatePasswordResetInput(req.body);
+
+  if (!validation.valid) {
+    res.status(400).json({ message: validation.message });
+    return;
+  }
+
+  try {
+    const updated = await resetPassword(
+      validation.value.token,
+      validation.value.password,
+    );
+
+    if (!updated) {
+      res.status(400).json({ message: "Reset link is invalid or has expired." });
+      return;
+    }
+
+    res.status(200).json({ message: "Password has been reset. You can now sign in." });
+  } catch (error) {
+    console.error("Password reset failed", error);
+    res.status(500).json({ message: "Unable to reset the password." });
+  }
+};

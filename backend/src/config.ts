@@ -5,6 +5,16 @@ export interface AppConfig {
   jwtSecret: string;
   clientOrigins: string[];
   trustProxy: number;
+  appUrl: string;
+  smtp:
+    | {
+        host: string;
+        port: number;
+        user: string;
+        password: string;
+        from: string;
+      }
+    | undefined;
 }
 
 export function loadConfig(): AppConfig {
@@ -12,6 +22,12 @@ export function loadConfig(): AppConfig {
   const port = Number(process.env.PORT ?? 5001);
   const jwtSecret = process.env.JWT_SECRET;
   const databaseUrl = process.env.DATABASE_URL;
+  const appUrl = process.env.APP_URL ?? (isProduction ? "" : "http://localhost:5173");
+  const smtpHost = process.env.SMTP_HOST?.trim();
+  const smtpPort = Number(process.env.SMTP_PORT ?? 465);
+  const smtpUser = process.env.SMTP_USER?.trim();
+  const smtpPassword = process.env.SMTP_PASSWORD;
+  const smtpFrom = process.env.SMTP_FROM?.trim();
   const clientOrigins = (
     process.env.CLIENT_ORIGINS ?? (isProduction ? "" : "http://localhost:5173")
   )
@@ -29,6 +45,37 @@ export function loadConfig(): AppConfig {
 
   if (!databaseUrl) {
     throw new Error("DATABASE_URL must be set.");
+  }
+
+  let parsedAppUrl: URL;
+  try {
+    parsedAppUrl = new URL(appUrl);
+  } catch (error) {
+    throw new Error("APP_URL must be a valid HTTP(S) origin.", { cause: error });
+  }
+  if (
+    (parsedAppUrl.protocol !== "http:" && parsedAppUrl.protocol !== "https:") ||
+    parsedAppUrl.origin !== appUrl ||
+    (isProduction && parsedAppUrl.protocol !== "https:")
+  ) {
+    throw new Error(`APP_URL must be a valid${isProduction ? " HTTPS" : ""} origin.`);
+  }
+
+  const hasSmtpConfiguration = [smtpHost, smtpUser, smtpPassword, smtpFrom].some(Boolean);
+  const hasCompleteSmtpConfiguration =
+    !!smtpHost && !!smtpUser && !!smtpPassword && !!smtpFrom;
+
+  if (isProduction && !hasCompleteSmtpConfiguration) {
+    throw new Error("SMTP_HOST, SMTP_USER, SMTP_PASSWORD, and SMTP_FROM must be set in production.");
+  }
+  if (hasSmtpConfiguration && !hasCompleteSmtpConfiguration) {
+    throw new Error("SMTP_HOST, SMTP_USER, SMTP_PASSWORD, and SMTP_FROM must all be set.");
+  }
+  if (
+    hasCompleteSmtpConfiguration &&
+    (!Number.isInteger(smtpPort) || smtpPort < 1 || smtpPort > 65535)
+  ) {
+    throw new Error("SMTP_PORT must be a valid TCP port number.");
   }
 
   if (!clientOrigins.length) {
@@ -70,5 +117,20 @@ export function loadConfig(): AppConfig {
     throw new Error("TRUST_PROXY must be a non-negative proxy hop count.");
   }
 
-  return { port, jwtSecret, clientOrigins, trustProxy };
+  return {
+    port,
+    jwtSecret,
+    clientOrigins,
+    trustProxy,
+    appUrl,
+    smtp: hasCompleteSmtpConfiguration
+      ? {
+          host: smtpHost,
+          port: smtpPort,
+          user: smtpUser,
+          password: smtpPassword,
+          from: smtpFrom,
+        }
+      : undefined,
+  };
 }

@@ -1,7 +1,9 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
+  validateForgotPasswordInput,
   validateLoginInput,
+  validatePasswordResetInput,
   validateRegistrationInput,
 } from "../src/utils/auth.validation.js";
 
@@ -79,5 +81,37 @@ test("passwords exceeding bcrypt's byte limit are rejected with a user-friendly 
       valid: false,
       message: "Password is too long. Please choose a shorter password.",
     },
+  );
+});
+
+test("forgot password validates and normalizes email addresses", () => {
+  assert.deepEqual(validateForgotPasswordInput({ email: " ADA@example.com " }), {
+    valid: true,
+    value: { email: "ada@example.com" },
+  });
+  assert.equal(validateForgotPasswordInput({ email: "invalid" }).valid, false);
+});
+
+test("password reset requires a valid token and a strong password", () => {
+  assert.deepEqual(
+    validatePasswordResetInput({
+      token: "a".repeat(64),
+      password: "a-long-password",
+    }),
+    {
+      valid: true,
+      value: {
+        token: "a".repeat(64),
+        password: "a-long-password",
+      },
+    },
+  );
+  assert.equal(
+    validatePasswordResetInput({ token: "invalid", password: "a-long-password" }).valid,
+    false,
+  );
+  assert.equal(
+    validatePasswordResetInput({ token: "a".repeat(64), password: "short" }).valid,
+    false,
   );
 });

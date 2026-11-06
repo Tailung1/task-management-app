@@ -14,6 +14,11 @@ interface RegistrationInput extends AuthInput {
   name: string;
 }
 
+interface PasswordResetInput {
+  token: string;
+  password: string;
+}
+
 type ValidationResult<T> =
   | { valid: true; value: T }
   | { valid: false; message: string };
@@ -122,5 +127,38 @@ export function validateRegistrationInput(
   return {
     valid: true,
     value: { name, email: email.value, password: password.value },
+  };
+}
+
+export function validateForgotPasswordInput(
+  value: unknown,
+): ValidationResult<{ email: string }> {
+  if (!isRecord(value)) {
+    return { valid: false, message: "Email address is required" };
+  }
+
+  const email = validateEmail(value.email);
+  if (!email.valid) return email;
+
+  return { valid: true, value: { email: email.value } };
+}
+
+export function validatePasswordResetInput(
+  value: unknown,
+): ValidationResult<PasswordResetInput> {
+  if (!isRecord(value)) {
+    return { valid: false, message: "Reset token and new password are required" };
+  }
+
+  if (typeof value.token !== "string" || !/^[\da-f]{64}$/.test(value.token)) {
+    return { valid: false, message: "Reset link is invalid or has expired" };
+  }
+
+  const password = validatePassword(value.password, true);
+  if (!password.valid) return password;
+
+  return {
+    valid: true,
+    value: { token: value.token, password: password.value },
   };
 }
