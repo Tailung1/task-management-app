@@ -76,7 +76,11 @@ export default function FormField({
 
       <div className='mt-2 min-h-5'>
         {error ? (
-          <p id={errorId} className='flex items-center gap-1.5 text-xs font-medium text-red-500'>
+          <p
+            id={errorId}
+            role='alert'
+            className='flex items-center gap-1.5 text-xs font-medium text-red-500'
+          >
             <AlertCircle size={14} aria-hidden='true' />
             {error}
           </p>
