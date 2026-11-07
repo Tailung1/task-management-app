@@ -56,6 +56,7 @@ export default function TaskDetailsModal({ task, boardName }: TaskDetailsModalPr
             type='button'
             aria-label='Task options'
             aria-expanded={showTaskMenu}
+            aria-controls={showTaskMenu ? "task-options-menu" : undefined}
             onClick={() => setShowTaskMenu((current) => !current)}
             className='text-gray-500 transition hover:text-gray-800 dark:text-gray-400 dark:hover:text-white'
           >
@@ -63,7 +64,10 @@ export default function TaskDetailsModal({ task, boardName }: TaskDetailsModalPr
           </button>
 
           {showTaskMenu && (
-            <div className='absolute right-0 top-full z-20 mt-2 w-36 overflow-hidden rounded-md bg-white py-1 shadow-lg dark:bg-[#20212C]'>
+            <div
+              id='task-options-menu'
+              className='absolute right-0 top-full z-20 mt-2 w-36 overflow-hidden rounded-md bg-white py-1 shadow-lg dark:bg-[#20212C]'
+            >
               <button
                 onClick={() => setActiveModal("edit-task")}
                 type='button'
@@ -135,6 +139,7 @@ export default function TaskDetailsModal({ task, boardName }: TaskDetailsModalPr
         <button
           type='button'
           aria-expanded={showStatusMenu}
+          aria-controls={showStatusMenu ? "task-status-menu" : undefined}
           onClick={() => setShowStatusMenu((current) => !current)}
           className='flex w-full items-center justify-between rounded border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-[#20212C] dark:border-gray-600 dark:bg-[#2B2C37] dark:text-white'
         >
@@ -147,7 +152,10 @@ export default function TaskDetailsModal({ task, boardName }: TaskDetailsModalPr
         </button>
 
         {showStatusMenu && (
-          <div className='absolute left-0 right-0 bottom-0 z-10 rounded-md border border-gray-200 bg-white shadow-lg dark:border-gray-600 dark:bg-[#2B2C37]'>
+          <div
+            id='task-status-menu'
+            className='absolute left-0 right-0 bottom-0 z-10 rounded-md border border-gray-200 bg-white shadow-lg dark:border-gray-600 dark:bg-[#2B2C37]'
+          >
             {statuses.map((option) => (
               <button
                 key={option}
