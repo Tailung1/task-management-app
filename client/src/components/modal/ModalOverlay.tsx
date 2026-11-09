@@ -1,8 +1,19 @@
-import { type ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import { useModalContext } from "../../contexts/ModalContext";
 
 export default function ModalOverlay({ children }: { children: ReactNode }) {
   const { setActiveModal } = useModalContext();
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setActiveModal(null);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [setActiveModal]);
 
   const handleModalOff = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target === event.currentTarget) {
