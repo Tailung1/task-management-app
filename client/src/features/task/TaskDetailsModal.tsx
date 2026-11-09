@@ -50,7 +50,7 @@ export default function TaskDetailsModal({ task, boardName }: TaskDetailsModalPr
             onClick={() => setActiveModal(null)}
             className='text-gray-500 transition hover:text-gray-800 dark:text-gray-400 dark:hover:text-white'
           >
-            <X size={27} />
+            <X size={27} aria-hidden='true' />
           </button>
           <button
             type='button'
@@ -60,7 +60,7 @@ export default function TaskDetailsModal({ task, boardName }: TaskDetailsModalPr
             onClick={() => setShowTaskMenu((current) => !current)}
             className='text-gray-500 transition hover:text-gray-800 dark:text-gray-400 dark:hover:text-white'
           >
-            <EllipsisVertical size={27} />
+            <EllipsisVertical size={27} aria-hidden='true' />
           </button>
 
           {showTaskMenu && (
@@ -115,7 +115,9 @@ export default function TaskDetailsModal({ task, boardName }: TaskDetailsModalPr
                       : "border-gray-300 bg-white dark:border-gray-600 dark:bg-[#2B2C37]"
                   }`}
                 >
-                  {isCompleted && <Check size={12} strokeWidth={3} className='text-white' />}
+                  {isCompleted && (
+                    <Check size={12} strokeWidth={3} className='text-white' aria-hidden='true' />
+                  )}
                 </span>
 
                 <span
@@ -147,6 +149,7 @@ export default function TaskDetailsModal({ task, boardName }: TaskDetailsModalPr
 
           <ChevronDown
             size={18}
+            aria-hidden='true'
             className={`transition-transform ${showStatusMenu ? "rotate-180" : ""}`}
           />
         </button>
