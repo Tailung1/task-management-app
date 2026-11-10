@@ -11,7 +11,13 @@ export default function BoardList() {
 
   if (isPending) return <BoardListSkeleton />;
 
-  if (isError) return <p role='alert'>{error.message}</p>;
+  if (isError) {
+    return (
+      <p className='w-full min-w-0 break-words' role='alert'>
+        {error.message}
+      </p>
+    );
+  }
 
   return (
     <div>
