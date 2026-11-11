@@ -124,10 +124,7 @@ const apiClient = async <T>(
   }
 
   if (!response.ok) {
-    throw new ApiError(
-      getErrorMessage(payload) ?? `Request failed (${response.status})`,
-      response.status,
-    );
+    throw new ApiError(getErrorMessage(payload) ?? "Request failed", response.status);
   }
 
   try {
