@@ -13,7 +13,7 @@ export default function BoardList() {
 
   if (isError) {
     return (
-      <p className='w-full min-w-0 break-words' role='alert'>
+      <p className='w-full min-w-0 wrap-break-word' role='alert'>
         {error.message}
       </p>
     );

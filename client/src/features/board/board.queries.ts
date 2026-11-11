@@ -5,14 +5,14 @@ import useAuthContext from "../../contexts/AuthContext";
 
 export const boardKeys = {
   all: ["boards"] as const,
-  lists: () => [...boardKeys.all, "list"] as const,
+  list: () => [...boardKeys.all, "list"] as const,
   detail: (boardId: string) => [...boardKeys.all, "detail", boardId] as const,
 };
 
 export function useBoards() {
   const { isAuthenticated } = useAuthContext();
   return useQuery({
-    queryKey: boardKeys.lists(),
+    queryKey: boardKeys.list(),
     queryFn: getBoards,
     enabled: isAuthenticated,
   });
@@ -24,7 +24,7 @@ export function useCreateBoard() {
   return useMutation({
     mutationFn: (input: CreateBoardInput) => createBoard(input),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: boardKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: boardKeys.list() });
     },
   });
 }
