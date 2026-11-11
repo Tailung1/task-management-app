@@ -42,14 +42,15 @@ export default function BoardPage() {
 
   return (
     <>
-      {activeModal && activeModal !== "create-board" ? (
-        <ModalRenderer task={activeTask ?? null} boardName={board.name} />
-      ) : board.columns.length === 0 ? (
+      {board.columns.length === 0 ? (
         <div className='flex flex-1 items-center justify-center'>
           <EmptyBoardState />
         </div>
       ) : (
         <BoardView columns={board.columns} onSelectTask={handleTaskSelect} />
+      )}
+      {activeModal && activeModal !== "create-board" && (
+        <ModalRenderer task={activeTask ?? null} boardName={board.name} />
       )}
     </>
   );
