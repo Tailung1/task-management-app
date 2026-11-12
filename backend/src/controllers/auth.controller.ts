@@ -7,10 +7,7 @@ import {
   validateRegistrationInput,
 } from "../utils/auth.validation.js";
 import type { AppConfig } from "../config.js";
-import {
-  requestPasswordReset,
-  resetPassword,
-} from "../services/password-reset.service.js";
+import { requestPasswordReset, resetPassword } from "../services/password-reset.service.js";
 
 interface PasswordResetEmailService {
   sendPasswordResetEmail(email: string, resetUrl: string): Promise<void>;
@@ -41,8 +38,7 @@ export const registerController = async (req: Request, res: Response) => {
   } catch (error) {
     if (
       error instanceof Error &&
-      (error.message === "Email already exists" ||
-        ("code" in error && error.code === "23505"))
+      (error.message === "Email already exists" || ("code" in error && error.code === "23505"))
     ) {
       res.status(409).json({ message: "An account with this email already exists" });
       return;
@@ -55,8 +51,8 @@ export const registerController = async (req: Request, res: Response) => {
   }
 };
 
-export const createLoginController = (jwtSecret: AppConfig["jwtSecret"]) =>
-  async (req: Request, res: Response) => {
+export const createLoginController =
+  (jwtSecret: AppConfig["jwtSecret"]) => async (req: Request, res: Response) => {
     const validation = validateLoginInput(req.body);
 
     if (!validation.valid) {
@@ -65,11 +61,7 @@ export const createLoginController = (jwtSecret: AppConfig["jwtSecret"]) =>
     }
 
     try {
-      const result = await loginUser(
-        validation.value.email,
-        validation.value.password,
-        jwtSecret,
-      );
+      const result = await loginUser(validation.value.email, validation.value.password, jwtSecret);
       res.status(200).json(result);
     } catch (error) {
       if (error instanceof Error && error.message === "Invalid credentials") {
@@ -86,33 +78,31 @@ export const createLoginController = (jwtSecret: AppConfig["jwtSecret"]) =>
     }
   };
 
-export const createForgotPasswordController = (
-  appUrl: AppConfig["appUrl"],
-  emailService: PasswordResetEmailService,
-  emailEnabled: boolean,
-) => async (req: Request, res: Response) => {
-  const validation = validateForgotPasswordInput(req.body);
+export const createForgotPasswordController =
+  (appUrl: AppConfig["appUrl"], emailService: PasswordResetEmailService, emailEnabled: boolean) =>
+  async (req: Request, res: Response) => {
+    const validation = validateForgotPasswordInput(req.body);
 
-  if (!validation.valid) {
-    res.status(400).json({ message: validation.message });
-    return;
-  }
+    if (!validation.valid) {
+      res.status(400).json({ message: validation.message });
+      return;
+    }
 
-  if (!emailEnabled) {
-    res.status(503).json({ message: "Password reset email is not configured." });
-    return;
-  }
+    if (!emailEnabled) {
+      res.status(503).json({ message: "Password reset email is not configured." });
+      return;
+    }
 
-  try {
-    await requestPasswordReset(validation.value.email, appUrl, emailService);
-    res.status(202).json({
-      message: "If an account exists for that email, a password reset link will be sent.",
-    });
-  } catch (error) {
-    console.error("Password reset request failed", error);
-    res.status(500).json({ message: "Unable to process the password reset request." });
-  }
-};
+    try {
+      await requestPasswordReset(validation.value.email, appUrl, emailService);
+      res.status(202).json({
+        message: "If an account exists for that email, a password reset link will be sent.",
+      });
+    } catch (error) {
+      console.error("Password reset request failed", error);
+      res.status(500).json({ message: "Unable to process the password reset request." });
+    }
+  };
 
 export const resetPasswordController = async (req: Request, res: Response) => {
   const validation = validatePasswordResetInput(req.body);
@@ -123,10 +113,7 @@ export const resetPasswordController = async (req: Request, res: Response) => {
   }
 
   try {
-    const updated = await resetPassword(
-      validation.value.token,
-      validation.value.password,
-    );
+    const updated = await resetPassword(validation.value.token, validation.value.password);
 
     if (!updated) {
       res.status(400).json({ message: "Reset link is invalid or has expired." });

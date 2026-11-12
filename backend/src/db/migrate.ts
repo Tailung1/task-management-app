@@ -51,8 +51,6 @@ async function migrate() {
         await client.query("INSERT INTO migrations (name) VALUES ($1)", [file]);
 
         await client.query("COMMIT");
-        // E.g. users table is created but INSERT migration fails;
-        // ROLLBACK undoes both, while COMMIT makes both permanent.
 
         console.log(`Applied: ${file}`);
       } catch (error) {
