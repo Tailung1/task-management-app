@@ -100,8 +100,8 @@ export const createBoard = (data: CreateBoardInput) =>
     body: data,
   });
 
-export const updateBoard = (boardId: string, data: UpdateBoardInput) =>
-  apiClient(`boards/${encodeURIComponent(boardId)}`, decodeBoardSummary, {
+export const updateBoard = (data: UpdateBoardInput) =>
+  apiClient(`boards/${encodeURIComponent(data.id!)}`, decodeBoardSummary, {
     method: "PATCH",
     body: data,
   });
