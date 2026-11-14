@@ -6,6 +6,7 @@ import {
   editBoard,
   removeBoard,
 } from "../services/board.service.js";
+import type { BoardColumnInput } from "../services/board.service.js";
 import { isRequestBody, isUuid } from "../utils/request.validation.js";
 
 export const getBoardsController = async (req: Request, res: Response) => {
@@ -96,21 +97,60 @@ export const updateBoardController = async (req: Request, res: Response) => {
       res.status(400).json({ message: "Invalid request body" });
       return;
     }
-    const { name } = req.body;
+    const { name, columns: requestColumns } = req.body;
 
     if (typeof name !== "string" || !name.trim() || name.length > 255) {
       res.status(400).json({ message: "Board name must be between 1 and 255 characters" });
       return;
     }
 
-    const board = await editBoard(boardId, req.user.id, name.trim());
+    let columns: BoardColumnInput[] | undefined;
+    if (requestColumns !== undefined) {
+      if (!Array.isArray(requestColumns) || requestColumns.length > 50) {
+        res.status(400).json({ message: "Columns must contain up to 50 entries" });
+        return;
+      }
 
-    if (!board) {
+      columns = [];
+      const columnIds = new Set<string>();
+      for (const column of requestColumns) {
+        if (
+          !isRequestBody(column) ||
+          typeof column.name !== "string" ||
+          !column.name.trim() ||
+          column.name.length > 255 ||
+          (column.id !== undefined && !isUuid(column.id))
+        ) {
+          res.status(400).json({ message: "Invalid board column" });
+          return;
+        }
+
+        if (typeof column.id === "string") {
+          if (columnIds.has(column.id)) {
+            res.status(400).json({ message: "Column IDs must be unique" });
+            return;
+          }
+          columnIds.add(column.id);
+          columns.push({ id: column.id, name: column.name.trim() });
+        } else {
+          columns.push({ name: column.name.trim() });
+        }
+      }
+    }
+
+    const result = await editBoard(boardId, req.user.id, name.trim(), columns);
+
+    if (result.status === "not-found") {
       res.status(404).json({ message: "Board not found" });
       return;
     }
 
-    res.status(200).json(board);
+    if (result.status === "invalid-columns") {
+      res.status(400).json({ message: "One or more columns do not belong to this board" });
+      return;
+    }
+
+    res.status(200).json(result.board);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Failed to update board" });

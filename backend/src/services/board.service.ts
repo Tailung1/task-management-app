@@ -6,6 +6,8 @@ import {
   deleteBoard,
 } from "../db/queries/board.query.js";
 
+export type BoardColumnInput = { id?: string; name: string };
+
 export const getBoards = async (userId: string) => {
   return findBoardsByUserId(userId);
 };
@@ -18,8 +20,13 @@ export const addBoard = async (userId: string, name: string, columnNames: string
   return createBoard(userId, name, columnNames);
 };
 
-export const editBoard = async (boardId: string, userId: string, name: string) => {
-  return updateBoard(boardId, userId, name);
+export const editBoard = async (
+  boardId: string,
+  userId: string,
+  name: string,
+  columns?: BoardColumnInput[],
+) => {
+  return updateBoard(boardId, userId, name, columns);
 };
 
 export const removeBoard = async (boardId: string, userId: string) => {

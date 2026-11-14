@@ -154,25 +154,77 @@ export const createBoard = async (userId: string, name: string, columnNames: str
   }
 };
 
-export const updateBoard = async (boardId: string, userId: string, name: string) => {
-  const result = await pool.query(
-    `
-      UPDATE boards
-      SET
-        name = $1,
-        updated_at = NOW()
-      WHERE id = $2 AND user_id = $3
-      RETURNING
-        id,
-        name,
-        user_id,
-        created_at,
-        updated_at;
-    `,
-    [name, boardId, userId],
-  );
+export const updateBoard = async (
+  boardId: string,
+  userId: string,
+  name: string,
+  columns?: { id?: string; name: string }[],
+) => {
+  const client = await pool.connect();
 
-  return result.rows[0] ?? null;
+  try {
+    await client.query("BEGIN");
+
+    const boardResult = await client.query(
+      `
+        UPDATE boards
+        SET name = $1, updated_at = NOW()
+        WHERE id = $2 AND user_id = $3
+        RETURNING id, name;
+      `,
+      [name, boardId, userId],
+    );
+
+    if (boardResult.rows.length === 0) {
+      await client.query("ROLLBACK");
+      return { status: "not-found" as const };
+    }
+
+    if (columns !== undefined) {
+      const currentColumnsResult = await client.query<{ id: string }>(
+        "SELECT id FROM columns WHERE board_id = $1 FOR UPDATE;",
+        [boardId],
+      );
+      const currentColumnIds = new Set(currentColumnsResult.rows.map((column) => column.id));
+      const requestedIds = columns.flatMap((column) => (column.id ? [column.id] : []));
+
+      if (requestedIds.some((id) => !currentColumnIds.has(id))) {
+        await client.query("ROLLBACK");
+        return { status: "invalid-columns" as const };
+      }
+
+      await client.query(
+        "DELETE FROM columns WHERE board_id = $1 AND NOT (id = ANY($2::uuid[]));",
+        [boardId, requestedIds],
+      );
+
+      for (const [position, column] of columns.entries()) {
+        if (column.id) {
+          await client.query(
+            `
+              UPDATE columns
+              SET name = $1, position = $2, updated_at = NOW()
+              WHERE id = $3 AND board_id = $4;
+            `,
+            [column.name, position, column.id, boardId],
+          );
+        } else {
+          await client.query(
+            "INSERT INTO columns (board_id, name, position) VALUES ($1, $2, $3);",
+            [boardId, column.name, position],
+          );
+        }
+      }
+    }
+
+    await client.query("COMMIT");
+    return { status: "updated" as const, board: boardResult.rows[0] };
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
 };
 
 export const deleteBoard = async (boardId: string, userId: string) => {
