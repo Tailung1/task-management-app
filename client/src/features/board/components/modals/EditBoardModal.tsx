@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, X } from "lucide-react";
+import { Plus, RotateCcw, X } from "lucide-react";
 import { useModalContext } from "../../../../contexts/ModalContext";
 import type { Board } from "../../board.types";
 
@@ -7,6 +7,10 @@ export default function EditBoardModal({ board }: { board: Board }) {
   const { setActiveModal } = useModalContext();
   const [boardName, setBoardName] = useState(board.name);
   const [columns, setColumns] = useState(board.columns);
+  const [columnsMarkedForDeletion, setColumnsMarkedForDeletion] = useState<Set<string>>(
+    () => new Set(),
+  );
+
 
   function updateColumnName(id: string, name: string) {
     setColumns((current) =>
@@ -26,16 +30,23 @@ export default function EditBoardModal({ board }: { board: Board }) {
   }
 
   function removeColumn(id: string) {
-    setColumns((current) => current.filter((column) => column.id !== id));
+    setColumnsMarkedForDeletion((current) => {
+      const updated = new Set(current);
+      if (updated.has(id)) {
+        updated.delete(id);
+      } else {
+        updated.add(id);
+      }
+      return updated;
+    });
   }
 
   function handleSubmit() {
     const updatedBoard: Board = {
       ...board,
       name: boardName,
-      columns,
+      columns: columns.filter((column) => !columnsMarkedForDeletion.has(column.id)),
     };
-
     console.log(updatedBoard);
     setActiveModal(null);
   }
@@ -65,21 +76,45 @@ export default function EditBoardModal({ board }: { board: Board }) {
 
         <div className='flex flex-col gap-3'>
           {columns.map((column) => (
-            <div key={column.id} className='flex items-center gap-2'>
+            <div
+              key={column.id}
+              className={`flex items-center gap-2 ${
+                columnsMarkedForDeletion.has(column.id) ? "opacity-50" : ""
+              }`}
+            >
               <input
                 type='text'
                 value={column.name}
                 onChange={(e) => updateColumnName(column.id, e.target.value)}
-                className='h-11 flex-1 rounded-md border border-[#D9D9D9] bg-transparent px-4 text-sm text-[#20212C] outline-none transition focus:border-[#635FC7] focus:ring-1 focus:ring-[#635FC7] dark:border-[#4B4C5C] dark:text-white'
+                disabled={columnsMarkedForDeletion.has(column.id)}
+                className={`h-11 flex-1 rounded-md border border-[#D9D9D9] bg-transparent px-4 text-sm text-[#20212C] outline-none transition focus:border-[#635FC7] focus:ring-1 focus:ring-[#635FC7] dark:border-[#4B4C5C] dark:text-white ${
+                  columnsMarkedForDeletion.has(column.id) ? "line-through" : ""
+                }`}
               />
+              {columnsMarkedForDeletion.has(column.id) && (
+                <span className='text-xs text-[#EA5555]'>Deletes on save</span>
+              )}
 
               <button
                 type='button'
                 onClick={() => removeColumn(column.id)}
                 className='cursor-pointer text-[#828FA3] transition-colors hover:text-[#EA5555]'
-                aria-label={`Delete ${column.name || "column"}`}
+                aria-label={
+                  columnsMarkedForDeletion.has(column.id)
+                    ? `Undo deletion of ${column.name || "column"}`
+                    : `Mark ${column.name || "column"} for deletion`
+                }
+                title={
+                  columnsMarkedForDeletion.has(column.id)
+                    ? "Undo deletion"
+                    : "Mark for deletion"
+                }
               >
-                <X size={20} />
+                {columnsMarkedForDeletion.has(column.id) ? (
+                  <RotateCcw size={20} />
+                ) : (
+                  <X size={20} />
+                )}
               </button>
             </div>
           ))}
