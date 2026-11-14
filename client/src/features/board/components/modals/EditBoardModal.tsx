@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Plus, RotateCcw, X } from "lucide-react";
 import { useModalContext } from "../../../../contexts/ModalContext";
-import type { Board } from "../../board.types";
+import { useUpdateBoard } from "../../board.queries";
+import type { Board, UpdateBoardInput } from "../../board.types";
 
 export default function EditBoardModal({ board }: { board: Board }) {
   const { setActiveModal } = useModalContext();
+  const updateBoardMutation = useUpdateBoard();
   const [boardName, setBoardName] = useState(board.name);
   const [columns, setColumns] = useState(board.columns);
   const [columnsMarkedForDeletion, setColumnsMarkedForDeletion] = useState<Set<string>>(
@@ -42,13 +44,25 @@ export default function EditBoardModal({ board }: { board: Board }) {
   }
 
   function handleSubmit() {
-    const updatedBoard: Board = {
-      ...board,
-      name: boardName,
-      columns: columns.filter((column) => !columnsMarkedForDeletion.has(column.id)),
+    if (updateBoardMutation.isPending) {
+      return;
+    }
+
+    const existingColumnIds = new Set(board.columns.map((column) => column.id));
+    const input: UpdateBoardInput = {
+      id: board.id,
+      name: boardName.trim(),
+      columns: columns
+        .filter((column) => !columnsMarkedForDeletion.has(column.id))
+        .map((column) => ({
+          ...(existingColumnIds.has(column.id) ? { id: column.id } : {}),
+          name: column.name.trim(),
+        })),
     };
-    console.log(updatedBoard);
-    setActiveModal(null);
+
+    updateBoardMutation.mutate(input, {
+      onSuccess: () => setActiveModal(null),
+    });
   }
 
   return (
@@ -133,10 +147,16 @@ export default function EditBoardModal({ board }: { board: Board }) {
       <button
         type='button'
         onClick={handleSubmit}
-        className='w-full cursor-pointer rounded-full bg-[#635FC7] py-3 text-sm font-bold text-white transition-colors hover:bg-[#7A75E0]'
+        disabled={!boardName.trim() || updateBoardMutation.isPending}
+        className='w-full cursor-pointer rounded-full bg-[#635FC7] py-3 text-sm font-bold text-white transition-colors hover:bg-[#7A75E0] disabled:cursor-not-allowed disabled:opacity-60'
       >
-        Save Changes
+        {updateBoardMutation.isPending ? "Saving..." : "Save Changes"}
       </button>
+      {updateBoardMutation.isError && (
+        <p className='mt-3 text-sm text-red-500' role='alert'>
+          {updateBoardMutation.error.message}
+        </p>
+      )}
     </div>
   );
 }

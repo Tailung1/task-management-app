@@ -11,7 +11,11 @@ interface Board extends BoardSummary {
 
 // intersection type                        intersection operator
 type CreateBoardInput = Pick<BoardSummary, "name"> & { columns?: string[] };
-type UpdateBoardInput = Partial<BoardSummary>;
+type UpdateBoardInput = {
+  id: string;
+  name: string;
+  columns?: { id?: string; name: string }[];
+};
 
 type BoardViewProps = {
   columns: BoardColumn[];
