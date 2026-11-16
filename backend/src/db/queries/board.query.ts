@@ -186,16 +186,16 @@ export const updateBoard = async (
         [boardId],
       );
       const currentColumnIds = new Set(currentColumnsResult.rows.map((column) => column.id));
-      const requestedIds = columns.flatMap((column) => (column.id ? [column.id] : []));
+      const requestedColumnIds = columns.flatMap((column) => (column.id ? [column.id] : []));
 
-      if (requestedIds.some((id) => !currentColumnIds.has(id))) {
+      if (requestedColumnIds.some((id) => !currentColumnIds.has(id))) {
         await client.query("ROLLBACK");
         return { status: "invalid-columns" as const };
       }
 
       await client.query(
         "DELETE FROM columns WHERE board_id = $1 AND NOT (id = ANY($2::uuid[]));",
-        [boardId, requestedIds],
+        [boardId, requestedColumnIds],
       );
 
       for (const [position, column] of columns.entries()) {

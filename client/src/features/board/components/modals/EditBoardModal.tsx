@@ -13,7 +13,6 @@ export default function EditBoardModal({ board }: { board: Board }) {
     () => new Set(),
   );
 
-
   function updateColumnName(id: string, name: string) {
     setColumns((current) =>
       current.map((column) => (column.id === id ? { ...column, name } : column)),
@@ -119,9 +118,7 @@ export default function EditBoardModal({ board }: { board: Board }) {
                     : `Mark ${column.name || "column"} for deletion`
                 }
                 title={
-                  columnsMarkedForDeletion.has(column.id)
-                    ? "Undo deletion"
-                    : "Mark for deletion"
+                  columnsMarkedForDeletion.has(column.id) ? "Undo deletion" : "Mark for deletion"
                 }
               >
                 {columnsMarkedForDeletion.has(column.id) ? (
