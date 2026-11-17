@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useState, type SubmitEvent } from "react";
 import { Plus, X } from "lucide-react";
 import { useModalContext } from "../../contexts/ModalContext";
 import { useUpdateBoard } from "../board/board.queries";
@@ -34,7 +34,7 @@ export default function CreateColumnModal({ board }: { board: Board }) {
     setFormError("");
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
 
     if (updateBoard.isPending) {
