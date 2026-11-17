@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { Plus, X } from "lucide-react";
 import { useModalContext } from "../../contexts/ModalContext";
 import { useUpdateBoard } from "../board/board.queries";
@@ -34,7 +34,9 @@ export default function CreateColumnModal({ board }: { board: Board }) {
     setFormError("");
   }
 
-  function handleSubmit() {
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
     if (updateBoard.isPending) {
       return;
     }
@@ -74,7 +76,10 @@ export default function CreateColumnModal({ board }: { board: Board }) {
   }
 
   return (
-    <div className='w-full max-w-130 rounded-xl bg-white p-6 shadow-2xl dark:bg-[#2B2C37]'>
+    <form
+      onSubmit={handleSubmit}
+      className='w-full max-w-130 rounded-xl bg-white p-6 shadow-2xl dark:bg-[#2B2C37]'
+    >
       <h2 className='mb-6 text-lg font-bold text-[#20212C] dark:text-white'>Add New Columns</h2>
 
       <div className='mb-6'>
@@ -130,8 +135,7 @@ export default function CreateColumnModal({ board }: { board: Board }) {
       </div>
 
       <button
-        type='button'
-        onClick={handleSubmit}
+        type='submit'
         disabled={updateBoard.isPending}
         className='w-full cursor-pointer rounded-full bg-[#635FC7] py-3 text-sm font-bold text-white hover:bg-[#7A75E0] disabled:cursor-not-allowed disabled:opacity-60'
       >
@@ -147,6 +151,6 @@ export default function CreateColumnModal({ board }: { board: Board }) {
           {updateBoard.error.message}
         </p>
       )}
-    </div>
+    </form>
   );
 }
