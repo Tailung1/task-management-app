@@ -1,33 +1,59 @@
 import { useState } from "react";
 import { Plus, X } from "lucide-react";
+import { useModalContext } from "../../contexts/ModalContext";
+import { useUpdateBoard } from "../board/board.queries";
+import type { Board } from "../board/board.types";
 
-export default function CreateColumnModal() {
+export default function CreateColumnModal({ board }: { board: Board }) {
+  const { setActiveModal } = useModalContext();
+  const updateBoard = useUpdateBoard();
   const [columns, setColumns] = useState([""]);
   const [errors, setErrors] = useState<string[]>([]);
+  const [formError, setFormError] = useState("");
 
   function addColumn() {
     setColumns((current) => [...current, ""]);
     setErrors((current) => [...current, ""]);
+    setFormError("");
   }
 
   function updateColumn(index: number, value: string) {
     setColumns((current) => current.map((column, i) => (i === index ? value : column)));
 
     setErrors((current) => current.map((error, i) => (i === index ? "" : error)));
+    setFormError("");
   }
 
   function removeColumn(index: number) {
     setColumns((current) => current.filter((_, i) => i !== index));
     setErrors((current) => current.filter((_, i) => i !== index));
+    setFormError("");
   }
 
   function handleSubmit() {
-    const newErrors = columns.map((column) => (column.trim() === "" ? "Can't be empty" : ""));
-    setErrors(newErrors);
-
-    if (newErrors.some(Boolean)) {
+    if (updateBoard.isPending) {
       return;
     }
+
+    const newErrors = columns.map((column) => (column.trim() === "" ? "Can't be empty" : ""));
+    setErrors(newErrors);
+    setFormError(columns.length === 0 ? "Add at least one column." : "");
+
+    if (columns.length === 0 || newErrors.some(Boolean)) {
+      return;
+    }
+
+    updateBoard.mutate(
+      {
+        id: board.id,
+        name: board.name,
+        columns: [
+          ...board.columns.map(({ id, name }) => ({ id, name })),
+          ...columns.map((name) => ({ name: name.trim() })),
+        ],
+      },
+      { onSuccess: () => setActiveModal(null) },
+    );
   }
 
   return (
@@ -84,10 +110,21 @@ export default function CreateColumnModal() {
       <button
         type='button'
         onClick={handleSubmit}
-        className='w-full cursor-pointer rounded-full bg-[#635FC7] py-3 text-sm font-bold text-white hover:bg-[#7A75E0]'
+        disabled={updateBoard.isPending}
+        className='w-full cursor-pointer rounded-full bg-[#635FC7] py-3 text-sm font-bold text-white hover:bg-[#7A75E0] disabled:cursor-not-allowed disabled:opacity-60'
       >
-        Create Columns
+        {updateBoard.isPending ? "Creating..." : "Create Columns"}
       </button>
+      {formError && (
+        <p className='mt-3 text-sm text-red-500' role='alert'>
+          {formError}
+        </p>
+      )}
+      {updateBoard.isError && (
+        <p className='mt-3 text-sm text-red-500' role='alert'>
+          {updateBoard.error.message}
+        </p>
+      )}
     </div>
   );
 }

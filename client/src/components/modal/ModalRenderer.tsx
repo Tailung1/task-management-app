@@ -7,13 +7,15 @@ import TaskDetailsModal from "../../features/task/TaskDetailsModal";
 import EditTaskModal from "../../features/task/EditTaskModal";
 import BoardActionModal from "../../features/board/components/modals/BoardActionModal";
 import type { Task } from "../../features/task/task.types";
+import type { Board } from "../../features/board/board.types";
 
 type ModalRendererProps = {
   task: Task | null;
   boardName: string;
+  board?: Board;
 };
 
-export default function ModalRenderer({ task, boardName }: ModalRendererProps) {
+export default function ModalRenderer({ task, boardName, board }: ModalRendererProps) {
   const { activeModal } = useModalContext();
   let activeModalForDisplay;
   switch (activeModal) {
@@ -25,7 +27,9 @@ export default function ModalRenderer({ task, boardName }: ModalRendererProps) {
       activeModalForDisplay = <BoardActionModal />;
       break;
     case "create-column":
-      activeModalForDisplay = <CreateColumnModal />;
+      if (board) {
+        activeModalForDisplay = <CreateColumnModal board={board} />;
+      }
       break;
     case "create-task":
       activeModalForDisplay = <CreateTaskModal />;

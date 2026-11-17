@@ -50,7 +50,7 @@ export default function BoardPage() {
         <BoardView columns={board.columns} onSelectTask={handleTaskSelect} />
       )}
       {activeModal && activeModal !== "create-board" && (
-        <ModalRenderer task={activeTask ?? null} boardName={board.name} />
+        <ModalRenderer task={activeTask ?? null} board={board} boardName={board.name} />
       )}
     </>
   );
