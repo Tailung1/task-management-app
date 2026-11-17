@@ -12,6 +12,10 @@ export default function CreateColumnModal({ board }: { board: Board }) {
   const [formError, setFormError] = useState("");
 
   function addColumn() {
+    if (board.columns.length + columns.length >= 50) {
+      return;
+    }
+
     setColumns((current) => [...current, ""]);
     setErrors((current) => [...current, ""]);
     setFormError("");
@@ -35,11 +39,24 @@ export default function CreateColumnModal({ board }: { board: Board }) {
       return;
     }
 
-    const newErrors = columns.map((column) => (column.trim() === "" ? "Can't be empty" : ""));
-    setErrors(newErrors);
-    setFormError(columns.length === 0 ? "Add at least one column." : "");
+    const newErrors = columns.map((column) => {
+      if (!column.trim()) {
+        return "Can't be empty";
+      }
 
-    if (columns.length === 0 || newErrors.some(Boolean)) {
+      return column.trim().length > 255 ? "Must be 255 characters or fewer" : "";
+    });
+    setErrors(newErrors);
+    const exceedsColumnLimit = board.columns.length + columns.length > 50;
+    setFormError(
+      columns.length === 0
+        ? "Add at least one column."
+        : exceedsColumnLimit
+          ? "A board can have up to 50 columns."
+          : "",
+    );
+
+    if (columns.length === 0 || exceedsColumnLimit || newErrors.some(Boolean)) {
       return;
     }
 
@@ -68,8 +85,12 @@ export default function CreateColumnModal({ board }: { board: Board }) {
             <div key={index} className='flex items-center gap-2'>
               <div className='relative flex-1'>
                 <input
+                  type='text'
                   value={column}
                   onChange={(e) => updateColumn(index, e.target.value)}
+                  maxLength={255}
+                  aria-label={`Column name ${index + 1}`}
+                  aria-invalid={Boolean(errors[index])}
                   placeholder={`Column ${index + 1}`}
                   className={`h-11 w-full rounded-md border bg-transparent px-4 pr-28 text-sm text-[#20212C] outline-none transition placeholder:text-[#828FA3] dark:text-white ${
                     errors[index]
@@ -100,7 +121,8 @@ export default function CreateColumnModal({ board }: { board: Board }) {
         <button
           type='button'
           onClick={addColumn}
-          className='mt-4 flex w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-[#635FC7]/10 py-2.5 text-sm font-bold text-[#635FC7] hover:bg-[#635FC7]/20'
+          disabled={board.columns.length + columns.length >= 50}
+          className='mt-4 flex w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-[#635FC7]/10 py-2.5 text-sm font-bold text-[#635FC7] hover:bg-[#635FC7]/20 disabled:cursor-not-allowed disabled:opacity-60'
         >
           <Plus size={18} />
           Add Another Column
