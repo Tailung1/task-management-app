@@ -96,6 +96,7 @@ export default function CreateColumnModal({ board }: { board: Board }) {
                   maxLength={255}
                   aria-label={`Column name ${index + 1}`}
                   aria-invalid={Boolean(errors[index])}
+                  aria-describedby={errors[index] ? `column-error-${index}` : undefined}
                   placeholder={`Column ${index + 1}`}
                   className={`h-11 w-full rounded-md border bg-transparent px-4 pr-28 text-sm text-[#20212C] outline-none transition placeholder:text-[#828FA3] dark:text-white ${
                     errors[index]
@@ -105,7 +106,10 @@ export default function CreateColumnModal({ board }: { board: Board }) {
                 />
 
                 {errors[index] && (
-                  <span className='pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs font-medium text-[#EA5555]'>
+                  <span
+                    id={`column-error-${index}`}
+                    className='pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs font-medium text-[#EA5555]'
+                  >
                     {errors[index]}
                   </span>
                 )}
