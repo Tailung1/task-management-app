@@ -7,6 +7,29 @@ import type { LoginCredentials } from "../auth.types";
 import AuthPageLayout from "../components/AuthPageLayout";
 import LoginForm from "../components/LoginForm";
 
+function getReturnPath(state: unknown): string {
+  if (
+    typeof state !== "object" ||
+    state === null ||
+    !("from" in state) ||
+    typeof state.from !== "object" ||
+    state.from === null ||
+    !("pathname" in state.from) ||
+    typeof state.from.pathname !== "string" ||
+    !state.from.pathname.startsWith("/") ||
+    state.from.pathname.startsWith("//")
+  ) {
+    return "/";
+  }
+
+  const search =
+    "search" in state.from && typeof state.from.search === "string" ? state.from.search : "";
+  const hash =
+    "hash" in state.from && typeof state.from.hash === "string" ? state.from.hash : "";
+
+  return `${state.from.pathname}${search}${hash}`;
+}
+
 export default function LoginPage() {
   const { setIsAuthenticated } = useAuthContext();
   const navigate = useNavigate();
@@ -35,7 +58,7 @@ export default function LoginPage() {
       const data = await login(credentials);
       localStorage.setItem("token", data.token);
       setIsAuthenticated(true);
-      navigate("/", { replace: true });
+      navigate(getReturnPath(location.state), { replace: true });
     } catch (error) {
       if (error instanceof ApiError && error.status === 401) {
         setCredentialsError("Email or password is incorrect.");
