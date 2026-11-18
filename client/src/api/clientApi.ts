@@ -4,6 +4,8 @@ type RequestOptions = Omit<RequestInit, "body"> & {
 
 type ResponseDecoder<T> = (value: unknown) => T;
 
+export const AUTH_SESSION_EXPIRED_EVENT = "auth:session-expired";
+
 export class ApiError extends Error {
   public readonly status: number | undefined;
 
@@ -76,14 +78,15 @@ const apiClient = async <T>(
 ): Promise<T> => {
   const url = new URL(path.replace(/^\/+/, ""), getApiBaseUrl());
   const headers = new Headers(options.headers);
+  const isAuthEndpoint = /^auth(?:\/|$)/.test(path.replace(/^\/+/, ""));
+  const sessionToken = !isAuthEndpoint && !headers.has("Authorization")
+    ? localStorage.getItem("token")
+    : null;
 
   headers.set("Accept", headers.get("Accept") ?? "application/json");
 
-  if (!headers.has("Authorization")) {
-    const token = localStorage.getItem("token");
-    if (token) {
-      headers.set("Authorization", `Bearer ${token}`);
-    }
+  if (sessionToken) {
+    headers.set("Authorization", `Bearer ${sessionToken}`);
   }
 
   const body = options.body === undefined ? undefined : JSON.stringify(options.body);
@@ -124,6 +127,10 @@ const apiClient = async <T>(
   }
 
   if (!response.ok) {
+    if (response.status === 401 && sessionToken) {
+      window.dispatchEvent(new Event(AUTH_SESSION_EXPIRED_EVENT));
+    }
+
     throw new ApiError(getErrorMessage(payload) ?? "Request failed", response.status);
   }
 
