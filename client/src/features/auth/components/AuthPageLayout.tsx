@@ -6,7 +6,7 @@ interface AuthPageLayoutProps {
   footer?: ReactNode;
   feedback?: {
     message: string;
-    type: "error" | "success";
+    type: "error" | "success" | "info";
   } | null;
 }
 
@@ -37,7 +37,9 @@ export default function AuthPageLayout({
                 className={`rounded-lg px-3 py-2 text-sm ${
                   feedback.type === "error"
                     ? "bg-red-50 text-red-700 dark:bg-red-950/40 dark:text-red-300"
-                    : "bg-green-50 text-green-700 dark:bg-green-950/40 dark:text-green-300"
+                    : feedback.type === "success"
+                      ? "bg-green-50 text-green-700 dark:bg-green-950/40 dark:text-green-300"
+                      : "bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300"
                 }`}
                 role={feedback.type === "error" ? "alert" : "status"}
                 aria-live='polite'

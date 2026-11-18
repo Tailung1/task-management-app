@@ -12,8 +12,8 @@ const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <AuthProvider>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
         <ThemeProvider>
           <SidebarProvider>
             <ModalProvider>
@@ -21,7 +21,7 @@ createRoot(document.getElementById("root")!).render(
             </ModalProvider>
           </SidebarProvider>
         </ThemeProvider>
-      </QueryClientProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </QueryClientProvider>
   </StrictMode>,
 );

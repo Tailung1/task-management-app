@@ -31,7 +31,7 @@ function getReturnPath(state: unknown): string {
 }
 
 export default function LoginPage() {
-  const { setIsAuthenticated } = useAuthContext();
+  const { setIsAuthenticated, setSessionExpired } = useAuthContext();
   const navigate = useNavigate();
   const location = useLocation();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -45,6 +45,11 @@ export default function LoginPage() {
     typeof location.state.email === "string"
       ? location.state.email
       : "";
+  const sessionExpired =
+    typeof location.state === "object" &&
+    location.state !== null &&
+    "sessionExpired" in location.state &&
+    location.state.sessionExpired === true;
 
   async function handleLogin(credentials: LoginCredentials) {
     if (isSubmittingRef.current) return;
@@ -58,6 +63,7 @@ export default function LoginPage() {
       const data = await login(credentials);
       localStorage.setItem("token", data.token);
       setIsAuthenticated(true);
+      setSessionExpired(false);
       navigate(getReturnPath(location.state), { replace: true });
     } catch (error) {
       if (error instanceof ApiError && error.status === 401) {
@@ -78,7 +84,13 @@ export default function LoginPage() {
   return (
     <AuthPageLayout
       title='Sign in'
-      feedback={submitError ? { message: submitError, type: "error" } : null}
+      feedback={
+        submitError
+          ? { message: submitError, type: "error" }
+          : sessionExpired
+            ? { message: "Your session expired. Please sign in again.", type: "info" }
+            : null
+      }
       footer={
         <>
           Don&apos;t have an account?{" "}
