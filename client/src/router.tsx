@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import MainLayout from "./components/layout/MainLayout/MainLayout";
 import BoardPage from "./features/board/pages/BoardPage";
 import NoBoardState from "./features/board/pages/NoBoardState";
@@ -32,6 +32,10 @@ const router = createBrowserRouter([
     path: "/auth",
     element: <AuthLayout />,
     children: [
+      {
+        index: true,
+        element: <Navigate to='login' replace />,
+      },
       {
         path: "login",
         element: <LoginPage />,
