@@ -85,7 +85,7 @@ export default function CreateColumnModal({ board }: { board: Board }) {
       <div className='mb-6'>
         <p className='mb-2 text-xs font-bold text-[#828FA3]'>Column Names</p>
 
-        <div className='flex flex-col gap-3'>
+        <div className='flex flex-col gap-3 max-h-40 overflow-y-auto scrollbar'>
           {columns.map((column, index) => (
             <div key={index} className='flex items-center gap-2'>
               <div className='relative flex-1'>
@@ -118,7 +118,7 @@ export default function CreateColumnModal({ board }: { board: Board }) {
               <button
                 type='button'
                 onClick={() => removeColumn(index)}
-                className='cursor-pointer text-[#828FA3] hover:text-[#EA5555]'
+                className='cursor-pointer pr-2 text-[#828FA3] hover:text-[#EA5555]2'
                 aria-label={`Remove ${column || "column"}`}
               >
                 <X size={20} />

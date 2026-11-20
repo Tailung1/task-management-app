@@ -51,10 +51,7 @@ function AuthBackgroundLayout() {
   const authRoute = location.pathname.startsWith("/auth");
   const state = location.state;
   const requestedBackground =
-    typeof state === "object" &&
-    state !== null &&
-    "from" in state &&
-    isLocation(state.from)
+    typeof state === "object" && state !== null && "from" in state && isLocation(state.from)
       ? state.from
       : null;
 
@@ -67,7 +64,8 @@ function AuthBackgroundLayout() {
   }, [authRoute, requestedBackground]);
 
   const backgroundLocation = authRoute
-    ? (requestedBackground ?? rememberedBackground ?? {
+    ? (requestedBackground ??
+      rememberedBackground ?? {
         pathname: "/",
         search: "",
         hash: "",
