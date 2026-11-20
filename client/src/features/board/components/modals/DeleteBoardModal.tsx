@@ -1,12 +1,17 @@
 import { useModalContext } from "../../../../contexts/ModalContext";
 import type { Board } from "../../board.types";
+import { useDeleteBoard } from "../../board.queries";
 
 export default function DeleteBoardModal({ board }: { board: Board }) {
   const { setActiveModal } = useModalContext();
+  const deleteBoard = useDeleteBoard();
 
-  function handleDelete() {
-    setActiveModal(null);
-    console.log(board);
+  function handleDelete(id: string) {
+    deleteBoard.mutate(id, {
+      onSuccess: () => {
+        setActiveModal(null);
+      },
+    });
   }
 
   return (
@@ -21,7 +26,7 @@ export default function DeleteBoardModal({ board }: { board: Board }) {
       <div className='flex flex-col gap-3'>
         <button
           type='button'
-          onClick={handleDelete}
+          onClick={() => handleDelete(board.id)}
           className='w-full cursor-pointer rounded-full bg-[#EA5555] py-3 text-sm font-bold text-white transition-colors hover:bg-[#FF6B6B]'
         >
           Delete

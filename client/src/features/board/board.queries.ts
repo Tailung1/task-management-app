@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createBoard, getBoardDetails, getBoards, updateBoard } from "./board.api";
+import { createBoard, deleteBoard, getBoardDetails, getBoards, updateBoard } from "./board.api";
 import type { CreateBoardInput, UpdateBoardInput } from "./board.types";
 import useAuthContext from "../../contexts/AuthContext";
 
@@ -55,5 +55,17 @@ export function useUpdateBoard() {
       });
       queryClient.invalidateQueries({ queryKey: boardKeys.list() });
     },
+  });
+}
+
+export function useDeleteBoard() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => deleteBoard(id),
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: boardKeys.list(),
+      }),
   });
 }
