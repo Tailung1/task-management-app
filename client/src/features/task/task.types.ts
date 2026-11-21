@@ -1,7 +1,7 @@
 interface Task {
   id: string;
   title: string;
-  description: string;
+  description?: string;
   status: string;
   subtasks: Subtask[];
 }
@@ -12,4 +12,6 @@ interface Subtask {
   isCompleted: boolean;
 }
 
-export type { Task };
+type CreateTaskInput = Omit<Task, "id">;
+
+export type { Task, CreateTaskInput };

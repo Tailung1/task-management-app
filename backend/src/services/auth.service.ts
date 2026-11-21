@@ -1,6 +1,5 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-
 import { findUserByEmail, createUser } from "../db/queries/auth.query.js";
 import type { AppConfig } from "../config.js";
 
