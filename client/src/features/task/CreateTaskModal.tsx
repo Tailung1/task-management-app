@@ -164,7 +164,6 @@ export default function CreateTaskModal() {
             setStatusError("");
           }}
           aria-invalid={Boolean(statusError)}
-          aria-describedby={statusError ? "task-status-error" : undefined}
           className={`h-11 w-full cursor-pointer rounded-md border bg-transparent px-4 text-sm text-[#20212C] outline-none transition dark:text-white ${
             statusError
               ? "border-[#EA5555] focus:border-[#EA5555] focus:ring-1 focus:ring-[#EA5555]"
@@ -179,11 +178,6 @@ export default function CreateTaskModal() {
           <option value='doing'>Doing</option>
           <option value='done'>Done</option>
         </select>
-        {statusError && (
-          <p id='task-status-error' role='alert' className='mt-2 text-xs font-medium text-[#EA5555]'>
-            {statusError}
-          </p>
-        )}
       </div>
 
       <button
