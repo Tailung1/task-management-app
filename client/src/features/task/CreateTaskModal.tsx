@@ -60,7 +60,7 @@ export default function CreateTaskModal() {
       <div className='mb-5'>
         <p className='mb-2 text-xs font-bold text-[#828FA3]'>Subtasks</p>
 
-        <div className='flex flex-col gap-3'>
+        <div className='flex flex-col gap-3 max-h-40 overflow-y-auto scrollbar'>
           {subtasks.map((subtask, index) => (
             <div key={index} className='flex items-center gap-2'>
               <input
@@ -73,7 +73,7 @@ export default function CreateTaskModal() {
               <button
                 type='button'
                 onClick={() => removeSubtask(index)}
-                className='cursor-pointer text-[#828FA3] transition-colors hover:text-[#EA5555]'
+                className='cursor-pointer pr-2 text-[#828FA3] transition-colors hover:text-[#EA5555]'
                 aria-label={`Remove subtask ${index + 1}`}
               >
                 <X size={20} />
