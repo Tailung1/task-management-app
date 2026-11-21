@@ -85,7 +85,7 @@ export default function CreateColumnModal({ board }: { board: Board }) {
       <div className='mb-6'>
         <p className='mb-2 text-xs font-bold text-[#828FA3]'>Column Names</p>
 
-        <div className='flex flex-col gap-3 max-h-40 overflow-y-auto scrollbar scrollbar-gutter:stable'>
+        <div className='flex flex-col gap-3 max-h-40 overflow-y-auto scrollbar [scrollbar-gutter:stable]'>
           {columns.map((column, index) => (
             <div key={index} className='flex items-center gap-2'>
               <div className='relative flex-1'>

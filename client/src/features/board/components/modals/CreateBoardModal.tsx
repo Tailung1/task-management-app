@@ -99,7 +99,7 @@ export default function CreateBoardModal() {
             <span className='text-xs text-[#828FA3]'>{columns.length}</span>
           </div>
 
-          <div className='space-y-2.5 max-h-30 pr-2 overflow-y-auto scrollbar scrollbar-gutter:stable'>
+          <div className='space-y-2.5 max-h-30 pr-2 overflow-y-auto scrollbar [scrollbar-gutter:stable]'>
             {columns.map((column, index) => (
               <div
                 key={index}
