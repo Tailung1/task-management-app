@@ -1,5 +1,11 @@
 import { useState, type SubmitEvent } from "react";
-import { Plus, X } from "lucide-react";
+import { ChevronDown, Plus, X } from "lucide-react";
+
+const statusOptions = [
+  { value: "todo", label: "Todo" },
+  { value: "doing", label: "Doing" },
+  { value: "done", label: "Done" },
+];
 
 export default function CreateTaskModal() {
   const [title, setTitle] = useState("");
@@ -9,6 +15,9 @@ export default function CreateTaskModal() {
   const [titleError, setTitleError] = useState("");
   const [subtaskErrors, setSubtaskErrors] = useState<string[]>([]);
   const [statusError, setStatusError] = useState("");
+  const [showStatusMenu, setShowStatusMenu] = useState(false);
+
+  const selectedStatus = statusOptions.find((option) => option.value === status);
 
   function addSubtask() {
     setSubtasks((current) => [...current, ""]);
@@ -157,33 +166,64 @@ export default function CreateTaskModal() {
       </div>
 
       {/* Status */}
-      <div className='mb-6'>
-        <label htmlFor='task-status' className='mb-2 block text-xs font-bold text-[#828FA3]'>
+      <div className='relative mb-6'>
+        <p id='task-status-label' className='mb-2 text-xs font-bold text-[#828FA3]'>
           Status
-        </label>
+        </p>
 
-        <select
-          id='task-status'
-          value={status}
-          onChange={(e) => {
-            setStatus(e.target.value);
-            setStatusError("");
-          }}
+        <button
+          type='button'
+          aria-labelledby='task-status-label task-status-value'
+          aria-expanded={showStatusMenu}
+          aria-controls={showStatusMenu ? "task-status-menu" : undefined}
           aria-invalid={Boolean(statusError)}
-          className={`h-11 w-full cursor-pointer rounded-md border bg-transparent px-4 text-sm text-[#20212C] outline-none transition dark:text-white ${
+          onClick={() => setShowStatusMenu((current) => !current)}
+          className={`flex h-11 w-full cursor-pointer items-center justify-between rounded-md border bg-transparent px-4 text-left text-sm outline-none transition focus:ring-1 dark:text-white ${
             statusError
-              ? "border-[#EA5555] focus:border-[#EA5555] focus:ring-1 focus:ring-[#EA5555]"
-              : "border-[#D9D9D9] focus:border-[#635FC7] focus:ring-1 focus:ring-[#635FC7] dark:border-[#4B4C5C]"
+              ? "border-[#EA5555] focus:border-[#EA5555] focus:ring-[#EA5555]"
+              : "border-[#D9D9D9] focus:border-[#635FC7] focus:ring-[#635FC7] dark:border-[#4B4C5C]"
           }`}
         >
-          <option value='' disabled>
-            Select status
-          </option>
+          <span id='task-status-value' className={selectedStatus ? "" : "text-[#828FA3]"}>
+            {selectedStatus?.label ?? "Select status"}
+          </span>
+          <ChevronDown
+            size={18}
+            aria-hidden='true'
+            className={`text-[#635FC7] transition-transform dark:text-[#A8A4FF] ${
+              showStatusMenu ? "rotate-180" : ""
+            }`}
+          />
+        </button>
 
-          <option value='todo'>Todo</option>
-          <option value='doing'>Doing</option>
-          <option value='done'>Done</option>
-        </select>
+        {showStatusMenu && (
+          <div
+            id='task-status-menu'
+            role='group'
+            aria-label='Task status options'
+            className='absolute left-0 right-0 top-full z-10 mt-2 overflow-hidden rounded-md bg-white py-1 shadow-lg dark:bg-[#20212C]'
+          >
+            {statusOptions.map((option) => (
+              <button
+                key={option.value}
+                type='button'
+                aria-pressed={status === option.value}
+                onClick={() => {
+                  setStatus(option.value);
+                  setStatusError("");
+                  setShowStatusMenu(false);
+                }}
+                className={`w-full px-4 py-2 text-left text-sm transition hover:bg-gray-100 dark:hover:bg-[#2B2C37] ${
+                  status === option.value
+                    ? "font-semibold text-[#635FC7] dark:text-[#A8A4FF]"
+                    : "text-[#20212C] dark:text-white"
+                }`}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       <button
