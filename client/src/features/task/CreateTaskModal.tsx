@@ -56,27 +56,33 @@ export default function CreateTaskModal() {
           Title
         </label>
 
-        <input
-          id='task-title'
-          value={title}
-          onChange={(e) => {
-            setTitle(e.target.value);
-            setTitleError("");
-          }}
-          placeholder='e.g. Take coffee break'
-          aria-invalid={Boolean(titleError)}
-          aria-describedby={titleError ? "task-title-error" : undefined}
-          className={`h-11 w-full rounded-md border bg-transparent px-4 text-sm text-[#20212C] outline-none transition dark:text-white ${
-            titleError
-              ? "border-[#EA5555] focus:border-[#EA5555] focus:ring-1 focus:ring-[#EA5555]"
-              : "border-[#D9D9D9] focus:border-[#635FC7] focus:ring-1 focus:ring-[#635FC7] dark:border-[#4B4C5C]"
-          }`}
-        />
-        {titleError && (
-          <p id='task-title-error' role='alert' className='mt-2 text-xs font-medium text-[#EA5555]'>
-            {titleError}
-          </p>
-        )}
+        <div className='relative'>
+          <input
+            id='task-title'
+            value={title}
+            onChange={(e) => {
+              setTitle(e.target.value);
+              setTitleError("");
+            }}
+            placeholder='e.g. Take coffee break'
+            aria-invalid={Boolean(titleError)}
+            aria-describedby={titleError ? "task-title-error" : undefined}
+            className={`h-11 w-full rounded-md border bg-transparent px-4 pr-28 text-sm text-[#20212C] outline-none transition dark:text-white ${
+              titleError
+                ? "border-[#EA5555] focus:border-[#EA5555] focus:ring-1 focus:ring-[#EA5555]"
+                : "border-[#D9D9D9] focus:border-[#635FC7] focus:ring-1 focus:ring-[#635FC7] dark:border-[#4B4C5C]"
+            }`}
+          />
+          {titleError && (
+            <span
+              id='task-title-error'
+              role='alert'
+              className='pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs font-medium text-[#EA5555]'
+            >
+              {titleError}
+            </span>
+          )}
+        </div>
       </div>
 
       {/* Description */}
