@@ -60,7 +60,7 @@ export default function CreateTaskModal() {
       <div className='mb-5'>
         <p className='mb-2 text-xs font-bold text-[#828FA3]'>Subtasks</p>
 
-        <div className='flex flex-col gap-3 max-h-40 overflow-y-auto scrollbar'>
+        <div className='flex flex-col gap-3 max-h-25 overflow-y-auto scrollbar'>
           {subtasks.map((subtask, index) => (
             <div key={index} className='flex items-center gap-2'>
               <input
