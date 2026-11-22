@@ -4,7 +4,7 @@ import type { BoardColumn } from "../column/column.types";
 import type { Task } from "../task/task.types";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && Array.isArray(value);
+  return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
 function decodeBoardSummary(value: unknown): BoardSummary {
