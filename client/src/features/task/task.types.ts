@@ -14,15 +14,41 @@ interface Subtask {
   isCompleted: boolean;
 }
 
-type CreateTaskInput = Omit<Task, "id">;
+type CreateTaskInput = {
+  title: string;
+  description: string | null;
+  subtasks: Subtask[];
+  position: number;
+};
 
 type CreateTaskVariables = {
   columnId: string;
   data: CreateTaskInput;
 };
 
-type CreateTaskModalProps = {
-  boardColumns: BoardColumn[] | undefined;
+type CreatedTask = {
+  id: string;
+  columnId: string;
+  title: string;
+  description: string | null;
+  position: number;
 };
 
-export type { Task, CreateTaskInput, CreateTaskVariables, CreateTaskModalProps };
+type CreateTaskModalProps = {
+  boardId: string;
+  boardColumns: BoardColumn[];
+};
+ type TaskDetailsModalProps = {
+  task: Task;
+  boardName: string;
+};
+
+export type {
+  Task,
+  Subtask,
+  CreateTaskInput,
+  CreateTaskVariables,
+  CreatedTask,
+  CreateTaskModalProps,
+  TaskDetailsModalProps,
+};

@@ -1,11 +1,33 @@
 import { useState } from "react";
 import { X } from "lucide-react";
+import type { Subtask, TaskDetailsModalProps } from "./task.types";
 
-export default function EditTaskModal() {
-  const [title, setTitle] = useState("Create dashboard UI");
-  const [description, setDescription] = useState(
-    "Create the dashboard interface with responsive layout and reusable components.",
-  );
+export default function EditTaskModal({ task }: Pick<TaskDetailsModalProps, "task">) {
+  const subtasks2: Subtask[] = [
+    {
+      id: crypto.randomUUID(),
+      title: "Create project structure",
+      isCompleted: true,
+    },
+    {
+      id: crypto.randomUUID(),
+      title: "Implement authentication",
+      isCompleted: true,
+    },
+    {
+      id: crypto.randomUUID(),
+      title: "Build task management UI",
+      isCompleted: false,
+    },
+    {
+      id: crypto.randomUUID(),
+      title: "Add API integration",
+      isCompleted: false,
+    },
+  ];
+  const [title, setTitle] = useState(task.title);
+  const [description, setDescription] = useState(task.description);
+  const [subTasks, setSubtasks] = useState(subtasks2);
 
   return (
     <div className='w-full max-w-lg rounded-lg bg-white p-6 shadow-xl dark:bg-[#2B2C37]'>
@@ -62,37 +84,23 @@ export default function EditTaskModal() {
           </p>
 
           <div className='space-y-2'>
-            <div className='flex items-center gap-3'>
-              <input
-                type='text'
-                defaultValue='Create dashboard layout'
-                className='flex-1 rounded border border-gray-300 bg-white px-4 py-3 text-sm text-[#20212C] outline-none focus:border-[#635FC7] dark:border-gray-600 dark:bg-[#2B2C37] dark:text-white'
-              />
+            {subTasks.map((subtask: Subtask) => (
+              <div className='flex items-center gap-3'>
+                <input
+                  type='text'
+                  value={subtask.title}
+                  className='flex-1 rounded border border-gray-300 bg-white px-4 py-3 text-sm text-[#20212C] outline-none focus:border-[#635FC7] dark:border-gray-600 dark:bg-[#2B2C37] dark:text-white'
+                />
 
-              <button
-                type='button'
-                className='text-gray-400 transition hover:text-red-500'
-                aria-label='Remove subtask'
-              >
-                <X size={18} />
-              </button>
-            </div>
-
-            <div className='flex items-center gap-3'>
-              <input
-                type='text'
-                defaultValue='Create navigation'
-                className='flex-1 rounded border border-gray-300 bg-white px-4 py-3 text-sm text-[#20212C] outline-none focus:border-[#635FC7] dark:border-gray-600 dark:bg-[#2B2C37] dark:text-white'
-              />
-
-              <button
-                type='button'
-                className='text-gray-400 transition hover:text-red-500'
-                aria-label='Remove subtask'
-              >
-                <X size={18} />
-              </button>
-            </div>
+                <button
+                  type='button'
+                  className='text-gray-400 transition hover:text-red-500'
+                  aria-label='Remove subtask'
+                >
+                  <X size={18} />
+                </button>
+              </div>
+            ))}
           </div>
 
           <button

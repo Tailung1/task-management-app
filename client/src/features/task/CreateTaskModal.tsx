@@ -1,26 +1,34 @@
 import { useState, type SubmitEvent } from "react";
 import { ChevronDown, Plus, X } from "lucide-react";
-import type { CreateTaskModalProps } from "./task.types";
+import type { CreateTaskModalProps, Subtask } from "./task.types";
 import type { BoardColumn } from "../column/column.types";
+import { useCreateTask } from "./task.queries";
+import { useModalContext } from "../../contexts/ModalContext";
 
-export default function CreateTaskModal({ boardColumns }: CreateTaskModalProps) {
+export default function CreateTaskModal({ boardId, boardColumns }: CreateTaskModalProps) {
   const statusOptions = boardColumns;
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState<Pick<BoardColumn, "name"> | null>(null);
-  const [subtasks, setSubtasks] = useState([""]);
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [selectedColumn, setSelectedColumn] = useState<BoardColumn | null>(null);
+  const [subtasks, setSubtasks] = useState<Subtask[]>([]);
   const [titleError, setTitleError] = useState("");
   const [subtaskErrors, setSubtaskErrors] = useState<string[]>([]);
   const [statusError, setStatusError] = useState<boolean>(false);
-  const [showStatusMenu, setShowStatusMenu] = useState(false);
+  const [showStatusMenu, setShowStatusMenu] = useState<boolean>(false);
+
+  const { setActiveModal } = useModalContext();
+  const createTaskMutation = useCreateTask(boardId);
 
   function addSubtask() {
-    setSubtasks((current) => [...current, ""]);
+    const id = (Math.random() * 99).toString();
+    setSubtasks((current) => [...current, { title, id: id, isCompleted: false }]);
     setSubtaskErrors((current) => [...current, ""]);
   }
 
   function updateSubtask(index: number, value: string) {
-    setSubtasks((current) => current.map((subtask, i) => (i === index ? value : subtask)));
+    setSubtasks((current) =>
+      current.map((subtask, i) => (i === index ? { ...subtask, title: value } : subtask)),
+    );
     setSubtaskErrors((current) => current.map((error, i) => (i === index ? "" : error)));
   }
 
@@ -32,12 +40,27 @@ export default function CreateTaskModal({ boardColumns }: CreateTaskModalProps) 
   function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     setTitleError(title.trim() ? "" : "Can't be empty");
-    setSubtaskErrors(subtasks.map((subtask) => (subtask.trim() ? "" : "Can't be empty")));
-    setStatusError(!selectedStatus?.name ? true : false);
+    setSubtaskErrors(subtasks.map((subtask) => (subtask.title.trim() ? "" : "Can't be empty")));
+    setStatusError(!selectedColumn);
 
-    if (!title.trim() || selectedStatus?.name || subtasks.some((subtask) => !subtask.trim())) {
+    if (!title.trim() || !selectedColumn || subtasks.some((subtask) => !subtask.title.trim())) {
       return;
     }
+
+    createTaskMutation.mutate(
+      {
+        columnId: selectedColumn.id,
+        data: {
+          title: title.trim(),
+          description: description.trim() || null,
+          subtasks: subtasks,
+          position: selectedColumn.tasks.length,
+        },
+      },
+      {
+        onSuccess: () => setActiveModal(null),
+      },
+    );
   }
 
   return (
@@ -107,7 +130,7 @@ export default function CreateTaskModal({ boardColumns }: CreateTaskModalProps) 
             <div key={index} className='flex items-center gap-2'>
               <div className='relative flex-1'>
                 <input
-                  value={subtask}
+                  value={subtask.title}
                   onChange={(e) => updateSubtask(index, e.target.value)}
                   placeholder='e.g. Make a cup of coffee'
                   aria-label={`Subtask ${index + 1}`}
@@ -172,8 +195,8 @@ export default function CreateTaskModal({ boardColumns }: CreateTaskModalProps) 
               : "border-[#D9D9D9] focus:border-[#635FC7] focus:ring-[#635FC7] dark:border-[#4B4C5C]"
           }`}
         >
-          <span id='task-status-value' className={selectedStatus ? "" : "text-[#828FA3]"}>
-            {selectedStatus?.name ?? "Select status"}
+          <span id='task-status-value' className={selectedColumn ? "" : "text-[#828FA3]"}>
+            {selectedColumn?.name ?? "Select status"}
           </span>
           <ChevronDown
             size={18}
@@ -195,14 +218,14 @@ export default function CreateTaskModal({ boardColumns }: CreateTaskModalProps) 
               <button
                 key={option.id}
                 type='button'
-                aria-pressed={selectedStatus?.name === option.name}
+                aria-pressed={selectedColumn?.id === option.id}
                 onClick={() => {
-                  setSelectedStatus(option);
+                  setSelectedColumn(option);
                   setStatusError(false);
                   setShowStatusMenu(false);
                 }}
                 className={`w-full px-4 py-2 text-left text-sm transition hover:bg-gray-100 dark:hover:bg-[#2B2C37] ${
-                  selectedStatus?.name === option.name
+                  selectedColumn?.id === option.id
                     ? "font-semibold text-[#635FC7] dark:text-[#A8A4FF]"
                     : "text-[#20212C] dark:text-white"
                 }`}

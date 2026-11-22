@@ -1,18 +1,35 @@
 import { useState } from "react";
 import { Check, ChevronDown, EllipsisVertical, X } from "lucide-react";
 import { useModalContext } from "../../contexts/ModalContext";
-import type { Task } from "./task.types";
+import type { Subtask, TaskDetailsModalProps } from "./task.types";
 
 const statuses = ["Todo", "Doing", "Done"];
 
-type TaskDetailsModalProps = {
-  task: Task;
-  boardName: string;
-};
-
 export default function TaskDetailsModal({ task, boardName }: TaskDetailsModalProps) {
+  const subtasks2: Subtask[] = [
+    {
+      id: crypto.randomUUID(),
+      title: "Create project structure",
+      isCompleted: true,
+    },
+    {
+      id: crypto.randomUUID(),
+      title: "Implement authentication",
+      isCompleted: true,
+    },
+    {
+      id: crypto.randomUUID(),
+      title: "Build task management UI",
+      isCompleted: false,
+    },
+    {
+      id: crypto.randomUUID(),
+      title: "Add API integration",
+      isCompleted: false,
+    },
+  ];
   const { setActiveModal } = useModalContext();
-  const [subtasks, setSubtasks] = useState(task.subtasks);
+  const [subtasks, setSubtasks] = useState(subtasks2);
   const [status, setStatus] = useState(task.status);
   const [showStatusMenu, setShowStatusMenu] = useState(false);
   const [showTaskMenu, setShowTaskMenu] = useState(false);
@@ -27,15 +44,13 @@ export default function TaskDetailsModal({ task, boardName }: TaskDetailsModalPr
               ...subtask,
               isCompleted: !subtask.isCompleted,
             }
-          : subtask
-      )
+          : subtask,
+      ),
     );
   };
 
   return (
-    <div
-      className='w-full max-w-lg rounded-lg bg-white p-6 shadow-xl dark:bg-[#2B2C37]'
-    >
+    <div className='w-full max-w-lg rounded-lg bg-white p-6 shadow-xl dark:bg-[#2B2C37]'>
       <div className='flex items-start justify-between gap-4'>
         <div>
           <h2 className='text-lg font-bold text-[#20212C] dark:text-white'>{task.title}</h2>
