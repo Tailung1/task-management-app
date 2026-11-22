@@ -32,7 +32,7 @@ export default function ModalRenderer({ task, boardName, board }: ModalRendererP
       }
       break;
     case "create-task":
-      activeModalForDisplay = <CreateTaskModal />;
+      activeModalForDisplay = <CreateTaskModal boardColumns={board?.columns} />;
       break;
     case "edit-task":
       activeModalForDisplay = <EditTaskModal />;

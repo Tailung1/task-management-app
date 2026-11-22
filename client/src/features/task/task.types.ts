@@ -1,3 +1,5 @@
+import type { BoardColumn } from "../column/column.types";
+
 interface Task {
   id: string;
   title: string;
@@ -19,4 +21,8 @@ type CreateTaskVariables = {
   data: CreateTaskInput;
 };
 
-export type { Task, CreateTaskInput, CreateTaskVariables };
+type CreateTaskModalProps = {
+  boardColumns: BoardColumn[] | undefined;
+};
+
+export type { Task, CreateTaskInput, CreateTaskVariables, CreateTaskModalProps };

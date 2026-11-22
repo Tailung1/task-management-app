@@ -1,5 +1,5 @@
 import apiClient from "../../api/clientApi";
-import type { Task, CreateTaskInput } from "./task.types";
+import type { Task, CreateTaskVariables } from "./task.types";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
@@ -25,9 +25,9 @@ function decodeTask(value: unknown): Task {
   };
 }
 
-export const createTask = (data: CreateTaskInput) => {
+export const createTask = (taskData: CreateTaskVariables) => {
   return apiClient("tasks", decodeTask, {
     method: "POST",
-    body: data,
+    body: taskData.data,
   });
 };

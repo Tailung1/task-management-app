@@ -1,23 +1,18 @@
 import { useState, type SubmitEvent } from "react";
 import { ChevronDown, Plus, X } from "lucide-react";
+import type { CreateTaskModalProps } from "./task.types";
+import type { BoardColumn } from "../column/column.types";
 
-const statusOptions = [
-  { value: "todo", label: "Todo" },
-  { value: "doing", label: "Doing" },
-  { value: "done", label: "Done" },
-];
-
-export default function CreateTaskModal() {
+export default function CreateTaskModal({ boardColumns }: CreateTaskModalProps) {
+  const statusOptions = boardColumns;
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [status, setStatus] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState<Pick<BoardColumn, "name"> | null>(null);
   const [subtasks, setSubtasks] = useState([""]);
   const [titleError, setTitleError] = useState("");
   const [subtaskErrors, setSubtaskErrors] = useState<string[]>([]);
-  const [statusError, setStatusError] = useState("");
+  const [statusError, setStatusError] = useState<boolean>(false);
   const [showStatusMenu, setShowStatusMenu] = useState(false);
-
-  const selectedStatus = statusOptions.find((option) => option.value === status);
 
   function addSubtask() {
     setSubtasks((current) => [...current, ""]);
@@ -36,18 +31,11 @@ export default function CreateTaskModal() {
 
   function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
-
     setTitleError(title.trim() ? "" : "Can't be empty");
-    setSubtaskErrors(
-      subtasks.map((subtask) => (subtask.trim() ? "" : "Can't be empty")),
-    );
-    setStatusError(status ? "" : "Can't be empty");
+    setSubtaskErrors(subtasks.map((subtask) => (subtask.trim() ? "" : "Can't be empty")));
+    setStatusError(!selectedStatus?.name ? true : false);
 
-    if (
-      !title.trim() ||
-      !status ||
-      subtasks.some((subtask) => !subtask.trim())
-    ) {
+    if (!title.trim() || selectedStatus?.name || subtasks.some((subtask) => !subtask.trim())) {
       return;
     }
   }
@@ -185,7 +173,7 @@ export default function CreateTaskModal() {
           }`}
         >
           <span id='task-status-value' className={selectedStatus ? "" : "text-[#828FA3]"}>
-            {selectedStatus?.label ?? "Select status"}
+            {selectedStatus?.name ?? "Select status"}
           </span>
           <ChevronDown
             size={18}
@@ -203,23 +191,23 @@ export default function CreateTaskModal() {
             aria-label='Task status options'
             className='absolute left-0 right-0 top-full z-10 mt-2 overflow-hidden rounded-md bg-white py-1 shadow-lg dark:bg-[#20212C]'
           >
-            {statusOptions.map((option) => (
+            {statusOptions?.map((option) => (
               <button
-                key={option.value}
+                key={option.id}
                 type='button'
-                aria-pressed={status === option.value}
+                aria-pressed={selectedStatus?.name === option.name}
                 onClick={() => {
-                  setStatus(option.value);
-                  setStatusError("");
+                  setSelectedStatus(option);
+                  setStatusError(false);
                   setShowStatusMenu(false);
                 }}
                 className={`w-full px-4 py-2 text-left text-sm transition hover:bg-gray-100 dark:hover:bg-[#2B2C37] ${
-                  status === option.value
+                  selectedStatus?.name === option.name
                     ? "font-semibold text-[#635FC7] dark:text-[#A8A4FF]"
                     : "text-[#20212C] dark:text-white"
                 }`}
               >
-                {option.label}
+                {option.name}
               </button>
             ))}
           </div>
