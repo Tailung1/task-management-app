@@ -14,4 +14,9 @@ interface Subtask {
 
 type CreateTaskInput = Omit<Task, "id">;
 
-export type { Task, CreateTaskInput };
+type CreateTaskVariables = {
+  columnId: string;
+  data: CreateTaskInput;
+};
+
+export type { Task, CreateTaskInput, CreateTaskVariables };
