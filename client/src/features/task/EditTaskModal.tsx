@@ -1,33 +1,47 @@
 import { useState } from "react";
-import { X } from "lucide-react";
+import { X, Check } from "lucide-react";
 import type { Subtask, TaskDetailsModalProps } from "./task.types";
 
 export default function EditTaskModal({ task }: Pick<TaskDetailsModalProps, "task">) {
-  const subtasks2: Subtask[] = [
-    {
-      id: crypto.randomUUID(),
-      title: "Create project structure",
-      isCompleted: true,
-    },
-    {
-      id: crypto.randomUUID(),
-      title: "Implement authentication",
-      isCompleted: true,
-    },
-    {
-      id: crypto.randomUUID(),
-      title: "Build task management UI",
-      isCompleted: false,
-    },
-    {
-      id: crypto.randomUUID(),
-      title: "Add API integration",
-      isCompleted: false,
-    },
-  ];
   const [title, setTitle] = useState(task.title);
   const [description, setDescription] = useState(task.description);
-  const [subTasks, setSubtasks] = useState(subtasks2);
+  const [subTasks, setSubtasks] = useState<Subtask[]>(task.subtasks);
+
+  const [isAddingSubtask, setIsAddingSubtask] = useState(false);
+  const [newSubtaskTitle, setNewSubtaskTitle] = useState("");
+
+  const handleSubtaskAdd = () => {
+    const trimmedTitle = newSubtaskTitle.trim();
+
+    if (!trimmedTitle) return;
+
+    setSubtasks((prev) => [
+      ...prev,
+      {
+        id: crypto.randomUUID(),
+        title: trimmedTitle,
+        isCompleted: false,
+      },
+    ]);
+
+    setNewSubtaskTitle("");
+    setIsAddingSubtask(false);
+  };
+
+  const handleSubtaskRemove = (id: string) => {
+    setSubtasks((prev) => prev.filter((subtask) => subtask.id !== id));
+  };
+
+  const handleSubtaskTitleChange = (id: string, title: string) => {
+    setSubtasks((prev) =>
+      prev.map((subtask) => (subtask.id === id ? { ...subtask, title } : subtask)),
+    );
+  };
+
+  const handleSubtaskCancel = () => {
+    setNewSubtaskTitle("");
+    setIsAddingSubtask(false);
+  };
 
   return (
     <div className='w-full max-w-lg rounded-lg bg-white p-6 shadow-xl dark:bg-[#2B2C37]'>
@@ -56,7 +70,7 @@ export default function EditTaskModal({ task }: Pick<TaskDetailsModalProps, "tas
             id='task-title'
             type='text'
             value={title}
-            onChange={(event) => setTitle(event.target.value)}
+            onChange={(e) => setTitle(e.target.value)}
             className='w-full rounded border border-gray-300 bg-white px-4 py-3 text-sm text-[#20212C] outline-none focus:border-[#635FC7] dark:border-gray-600 dark:bg-[#2B2C37] dark:text-white'
           />
         </div>
@@ -72,7 +86,7 @@ export default function EditTaskModal({ task }: Pick<TaskDetailsModalProps, "tas
           <textarea
             id='task-description'
             value={description}
-            onChange={(event) => setDescription(event.target.value)}
+            onChange={(e) => setDescription(e.target.value)}
             rows={4}
             className='w-full resize-none rounded border border-gray-300 bg-white px-4 py-3 text-sm text-[#20212C] outline-none focus:border-[#635FC7] dark:border-gray-600 dark:bg-[#2B2C37] dark:text-white'
           />
@@ -84,16 +98,18 @@ export default function EditTaskModal({ task }: Pick<TaskDetailsModalProps, "tas
           </p>
 
           <div className='space-y-2'>
-            {subTasks.map((subtask: Subtask) => (
-              <div className='flex items-center gap-3'>
+            {subTasks.map((subtask) => (
+              <div key={subtask.id} className='flex items-center gap-3'>
                 <input
                   type='text'
                   value={subtask.title}
+                  onChange={(e) => handleSubtaskTitleChange(subtask.id, e.target.value)}
                   className='flex-1 rounded border border-gray-300 bg-white px-4 py-3 text-sm text-[#20212C] outline-none focus:border-[#635FC7] dark:border-gray-600 dark:bg-[#2B2C37] dark:text-white'
                 />
 
                 <button
                   type='button'
+                  onClick={() => handleSubtaskRemove(subtask.id)}
                   className='text-gray-400 transition hover:text-red-500'
                   aria-label='Remove subtask'
                 >
@@ -103,12 +119,45 @@ export default function EditTaskModal({ task }: Pick<TaskDetailsModalProps, "tas
             ))}
           </div>
 
-          <button
-            type='button'
-            className='mt-3 w-full rounded-full bg-[#F0EFFA] px-4 py-3 text-sm font-bold text-[#635FC7] transition hover:bg-[#E5E3F5] dark:bg-white dark:hover:bg-gray-200'
-          >
-            + Add New Subtask
-          </button>
+          {isAddingSubtask ? (
+            <div className='mt-3 flex items-center gap-3'>
+              <input
+                autoFocus
+                type='text'
+                value={newSubtaskTitle}
+                onChange={(e) => setNewSubtaskTitle(e.target.value)}
+                placeholder='Enter subtask title'
+                className='min-w-0 flex-1 rounded border border-gray-300 bg-white px-4 py-3 text-sm outline-none focus:border-[#635FC7] dark:border-gray-600 dark:bg-[#2B2C37] dark:text-white'
+              />
+
+              <button
+                type='button'
+                onClick={handleSubtaskAdd}
+                disabled={!newSubtaskTitle.trim()}
+                aria-label='Confirm subtask'
+                className='text-green-600 transition hover:text-green-700 disabled:cursor-not-allowed disabled:opacity-40'
+              >
+                <Check size={20} />
+              </button>
+
+              <button
+                type='button'
+                onClick={handleSubtaskCancel}
+                aria-label='Cancel subtask creation'
+                className='text-gray-400 transition hover:text-red-500'
+              >
+                <X size={20} />
+              </button>
+            </div>
+          ) : (
+            <button
+              type='button'
+              onClick={() => setIsAddingSubtask(true)}
+              className='mt-3 w-full rounded-full bg-[#F0EFFA] px-4 py-3 text-sm font-bold text-[#635FC7] transition hover:bg-[#E5E3F5] dark:bg-white dark:hover:bg-gray-200'
+            >
+              + Add New Subtask
+            </button>
+          )}
         </div>
 
         <button
