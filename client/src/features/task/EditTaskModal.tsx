@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, Check } from "lucide-react";
+import { X } from "lucide-react";
 import type { Subtask, TaskDetailsModalProps } from "./task.types";
 
 export default function EditTaskModal({ task }: Pick<TaskDetailsModalProps, "task">) {
@@ -9,24 +9,7 @@ export default function EditTaskModal({ task }: Pick<TaskDetailsModalProps, "tas
 
   const [isAddingSubtask, setIsAddingSubtask] = useState(false);
   const [newSubtaskTitle, setNewSubtaskTitle] = useState("");
-
-  const handleSubtaskAdd = () => {
-    const trimmedTitle = newSubtaskTitle.trim();
-
-    if (!trimmedTitle) return;
-
-    setSubtasks((prev) => [
-      ...prev,
-      {
-        id: crypto.randomUUID(),
-        title: trimmedTitle,
-        isCompleted: false,
-      },
-    ]);
-
-    setNewSubtaskTitle("");
-    setIsAddingSubtask(false);
-  };
+  const [subtaskError, setSubtaskError] = useState(false);
 
   const handleSubtaskRemove = (id: string) => {
     setSubtasks((prev) => prev.filter((subtask) => subtask.id !== id));
@@ -41,6 +24,30 @@ export default function EditTaskModal({ task }: Pick<TaskDetailsModalProps, "tas
   const handleSubtaskCancel = () => {
     setNewSubtaskTitle("");
     setIsAddingSubtask(false);
+    setSubtaskError(false);
+  };
+
+  const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (isAddingSubtask && !newSubtaskTitle.trim()) {
+      setSubtaskError(true);
+      return;
+    }
+
+    const updatedSubtasks = isAddingSubtask
+      ? [
+          ...subTasks,
+          {
+            id: crypto.randomUUID(),
+            title: newSubtaskTitle.trim(),
+            isCompleted: false,
+          },
+        ]
+      : subTasks;
+
+    setSubtasks(updatedSubtasks);
+
   };
 
   return (
@@ -57,7 +64,7 @@ export default function EditTaskModal({ task }: Pick<TaskDetailsModalProps, "tas
         </button>
       </div>
 
-      <form className='mt-6 space-y-5'>
+      <form onSubmit={handleSubmit} className='mt-6 space-y-5'>
         <div>
           <label
             htmlFor='task-title'
@@ -70,7 +77,7 @@ export default function EditTaskModal({ task }: Pick<TaskDetailsModalProps, "tas
             id='task-title'
             type='text'
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(event) => setTitle(event.target.value)}
             className='w-full rounded border border-gray-300 bg-white px-4 py-3 text-sm text-[#20212C] outline-none focus:border-[#635FC7] dark:border-gray-600 dark:bg-[#2B2C37] dark:text-white'
           />
         </div>
@@ -86,7 +93,7 @@ export default function EditTaskModal({ task }: Pick<TaskDetailsModalProps, "tas
           <textarea
             id='task-description'
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(event) => setDescription(event.target.value)}
             rows={4}
             className='w-full resize-none rounded border border-gray-300 bg-white px-4 py-3 text-sm text-[#20212C] outline-none focus:border-[#635FC7] dark:border-gray-600 dark:bg-[#2B2C37] dark:text-white'
           />
@@ -103,7 +110,7 @@ export default function EditTaskModal({ task }: Pick<TaskDetailsModalProps, "tas
                 <input
                   type='text'
                   value={subtask.title}
-                  onChange={(e) => handleSubtaskTitleChange(subtask.id, e.target.value)}
+                  onChange={(event) => handleSubtaskTitleChange(subtask.id, event.target.value)}
                   className='flex-1 rounded border border-gray-300 bg-white px-4 py-3 text-sm text-[#20212C] outline-none focus:border-[#635FC7] dark:border-gray-600 dark:bg-[#2B2C37] dark:text-white'
                 />
 
@@ -125,20 +132,18 @@ export default function EditTaskModal({ task }: Pick<TaskDetailsModalProps, "tas
                 autoFocus
                 type='text'
                 value={newSubtaskTitle}
-                onChange={(e) => setNewSubtaskTitle(e.target.value)}
-                placeholder='Enter subtask title'
-                className='min-w-0 flex-1 rounded border border-gray-300 bg-white px-4 py-3 text-sm outline-none focus:border-[#635FC7] dark:border-gray-600 dark:bg-[#2B2C37] dark:text-white'
-              />
+                onChange={(event) => {
+                  setNewSubtaskTitle(event.target.value);
 
-              <button
-                type='button'
-                onClick={handleSubtaskAdd}
-                disabled={!newSubtaskTitle.trim()}
-                aria-label='Confirm subtask'
-                className='text-green-600 transition hover:text-green-700 disabled:cursor-not-allowed disabled:opacity-40'
-              >
-                <Check size={20} />
-              </button>
+                  if (subtaskError && event.target.value.trim()) {
+                    setSubtaskError(false);
+                  }
+                }}
+                placeholder='Enter subtask title'
+                className={`min-w-0 flex-1 rounded border bg-white px-4 py-3 text-sm outline-none focus:border-[#635FC7] dark:bg-[#2B2C37] dark:text-white ${
+                  subtaskError ? "border-red-500" : "border-gray-300 dark:border-gray-600"
+                }`}
+              />
 
               <button
                 type='button'
