@@ -1,6 +1,6 @@
 import { useState, type SubmitEvent } from "react";
 import { ChevronDown, Plus, X } from "lucide-react";
-import type { CreateTaskModalProps, Subtask } from "./task.types";
+import type { CreateTaskModalProps, SubtaskInput } from "./task.types";
 import type { BoardColumn } from "../column/column.types";
 import { useCreateTask } from "./task.queries";
 import { useModalContext } from "../../contexts/ModalContext";
@@ -10,7 +10,7 @@ export default function CreateTaskModal({ boardId, boardColumns }: CreateTaskMod
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [selectedColumn, setSelectedColumn] = useState<BoardColumn | null>(null);
-  const [subtasks, setSubtasks] = useState<Subtask[]>([]);
+  const [subtasks, setSubtasks] = useState<SubtaskInput[]>([]);
   const [titleError, setTitleError] = useState("");
   const [subtaskErrors, setSubtaskErrors] = useState<string[]>([]);
   const [statusError, setStatusError] = useState<boolean>(false);
@@ -20,8 +20,7 @@ export default function CreateTaskModal({ boardId, boardColumns }: CreateTaskMod
   const createTaskMutation = useCreateTask(boardId);
 
   function addSubtask() {
-    const id = (Math.random() * 99).toString();
-    setSubtasks((current) => [...current, { title, id: id, isCompleted: false }]);
+    setSubtasks((current) => [...current, { title: "", isCompleted: false }]);
     setSubtaskErrors((current) => [...current, ""]);
   }
 

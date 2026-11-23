@@ -14,11 +14,25 @@ interface Subtask {
   isCompleted: boolean;
 }
 
+type SubtaskInput = Omit<Subtask, "id"> & { id?: string };
+
 type CreateTaskInput = {
   title: string;
   description: string | null;
-  subtasks: Subtask[];
+  subtasks: SubtaskInput[];
   position: number;
+};
+
+type UpdateTaskInput = {
+  title: string;
+  description: string | null;
+  subtasks: SubtaskInput[];
+};
+
+type UpdateTaskVariables = {
+  taskId: string;
+  boardId: string;
+  data: UpdateTaskInput;
 };
 
 type CreateTaskVariables = {
@@ -46,9 +60,12 @@ type CreateTaskModalProps = {
 export type {
   Task,
   Subtask,
+  SubtaskInput,
   CreateTaskInput,
   CreateTaskVariables,
   CreatedTask,
+  UpdateTaskInput,
+  UpdateTaskVariables,
   CreateTaskModalProps,
   TaskDetailsModalProps,
 };

@@ -1,21 +1,30 @@
 import { useState } from "react";
 import { X } from "lucide-react";
-import type { Subtask, TaskDetailsModalProps } from "./task.types";
+import type { SubtaskInput, TaskDetailsModalProps } from "./task.types";
+import { useUpdateTask } from "./task.queries";
+import { useModalContext } from "../../contexts/ModalContext";
 
-export default function EditTaskModal({ task }: Pick<TaskDetailsModalProps, "task">) {
+export default function EditTaskModal({
+  task,
+  boardId,
+}: Pick<TaskDetailsModalProps, "task"> & { boardId: string }) {
   const [title, setTitle] = useState(task.title);
-  const [description, setDescription] = useState(task.description);
-  const [subTasks, setSubtasks] = useState<Subtask[]>(task.subtasks);
+  const [description, setDescription] = useState(task.description ?? "");
+  const [subTasks, setSubtasks] = useState<SubtaskInput[]>(task.subtasks);
+  const updateTaskMutation = useUpdateTask(boardId);
+  const { setActiveModal } = useModalContext();
 
   const [isAddingSubtask, setIsAddingSubtask] = useState(false);
   const [newSubtaskTitle, setNewSubtaskTitle] = useState("");
   const [subtaskError, setSubtaskError] = useState(false);
 
-  const handleSubtaskRemove = (id: string) => {
+  const handleSubtaskRemove = (id: string | undefined) => {
+    if (!id) return;
     setSubtasks((prev) => prev.filter((subtask) => subtask.id !== id));
   };
 
-  const handleSubtaskTitleChange = (id: string, title: string) => {
+  const handleSubtaskTitleChange = (id: string | undefined, title: string) => {
+    if (!id) return;
     setSubtasks((prev) =>
       prev.map((subtask) => (subtask.id === id ? { ...subtask, title } : subtask)),
     );
@@ -30,6 +39,10 @@ export default function EditTaskModal({ task }: Pick<TaskDetailsModalProps, "tas
   const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    if (!title.trim()) {
+      return;
+    }
+
     if (isAddingSubtask && !newSubtaskTitle.trim()) {
       setSubtaskError(true);
       return;
@@ -39,15 +52,26 @@ export default function EditTaskModal({ task }: Pick<TaskDetailsModalProps, "tas
       ? [
           ...subTasks,
           {
-            id: crypto.randomUUID(),
             title: newSubtaskTitle.trim(),
             isCompleted: false,
           },
         ]
       : subTasks;
 
-    setSubtasks(updatedSubtasks);
-
+    updateTaskMutation.mutate(
+      {
+        taskId: task.id,
+        boardId,
+        data: {
+          title: title.trim(),
+          description: description.trim() || null,
+          subtasks: updatedSubtasks,
+        },
+      },
+      {
+        onSuccess: () => setActiveModal(null),
+      },
+    );
   };
 
   return (
@@ -58,6 +82,7 @@ export default function EditTaskModal({ task }: Pick<TaskDetailsModalProps, "tas
         <button
           type='button'
           aria-label='Close edit task modal'
+          onClick={() => setActiveModal(null)}
           className='text-gray-500 transition hover:text-gray-800 dark:text-gray-400 dark:hover:text-white'
         >
           <X size={20} />
@@ -105,8 +130,8 @@ export default function EditTaskModal({ task }: Pick<TaskDetailsModalProps, "tas
           </p>
 
           <div className='space-y-2'>
-            {subTasks.map((subtask) => (
-              <div key={subtask.id} className='flex items-center gap-3'>
+            {subTasks.map((subtask, index) => (
+              <div key={subtask.id ?? index} className='flex items-center gap-3'>
                 <input
                   type='text'
                   value={subtask.title}

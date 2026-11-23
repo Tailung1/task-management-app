@@ -37,13 +37,15 @@ export default function ModalRenderer({ task, boardName, board }: ModalRendererP
       }
       break;
     case "edit-task":
-      if (task) {
-        activeModalForDisplay = <EditTaskModal task={task} />;
+      if (task && board) {
+        activeModalForDisplay = <EditTaskModal task={task} boardId={board.id} />;
       }
       break;
     case "show-task-details":
-      if (task) {
-        activeModalForDisplay = <TaskDetailsModal task={task} boardName={boardName} />;
+      if (task && board) {
+        activeModalForDisplay = (
+          <TaskDetailsModal task={task} boardName={boardName} boardId={board.id} />
+        );
       }
       break;
   }

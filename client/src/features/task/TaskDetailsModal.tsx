@@ -1,35 +1,19 @@
 import { useState } from "react";
 import { Check, ChevronDown, EllipsisVertical, X } from "lucide-react";
 import { useModalContext } from "../../contexts/ModalContext";
-import type { Subtask, TaskDetailsModalProps } from "./task.types";
+import type { TaskDetailsModalProps } from "./task.types";
+import { useUpdateTask } from "./task.queries";
 
 const statuses = ["Todo", "Doing", "Done"];
 
-export default function TaskDetailsModal({ task, boardName }: TaskDetailsModalProps) {
-  const subtasks2: Subtask[] = [
-    {
-      id: crypto.randomUUID(),
-      title: "Create project structure",
-      isCompleted: true,
-    },
-    {
-      id: crypto.randomUUID(),
-      title: "Implement authentication",
-      isCompleted: true,
-    },
-    {
-      id: crypto.randomUUID(),
-      title: "Build task management UI",
-      isCompleted: false,
-    },
-    {
-      id: crypto.randomUUID(),
-      title: "Add API integration",
-      isCompleted: false,
-    },
-  ];
+export default function TaskDetailsModal({
+  task,
+  boardName,
+  boardId,
+}: TaskDetailsModalProps & { boardId: string }) {
   const { setActiveModal } = useModalContext();
-  const [subtasks, setSubtasks] = useState(subtasks2);
+  const [subtasks, setSubtasks] = useState(task.subtasks);
+  const updateTaskMutation = useUpdateTask(boardId);
   const [status, setStatus] = useState(task.status);
   const [showStatusMenu, setShowStatusMenu] = useState(false);
   const [showTaskMenu, setShowTaskMenu] = useState(false);
@@ -37,16 +21,19 @@ export default function TaskDetailsModal({ task, boardName }: TaskDetailsModalPr
   const completedCount = subtasks.filter((subtask) => subtask.isCompleted).length;
 
   const toggleSubtask = (id: string) => {
-    setSubtasks((currentSubtasks) =>
-      currentSubtasks.map((subtask) =>
-        subtask.id === id
-          ? {
-              ...subtask,
-              isCompleted: !subtask.isCompleted,
-            }
-          : subtask,
-      ),
+    const updatedSubtasks = subtasks.map((subtask) =>
+      subtask.id === id ? { ...subtask, isCompleted: !subtask.isCompleted } : subtask,
     );
+    setSubtasks(updatedSubtasks);
+    updateTaskMutation.mutate({
+      taskId: task.id,
+      boardId,
+      data: {
+        title: task.title,
+        description: task.description ?? null,
+        subtasks: updatedSubtasks,
+      },
+    });
   };
 
   return (

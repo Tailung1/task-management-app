@@ -1,5 +1,5 @@
 import apiClient from "../../api/clientApi";
-import type { CreatedTask, CreateTaskVariables } from "./task.types";
+import type { CreatedTask, CreateTaskVariables, UpdateTaskVariables } from "./task.types";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
@@ -28,6 +28,13 @@ function decodeCreatedTask(value: unknown): CreatedTask {
 export const createTask = ({ columnId, data }: CreateTaskVariables) => {
   return apiClient(`columns/${encodeURIComponent(columnId)}/tasks`, decodeCreatedTask, {
     method: "POST",
+    body: data,
+  });
+};
+
+export const updateTask = ({ taskId, data }: UpdateTaskVariables) => {
+  return apiClient(`tasks/${encodeURIComponent(taskId)}`, decodeCreatedTask, {
+    method: "PATCH",
     body: data,
   });
 };
