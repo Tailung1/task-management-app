@@ -63,9 +63,15 @@ export function useDeleteBoard() {
 
   return useMutation({
     mutationFn: (id: string) => deleteBoard(id),
-    onSuccess: () =>
+
+    onSuccess: (_, id) => {
+      queryClient.removeQueries({
+        queryKey: boardKeys.detail(id),
+      });
+
       queryClient.invalidateQueries({
         queryKey: boardKeys.list(),
-      }),
+      });
+    },
   });
 }
