@@ -50,13 +50,19 @@ export default function EditTaskModal({
 
     const updatedSubtasks = isAddingSubtask
       ? [
-          ...subTasks,
+          ...subTasks.map((subtask) => ({
+            ...subtask,
+            title: subtask.title.trim(),
+          })),
           {
             title: newSubtaskTitle.trim(),
             isCompleted: false,
           },
         ]
-      : subTasks;
+      : subTasks.map((subtask) => ({
+          ...subtask,
+          title: subtask.title.trim(),
+        }));
 
     updateTaskMutation.mutate(
       {

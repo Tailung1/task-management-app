@@ -52,7 +52,10 @@ export default function CreateTaskModal({ boardId, boardColumns }: CreateTaskMod
         data: {
           title: title.trim(),
           description: description.trim() || null,
-          subtasks: subtasks,
+          subtasks: subtasks.map((subtask) => ({
+            ...subtask,
+            title: subtask.title.trim(),
+          })),
           position: selectedColumn.tasks.length,
         },
       },
