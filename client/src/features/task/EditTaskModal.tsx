@@ -11,6 +11,7 @@ export default function EditTaskModal({
   const [title, setTitle] = useState(task.title);
   const [description, setDescription] = useState(task.description ?? "");
   const [subTasks, setSubtasks] = useState<SubtaskInput[]>(task.subtasks);
+  const [titleError, setTitleError] = useState("");
   const updateTaskMutation = useUpdateTask(boardId);
   const { setActiveModal } = useModalContext();
 
@@ -40,8 +41,10 @@ export default function EditTaskModal({
     event.preventDefault();
 
     if (!title.trim()) {
+      setTitleError("Can't be empty");
       return;
     }
+    setTitleError("");
 
     if (isAddingSubtask && !newSubtaskTitle.trim()) {
       setSubtaskError(true);
@@ -108,9 +111,24 @@ export default function EditTaskModal({
             id='task-title'
             type='text'
             value={title}
-            onChange={(event) => setTitle(event.target.value)}
-            className='w-full rounded border border-gray-300 bg-white px-4 py-3 text-sm text-[#20212C] outline-none focus:border-[#635FC7] dark:border-gray-600 dark:bg-[#2B2C37] dark:text-white'
+            maxLength={255}
+            onChange={(event) => {
+              setTitle(event.target.value);
+              setTitleError("");
+            }}
+            aria-invalid={Boolean(titleError)}
+            aria-describedby={titleError ? "edit-task-title-error" : undefined}
+            className={`w-full rounded border bg-white px-4 py-3 text-sm text-[#20212C] outline-none focus:ring-1 dark:bg-[#2B2C37] dark:text-white ${
+              titleError
+                ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                : "border-gray-300 focus:border-[#635FC7] dark:border-gray-600"
+            }`}
           />
+          {titleError && (
+            <p id='edit-task-title-error' role='alert' className='mt-2 text-xs font-medium text-red-500'>
+              {titleError}
+            </p>
+          )}
         </div>
 
         <div>
@@ -126,6 +144,7 @@ export default function EditTaskModal({
             value={description}
             onChange={(event) => setDescription(event.target.value)}
             rows={4}
+            maxLength={10000}
             className='w-full resize-none rounded border border-gray-300 bg-white px-4 py-3 text-sm text-[#20212C] outline-none focus:border-[#635FC7] dark:border-gray-600 dark:bg-[#2B2C37] dark:text-white'
           />
         </div>
@@ -142,6 +161,7 @@ export default function EditTaskModal({
                   type='text'
                   value={subtask.title}
                   onChange={(event) => handleSubtaskTitleChange(subtask.id, event.target.value)}
+                  maxLength={255}
                   className='flex-1 rounded border border-gray-300 bg-white px-4 py-3 text-sm text-[#20212C] outline-none focus:border-[#635FC7] dark:border-gray-600 dark:bg-[#2B2C37] dark:text-white'
                 />
 
@@ -163,6 +183,7 @@ export default function EditTaskModal({
                 autoFocus
                 type='text'
                 value={newSubtaskTitle}
+                maxLength={255}
                 onChange={(event) => {
                   setNewSubtaskTitle(event.target.value);
 
