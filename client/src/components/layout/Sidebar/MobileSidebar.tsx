@@ -14,6 +14,6 @@ export default function MobileSidebar() {
     >
       <SidebarContent />
     </div>,
-    document.body
+    document.body,
   );
 }

@@ -5,11 +5,13 @@ import { useSidebarContext } from "../../../contexts/SidebarContext";
 import { useModalContext } from "../../../contexts/ModalContext";
 import BoardOptionsMenu from "../../../features/board/components/BoardOptionsMenu";
 import { useLocation } from "react-router-dom";
+import useActiveBoard from "../../../features/board/hooks/useActiveBoard";
 
 export default function MobileHeader() {
   const { showSidebar, setShowSidebar } = useSidebarContext();
   const { setActiveModal } = useModalContext();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const activeBoard = useActiveBoard();
   const location = useLocation();
 
   const handleModalOpen = () => {
@@ -30,7 +32,9 @@ export default function MobileHeader() {
           }`}
         >
           {" "}
-          <h3 className='text-lg font-bold'>Personal board</h3>{" "}
+          <h3 className='text-lg font-bold'>
+            {activeBoard.data?.name ?? "No board selected"}
+          </h3>{" "}
           <ChevronDown className='md:hidden' size={20} strokeWidth={2} aria-hidden='true' />{" "}
         </div>{" "}
       </div>{" "}
