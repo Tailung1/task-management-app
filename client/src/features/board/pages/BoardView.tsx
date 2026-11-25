@@ -1,6 +1,7 @@
 import { Plus } from "lucide-react";
 import { useModalContext } from "../../../contexts/ModalContext";
 import type { BoardViewProps } from "../board.types";
+import { useSidebarContext } from "../../../contexts/SidebarContext";
 
 const columnColors = [
   "bg-purple-500",
@@ -18,13 +19,17 @@ function getColumnColor(id: string) {
 
 export default function BoardView({ columns, onSelectTask }: BoardViewProps) {
   const { setActiveModal } = useModalContext();
+  const { showSidebar } = useSidebarContext();
 
   const handleCreateColumn = () => {
     setActiveModal("create-column");
   };
 
   return (
-    <div className='flex gap-6 p-6'>
+    // <div className='flex gap-6 p-6 transition-transform'>
+    <div
+      className={`flex gap-6 p-6 transition-transform duration-1000 ease ${showSidebar ? "translate-x-65" : "translate-x-0"} `}
+    >
       {columns.map((column) => (
         <section key={column.id} className='flex h-full w-70 flex-col'>
           {/* Column header */}

@@ -35,6 +35,7 @@ export default function MobileHeader() {
           <h3 className='text-lg font-bold'>
             {activeBoard.data?.name ?? "No board selected"}
           </h3>{" "}
+
           <ChevronDown className='md:hidden' size={20} strokeWidth={2} aria-hidden='true' />{" "}
         </div>{" "}
       </div>{" "}
