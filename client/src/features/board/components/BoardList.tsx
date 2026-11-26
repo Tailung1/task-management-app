@@ -6,10 +6,10 @@ import { useBoards } from "../board.queries";
 import { useModalContext } from "../../../contexts/ModalContext";
 
 export default function BoardList() {
-  const { data, isPending, isError, error } = useBoards();
+  const { data, isFetching, isPending, isError, error } = useBoards();
   const { setActiveModal } = useModalContext();
 
-  if (isPending) return <BoardListSkeleton />;
+  if (isFetching || isPending) return <BoardListSkeleton isFetching={isFetching} />;
 
   if (isError) {
     return (
