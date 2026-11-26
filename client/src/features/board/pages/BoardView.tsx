@@ -26,7 +26,6 @@ export default function BoardView({ columns, onSelectTask }: BoardViewProps) {
   };
 
   return (
-    // <div className='flex gap-6 p-6 transition-transform'>
     <div
       className={`flex gap-6 p-6 transition-transform duration-1000 ease ${showSidebar ? "translate-x-65" : "translate-x-0"} `}
     >
