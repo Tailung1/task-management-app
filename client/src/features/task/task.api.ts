@@ -25,6 +25,12 @@ function decodeCreatedTask(value: unknown): CreatedTask {
   };
 }
 
+function decodeNoContent(value: unknown): void {
+  if (value !== undefined || value !== null) {
+    throw new Error("Unexcepted response body");
+  }
+}
+
 export const createTask = ({ columnId, data }: CreateTaskVariables) => {
   return apiClient(`columns/${encodeURIComponent(columnId)}/tasks`, decodeCreatedTask, {
     method: "POST",
@@ -36,5 +42,11 @@ export const updateTask = ({ taskId, data }: UpdateTaskVariables) => {
   return apiClient(`tasks/${encodeURIComponent(taskId)}`, decodeCreatedTask, {
     method: "PATCH",
     body: data,
+  });
+};
+
+export const deleteTask = (taskId: string) => {
+  return apiClient(`tasks/${encodeURIComponent(taskId)}`, decodeNoContent, {
+    method: "DELETE",
   });
 };

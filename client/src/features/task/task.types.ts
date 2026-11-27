@@ -52,9 +52,15 @@ type CreateTaskModalProps = {
   boardId: string;
   boardColumns: BoardColumn[];
 };
- type TaskDetailsModalProps = {
+
+type TaskDetailsModalProps = {
   task: Task;
   boardName: string;
+};
+
+type DeleteTaskVariables = {
+  taskId: string;
+  boardId: string;
 };
 
 export type {
@@ -68,4 +74,5 @@ export type {
   UpdateTaskVariables,
   CreateTaskModalProps,
   TaskDetailsModalProps,
+  DeleteTaskVariables,
 };

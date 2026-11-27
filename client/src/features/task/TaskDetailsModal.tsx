@@ -35,6 +35,9 @@ export default function TaskDetailsModal({
       },
     });
   };
+  const handleTaskStatusEdit=()=>  {
+
+  }
 
   return (
     <div className='w-full max-w-lg rounded-lg bg-white p-6 shadow-xl dark:bg-[#2B2C37]'>
