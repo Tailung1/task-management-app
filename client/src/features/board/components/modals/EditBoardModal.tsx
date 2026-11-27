@@ -31,6 +31,11 @@ export default function EditBoardModal({ board }: { board: Board }) {
   }
 
   function removeColumn(id: string) {
+    const existingColumnIds = new Set(board.columns.map((column) => column.id));
+    if (!existingColumnIds.has(id)) {
+      setColumns((current) => current.filter((column) => column.id !== id));
+      return;
+    }
     setColumnsMarkedForDeletion((current) => {
       const updated = new Set(current);
       if (updated.has(id)) {
@@ -87,7 +92,9 @@ export default function EditBoardModal({ board }: { board: Board }) {
       <div className='mb-6'>
         <p className='mb-2 text-xs font-bold text-[#828FA3]'>Board Columns</p>
 
-        <div className='flex flex-col gap-3'>
+        <div
+          className={`flex flex-col gap-3 max-h-39 overflow-y-auto scrollbar ${columns.length > 3 && "pr-2"}`}
+        >
           {columns.map((column) => (
             <div
               key={column.id}

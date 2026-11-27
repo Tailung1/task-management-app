@@ -1,15 +1,22 @@
 import { useModalContext } from "../../../../contexts/ModalContext";
 import type { Board } from "../../board.types";
 import { useDeleteBoard } from "../../board.queries";
+import { useNavigate } from "react-router-dom";
+import { useBoards } from "../../board.queries";
 
 export default function DeleteBoardModal({ board }: { board: Board }) {
   const { setActiveModal } = useModalContext();
   const deleteBoard = useDeleteBoard();
+  const { data } = useBoards();
+  const navigate = useNavigate();
 
   function handleDelete(id: string) {
     deleteBoard.mutate(id, {
       onSuccess: () => {
         setActiveModal(null);
+        if (data) {
+          navigate(`boards/${data[0].id}/${data[0].name}`, { replace: true });
+        }
       },
     });
   }
