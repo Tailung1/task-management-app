@@ -8,6 +8,7 @@ import EditTaskModal from "../../features/task/EditTaskModal";
 import BoardActionModal from "../../features/board/components/modals/BoardActionModal";
 import type { Task } from "../../features/task/task.types";
 import type { Board } from "../../features/board/board.types";
+import DeleteTaskModal from "../../features/task/modals/DeleteTaskModal";
 
 type ModalRendererProps = {
   task: Task | null;
@@ -48,6 +49,10 @@ export default function ModalRenderer({ task, boardName, board }: ModalRendererP
         );
       }
       break;
+    case "delete-task":
+      if (task && board) {
+        activeModalForDisplay = <DeleteTaskModal taskId={task.id} boardId={board.id} />;
+      }
   }
   return <ModalOverlay>{activeModalForDisplay}</ModalOverlay>;
 }

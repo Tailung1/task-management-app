@@ -35,9 +35,6 @@ export default function TaskDetailsModal({
       },
     });
   };
-  const handleTaskStatusEdit=()=>  {
-
-  }
 
   return (
     <div className='w-full max-w-lg rounded-lg bg-white p-6 shadow-xl dark:bg-[#2B2C37]'>
@@ -82,6 +79,7 @@ export default function TaskDetailsModal({
               </button>
 
               <button
+              onClick={()=>setActiveModal("delete-task")}
                 type='button'
                 className='w-full px-4 py-2 text-left text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-[#2B2C37]'
               >
