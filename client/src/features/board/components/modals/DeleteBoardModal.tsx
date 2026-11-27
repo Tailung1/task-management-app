@@ -15,7 +15,7 @@ export default function DeleteBoardModal({ board }: { board: Board }) {
       onSuccess: () => {
         setActiveModal(null);
         if (data) {
-          navigate(`boards/${data[0].id}/${data[0].name}`, { replace: true });
+          navigate(`/board/${data[0].id}/${data[0].name}`, { replace: true });
         }
       },
     });
