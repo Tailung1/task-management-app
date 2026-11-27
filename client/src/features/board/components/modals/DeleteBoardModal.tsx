@@ -14,8 +14,15 @@ export default function DeleteBoardModal({ board }: { board: Board }) {
     deleteBoard.mutate(id, {
       onSuccess: () => {
         setActiveModal(null);
-        if (data) {
-          navigate(`/board/${data[0].id}/${data[0].name}`, { replace: true });
+
+        const nextBoard = data?.find((board) => board.id !== id);
+
+        if (nextBoard) {
+          navigate(`/board/${nextBoard.id}/${nextBoard.name}`, {
+            replace: true,
+          });
+        } else {
+          navigate("/");
         }
       },
     });
