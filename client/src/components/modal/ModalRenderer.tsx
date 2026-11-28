@@ -3,7 +3,7 @@ import CreateBoardModal from "../../features/board/components/modals/CreateBoard
 import CreateColumnModal from "../../features/column/CreateColumnModal";
 import ModalOverlay from "./ModalOverlay";
 import CreateTaskModal from "../../features/task/CreateTaskModal";
-import TaskDetailsModal from "../../features/task/TaskDetailsModal";
+import TaskDetailsModal from "../../features/task/modals/TaskDetailsModal";
 import EditTaskModal from "../../features/task/EditTaskModal";
 import BoardActionModal from "../../features/board/components/modals/BoardActionModal";
 import type { Task } from "../../features/task/task.types";

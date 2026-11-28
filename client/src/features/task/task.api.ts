@@ -26,7 +26,7 @@ function decodeCreatedTask(value: unknown): CreatedTask {
 }
 
 function decodeNoContent(value: unknown): void {
-  if (value !== undefined || value !== null) {
+  if (value !== undefined && value !== null) {
     throw new Error("Unexcepted response body");
   }
 }

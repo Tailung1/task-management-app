@@ -154,7 +154,7 @@ export const updateTaskController = async (req: Request, res: Response) => {
 export const deleteTaskController = async (req: Request, res: Response) => {
   try {
     const { taskId } = req.params;
-
+    
     if (!isUuid(taskId)) {
       res.status(400).json({ message: "Invalid task ID" });
       return;

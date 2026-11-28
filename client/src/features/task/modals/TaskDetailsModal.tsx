@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Check, ChevronDown, EllipsisVertical, X } from "lucide-react";
-import { useModalContext } from "../../contexts/ModalContext";
-import type { TaskDetailsModalProps } from "./task.types";
-import { useUpdateTask } from "./task.queries";
+import { useModalContext } from "../../../contexts/ModalContext";
+import type { TaskDetailsModalProps } from "../task.types";
+import { useUpdateTask } from "../task.queries";
 
 const statuses = ["Todo", "Doing", "Done"];
 
